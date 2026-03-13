@@ -1,25 +1,26 @@
 #!/usr/bin/env python3
-"""SOC Analysis Pipeline — CLI entry point.
+"""Penelope — Step 2: Run LLM analysis on pre-chunked texts.
+
+Reads chunk-annotated files from chunking/ (produced by chunk.py),
+sends each chunk to one or more LLMs, and exports results.
 
 Usage:
-    # Single model (from .env):
-    python run.py --input input/ --output results/
+    # Run analysis on all chunked files
+    python run.py --input chunking/ --output results/
 
     # Multiple models (from models.yaml):
-    python run.py --input input/ --output results/ --config models.yaml
+    python run.py --input chunking/ --output results/ --config models.yaml
 
     # Override: run only specific models from the config:
-    python run.py --input input/ --config models.yaml --model gpt-4o --model claude-sonnet
+    python run.py --input chunking/ --model gpt-4o --model claude-sonnet
 
-    # Dry run (test extraction + chunking, no LLM calls):
-    python run.py --input input/ --dry-run
+    # Dry run (list chunks, no LLM calls):
+    python run.py --input chunking/ --dry-run
 
-The pipeline:
-    1. Extract plain text from .txt, .doc/.docx, .pdf files
-    2. Chunk each text by structural markers (chapters/headings) or sentence boundaries
-    3. Send each chunk to one or more LLMs for SOC classification (per SKILL.md)
-    4. Parse and validate structured responses
-    5. Export combined results as CSV and/or JSON (with model_label column for comparison)
+Two-step workflow:
+    1. python chunk.py --input input/     # extract + chunk → chunking/
+       (review and edit chunk boundaries in chunking/)
+    2. python run.py --input chunking/    # LLM analysis → results/
 """
 
 from __future__ import annotations
@@ -29,33 +30,35 @@ import logging
 import sys
 from pathlib import Path
 
-from scripts.analyze import analyze_chunks, analyze_chunks_multi
+from scripts.analyze import analyze_chunks_multi
 from scripts.config import Config
 from scripts.export import export_results, print_summary
-from scripts.extract import extract_all, extract_text
 from scripts.models import ResultRow
-from scripts.soc_chunker import chunk_text
+from scripts.soc_chunker import is_chunked_file, parse_chunked_dir, parse_chunked_file
 
 logger = logging.getLogger(__name__)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="SOC Analysis Pipeline — detect stream of consciousness in literary texts",
+        description="Penelope — run LLM analysis on pre-chunked literary texts",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"
-            "  python run.py --input input/ --output results/\n"
-            "  python run.py --input input/ --config models.yaml\n"
-            "  python run.py --input input/ --config models.yaml --model gpt-4o --model claude-sonnet\n"
-            "  python run.py --input input/ --dry-run\n"
+            "  python run.py --input chunking/ --output results/\n"
+            "  python run.py --input chunking/ --config models.yaml\n"
+            "  python run.py --input chunking/ --model gpt-4o --model claude-sonnet\n"
+            "  python run.py --input chunking/ --dry-run\n"
+            "\n"
+            "First run:  python chunk.py --input input/\n"
+            "to produce the chunked files.\n"
         ),
     )
     parser.add_argument(
         "--input", "-i",
         required=True,
         type=Path,
-        help="Input file or directory containing literary texts (.txt, .doc, .pdf)",
+        help="Chunked file or directory (from chunk.py) with <chunk-N> markup",
     )
     parser.add_argument(
         "--output", "-o",
@@ -86,18 +89,6 @@ def parse_args() -> argparse.Namespace:
         help="Output format(s). Can be specified multiple times. Default: both csv and json.",
     )
     parser.add_argument(
-        "--chunk-size",
-        type=int,
-        default=None,
-        help="Override chunk size in characters (default: from config/env)",
-    )
-    parser.add_argument(
-        "--chunk-overlap",
-        type=int,
-        default=None,
-        help="Override chunk overlap in characters (default: from config/env)",
-    )
-    parser.add_argument(
         "--env-file",
         type=Path,
         default=None,
@@ -106,7 +97,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Extract and chunk only — skip LLM analysis (useful for testing chunking)",
+        help="List chunks without making LLM calls (useful for verifying chunking)",
     )
     parser.add_argument(
         "--verbose", "-v",
@@ -128,12 +119,8 @@ def main() -> None:
         datefmt="%H:%M:%S",
     )
 
-    # Load config (multi-model from YAML, or single-model from .env)
+    # Load config
     config = Config.load(env_file=args.env_file, config_file=args.config)
-    if args.chunk_size:
-        config.chunk_size = args.chunk_size
-    if args.chunk_overlap:
-        config.chunk_overlap = args.chunk_overlap
 
     # Filter to requested models if --model was specified
     if args.models:
@@ -150,54 +137,56 @@ def main() -> None:
         config.models = [p for p in config.get_model_profiles() if p.label in requested]
 
     profiles = config.get_model_profiles()
-    logger.info(
-        "Models to run: %s", ", ".join(p.label for p in profiles)
-    )
+    logger.info("Models to run: %s", ", ".join(p.label for p in profiles))
 
-    # ── Step 1: Extract text ───────────────────────────────────────────
+    # ── Step 1: Read pre-chunked files ─────────────────────────────────
     input_path: Path = args.input
     if input_path.is_file():
+        if not is_chunked_file(input_path):
+            logger.error(
+                "%s does not contain <chunk-N> markup. "
+                "Run chunk.py first:  python chunk.py --input input/",
+                input_path,
+            )
+            sys.exit(1)
         logger.info("Single-file mode: %s", input_path.name)
-        text = extract_text(input_path)
-        files = [(input_path, text)]
+        all_chunks = parse_chunked_file(input_path)
     elif input_path.is_dir():
+        # Check that at least one file has markup
+        txt_files = sorted(input_path.glob("*.txt"))
+        if not txt_files:
+            logger.error("No .txt files found in %s", input_path)
+            sys.exit(1)
+        if not any(is_chunked_file(f) for f in txt_files):
+            logger.error(
+                "No files in %s contain <chunk-N> markup. "
+                "Run chunk.py first:  python chunk.py --input input/ --output %s",
+                input_path, input_path,
+            )
+            sys.exit(1)
         logger.info("Directory mode: %s", input_path)
-        files = extract_all(input_path)
+        all_chunks = parse_chunked_dir(input_path)
     else:
         logger.error("Input path does not exist: %s", input_path)
         sys.exit(1)
 
-    if not files:
-        logger.error("No text files found. Exiting.")
+    if not all_chunks:
+        logger.error("No chunks found. Exiting.")
         sys.exit(1)
-
-    logger.info("Extracted text from %d file(s)", len(files))
-
-    # ── Step 2: Chunk ──────────────────────────────────────────────────
-    all_chunks = []
-    for file_path, text in files:
-        chunks = chunk_text(
-            text,
-            source_file=file_path.name,
-            chunk_size=config.chunk_size,
-            overlap=config.chunk_overlap,
-        )
-        logger.info("%s → %d chunks", file_path.name, len(chunks))
-        all_chunks.extend(chunks)
 
     logger.info("Total chunks: %d", len(all_chunks))
 
     if args.dry_run:
-        print(f"\n[DRY RUN] Extracted & chunked {len(files)} file(s) into {len(all_chunks)} chunks.")
+        print(f"\n[DRY RUN] Read {len(all_chunks)} chunks from {input_path}")
         print(f"Models configured: {', '.join(p.label for p in profiles)}")
         for c in all_chunks:
             print(f"  {c.chunk_id:30s}  {c.chunk_label:30s}  {len(c.chunk_text):,} chars")
         return
 
-    # ── Step 3: LLM Analysis (all models) ─────────────────────────────
+    # ── Step 2: LLM Analysis (all models) ─────────────────────────────
     all_rows: list[ResultRow] = analyze_chunks_multi(all_chunks, config)
 
-    # ── Step 4: Export ─────────────────────────────────────────────────
+    # ── Step 3: Export ─────────────────────────────────────────────────
     formats = args.formats or ["csv", "json"]
     created = export_results(all_rows, args.output, formats=formats)
 

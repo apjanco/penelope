@@ -50,11 +50,13 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your API keys
 
-# Test chunking (no API calls)
-python run.py --input input/ --dry-run
+# Step 1: Extract + chunk (no API calls)
+python chunk.py --input input/
 
-# Run analysis
-python run.py --input input/ --output results/
+# Review chunk boundaries in chunking/ — edit as needed
+
+# Step 2: Run LLM analysis
+python run.py --input chunking/ --output results/
 ```
 
 ## Configuration
@@ -95,32 +97,66 @@ API keys use `${ENV_VAR}` syntax and are resolved from your `.env` or shell envi
 
 ## Usage
 
+### Step 1 — Chunk (`chunk.py`)
+
+Extract text and produce annotated files with `<chunk-N>` markup:
+
 ```bash
-# Full corpus, all models
-python run.py --input input/ --output results/
+# All files in input/
+python chunk.py --input input/
 
 # Single file
-python run.py --input input/mrs_dalloway.txt --output results/
-
-# Specific models only
-python run.py --input input/ --model gpt-4o --model claude-sonnet
-
-# CSV only
-python run.py --input input/ --format csv
+python chunk.py --input input/mrs_dalloway.txt
 
 # Custom chunk size
-python run.py --input input/ --chunk-size 15000 --chunk-overlap 800
+python chunk.py --input input/ --chunk-size 15000 --chunk-overlap 800
+
+# Custom output directory
+python chunk.py --input input/ --output my_chunks/
+```
+
+This creates plain-text files in `chunking/` with tags like:
+
+```
+<chunk-0 label="Chapter I">
+...text of chunk 0...
+</chunk-0>
+
+<chunk-1 label="Chapter II">
+...text of chunk 1...
+</chunk-1>
+```
+
+Open these in any text editor. You can:
+- **Move** chunk boundaries by relocating the tags
+- **Merge** chunks by removing a closing+opening tag pair
+- **Split** a chunk by inserting new tags
+- **Rename** labels by editing the `label="..."` attribute
+
+### Step 2 — Analyze (`run.py`)
+
+Run LLM analysis on the pre-chunked files:
+
+```bash
+# Full corpus, all models
+python run.py --input chunking/ --output results/
+
+# Specific models only
+python run.py --input chunking/ --model gpt-4o --model claude-sonnet
+
+# CSV only
+python run.py --input chunking/ --format csv
 
 # Verbose logging
-python run.py --input input/ -v
+python run.py --input chunking/ -v
 ```
 
 ### Dry run
 
-Test text extraction and chunking without making any API calls:
+List chunks without making API calls:
 
 ```bash
-python run.py --input input/ --dry-run
+python run.py --input chunking/ --dry-run
 ```
 
 ### Chunking tools
@@ -188,12 +224,16 @@ penelope/
 ├── models.yaml           # Multi-model LLM configuration
 ├── .env.example          # API key template
 ├── requirements.txt      # Python dependencies
-├── run.py                # CLI entry point
+├── chunk.py              # Step 1: extract + chunk → chunking/
+├── run.py                # Step 2: LLM analysis → results/
+├── input/                # Raw literary texts (.txt, .docx, .pdf)
+├── chunking/             # Annotated texts with <chunk-N> markup (editable)
+├── results/              # CSV/JSON output
 └── scripts/
     ├── config.py         # Config loader (.env + models.yaml)
     ├── models.py         # Pydantic schemas
     ├── extract.py        # Text extraction (.txt, .docx, .pdf)
-    ├── soc_chunker.py    # Built-in chapter/heading chunker
+    ├── soc_chunker.py    # Chunker + markup writer/parser
     ├── soc_chonkie.py    # Chonkie library wrapper
     ├── analyze.py        # LLM analysis + response parsing
     └── export.py         # CSV/JSON export + summary

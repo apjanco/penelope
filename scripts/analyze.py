@@ -50,7 +50,13 @@ def build_system_prompt(skill_path: Path) -> str:
         "- Quote passages VERBATIM from the text.\n"
         "- Respond ONLY with valid JSON matching the output format.\n"
         "- Include secondary_devices, affective_register, narrator_position, "
-        "character_pov, evidence, and notes for EVERY instance.\n"
+        "character_pov, evidence, and notes for EVERY instance.\n\n"
+        "JSON SCHEMA — use these exact field names:\n"
+        '{"soc_instances": [{"passage": "...", "soc_type": "...", '
+        '"secondary_devices": [...], "affective_register": "...", '
+        '"narrator_position": "...", "character_pov": "...", '
+        '"explanation": "...", "evidence": [...], "confidence": "...", '
+        '"notes": "..."}]}\n'
     )
 
 
@@ -84,21 +90,27 @@ def _call_llm(
     model: str,
     system_prompt: str,
     user_prompt: str,
+    temperature: float | None = 0.1,
     max_retries: int = 3,
     retry_delay: float = 2.0,
 ) -> str:
     """Send a chat completion request with simple retry logic."""
     for attempt in range(1, max_retries + 1):
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
+            kwargs: dict = {
+                "model": model,
+                "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
                 ],
-                temperature=0.1,  # low temperature for consistent analysis
-                response_format={"type": "json_object"},
-            )
+                "response_format": {"type": "json_object"},
+            }
+            # Only include temperature if explicitly set — some models
+            # (e.g. GPT-5 via Portkey) reject non-default values.
+            if temperature is not None:
+                kwargs["temperature"] = temperature
+
+            response = client.chat.completions.create(**kwargs)
             content = response.choices[0].message.content or ""
             return content
 
@@ -110,6 +122,70 @@ def _call_llm(
                 time.sleep(retry_delay * attempt)
             else:
                 raise
+
+
+# ---------------------------------------------------------------------------
+# Response normalization — remap common LLM field-name variants
+# ---------------------------------------------------------------------------
+
+# Maps human-readable / variant keys → Pydantic field names
+_KEY_MAP: dict[str, str] = {
+    "primary type": "soc_type",
+    "primary_type": "soc_type",
+    "type": "soc_type",
+    "soc type": "soc_type",
+    "secondary devices": "secondary_devices",
+    "secondary_devices": "secondary_devices",
+    "affective register": "affective_register",
+    "affective_register": "affective_register",
+    "narrator position": "narrator_position",
+    "narrator_position": "narrator_position",
+    "character pov": "character_pov",
+    "character_pov": "character_pov",
+    "character": "character_pov",
+    "pov": "character_pov",
+    "passage": "passage",
+    "text": "passage",
+    "quote": "passage",
+    "explanation": "explanation",
+    "reasoning": "explanation",
+    "evidence": "evidence",
+    "confidence": "confidence",
+    "confidence level": "confidence",
+    "notes": "notes",
+}
+
+
+def _normalize_instance(raw: dict) -> dict:
+    """Remap variant field names to canonical Pydantic names."""
+    normalized: dict = {}
+    for key, value in raw.items():
+        canonical = _KEY_MAP.get(key.lower().strip(), key)
+        # First match wins — don't overwrite if we already set it
+        if canonical not in normalized:
+            normalized[canonical] = value
+    return normalized
+
+
+def _normalize_response(data: dict) -> dict:
+    """Normalize top-level response and each soc_instance inside it."""
+    # Handle variant top-level keys ("soc_instances", "instances", "results")
+    instances = None
+    for key in ("soc_instances", "instances", "results", "annotations"):
+        if key in data:
+            instances = data[key]
+            break
+    if instances is None:
+        # Maybe the LLM returned a bare list
+        if isinstance(data, list):
+            instances = data
+        else:
+            instances = []
+
+    if isinstance(instances, list):
+        instances = [_normalize_instance(inst) if isinstance(inst, dict) else inst for inst in instances]
+
+    return {"soc_instances": instances}
 
 
 # ---------------------------------------------------------------------------
@@ -127,12 +203,16 @@ def _parse_response(
         logger.debug("Raw response: %s", raw_json[:500])
         return []
 
+    # Normalize field names before validation
+    data = _normalize_response(data)
+
     try:
         llm_response = LLMResponse.model_validate(data)
     except Exception as exc:
         logger.error(
             "Response validation failed for chunk %s: %s", chunk.chunk_id, exc
         )
+        logger.debug("Normalized data keys: %s", list(data.get("soc_instances", [{}])[0].keys()) if data.get("soc_instances") else "empty")
         return []
 
     rows: list[ResultRow] = []
@@ -151,6 +231,7 @@ def analyze_chunk(
     model: str,
     system_prompt: str,
     model_label: str = "",
+    temperature: float | None = 0.1,
     max_retries: int = 3,
 ) -> list[ResultRow]:
     """Analyze a single chunk for SOC passages.
@@ -161,6 +242,7 @@ def analyze_chunk(
         model: Model name to use.
         system_prompt: Pre-built system prompt with SKILL.md.
         model_label: Human-readable label for this model (for output).
+        temperature: Temperature for sampling. None = omit (model default).
         max_retries: Number of retry attempts on failure.
 
     Returns:
@@ -169,7 +251,10 @@ def analyze_chunk(
     user_prompt = build_user_prompt(chunk)
     logger.info("[%s] Analyzing chunk %s (%d chars)", model_label, chunk.chunk_id, len(chunk.chunk_text))
 
-    raw = _call_llm(client, model, system_prompt, user_prompt, max_retries=max_retries)
+    raw = _call_llm(
+        client, model, system_prompt, user_prompt,
+        temperature=temperature, max_retries=max_retries,
+    )
     rows = _parse_response(raw, chunk, model_label=model_label)
 
     logger.info(
@@ -208,6 +293,7 @@ def analyze_chunks(
             rows = analyze_chunk(
                 chunk, client, profile.model_name, system_prompt,
                 model_label=profile.label,
+                temperature=profile.temperature,
             )
             all_rows.extend(rows)
         except Exception:

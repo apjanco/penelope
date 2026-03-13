@@ -541,19 +541,47 @@ When presented with a passage to classify:
 
 ## Output Format
 
-For each classified passage, produce an annotation in this structure:
+Return a **single JSON object** with exactly this structure. Use these field names
+verbatim — the downstream parser depends on them:
 
+```json
+{
+  "soc_instances": [
+    {
+      "passage": "Exact verbatim quote from the text.",
+      "soc_type": "indirect_interior_monologue",
+      "secondary_devices": ["free_association", "imagery"],
+      "affective_register": "anxiety",
+      "narrator_position": "minimal",
+      "character_pov": "Clarissa Dalloway",
+      "explanation": "Why this passage is classified this way.",
+      "evidence": [
+        "Specific textual feature 1",
+        "Specific textual feature 2"
+      ],
+      "confidence": "high",
+      "notes": "Any ambiguity, hybrid transitions, or observations."
+    }
+  ]
+}
 ```
-Primary type: [one of the core types or hybrid]
-Secondary devices: [any of: free association, space-montage, orthographic marker, imagery,
-                    simulation of state of mind, reverie/fantasy, or none]
-Affective register: [if simulation of state of mind: happiness, distress, anxiety, etc.; else n/a]
-Narrator position: absent | minimal | present | dominant
-Character POV: [character name]
-Evidence: [2-3 specific textual features supporting the classification]
-Confidence: high | medium | low
-Notes: [any ambiguity, hybrid transitions, or analytical observations]
-```
+
+### Field reference
+
+| Field | Type | Allowed values |
+|-------|------|----------------|
+| `passage` | string | Exact verbatim quote from the text |
+| `soc_type` | string | `direct_interior_monologue`, `indirect_interior_monologue`, `omniscient_description`, `soliloquy`, `free_association`, `space_montage`, `orthographic_marker`, `imagery`, `simulation_state_of_mind`, `reverie_fantasy`, `hybrid` |
+| `secondary_devices` | list of strings | Zero or more of the `soc_type` values above |
+| `affective_register` | string | Emotional register if simulation of state of mind; else `"n/a"` |
+| `narrator_position` | string | `absent`, `minimal`, `present`, `dominant` |
+| `character_pov` | string | Name of the character whose consciousness is rendered |
+| `explanation` | string | Reasoning for the classification |
+| `evidence` | list of strings | 2-3 specific textual features supporting classification |
+| `confidence` | string | `high`, `medium`, `low` |
+| `notes` | string | Edge cases, ambiguity, hybrid transitions (empty string if none) |
+
+If no SOC passages are found in the chunk, return: `{"soc_instances": []}`
 
 ## Reference Corpus
 

@@ -13,6 +13,9 @@ venv/
 # Input texts (large, potentially copyrighted)
 input/
 
+# Chunked/annotated texts (derived from input, may contain copyrighted text)
+chunking/
+
 # LLM results (regenerable, can be large)
 results/
 

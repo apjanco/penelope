@@ -23,7 +23,7 @@ class ModelProfile:
     base_url: str
     model_name: str
     api_key: str
-    temperature: float = 0.1
+    temperature: float | None = 0.1  # None = omit (use model default)
 
     def validate(self) -> None:
         if not self.api_key or self.api_key.startswith("${"):
@@ -123,13 +123,16 @@ class Config:
 
         self.models = []
         for entry in data["models"]:
+            # temperature: null in YAML → None in Python → omit from API call
+            raw_temp = entry.get("temperature", 0.1)
+            temp = float(raw_temp) if raw_temp is not None else None
             self.models.append(
                 ModelProfile(
                     label=entry["label"],
                     base_url=_resolve_env_vars(str(entry["base_url"])),
                     model_name=_resolve_env_vars(str(entry["model_name"])),
                     api_key=_resolve_env_vars(str(entry.get("api_key", ""))),
-                    temperature=float(entry.get("temperature", 0.1)),
+                    temperature=temp,
                 )
             )
 

@@ -11,19 +11,40 @@
 #   api_key    — API key (or reference an env var with ${ENV_VAR_NAME})
 #
 # Optional:
-#   temperature — override default 0.1
+#   temperature — override default 0.1; use null for models that
+#                 reject custom temperature (e.g. GPT-5)
 
 models:
-  - label: gpt-4o
-    base_url: https://api.openai.com/v1
-    model_name: gpt-4o
-    api_key: ${OPENAI_API_KEY}
+  # - label: gpt-5
+  #   base_url: https://api.portkey.ai/v1
+  #   model_name: gpt-5
+  #   api_key: ${PORTKEY_API_KEY}
+  #   temperature: null  # GPT-5 only supports default temperature
 
-  - label: claude-sonnet
-    base_url: https://api.anthropic.com/v1
-    model_name: claude-sonnet-4-20250514
-    api_key: ${ANTHROPIC_API_KEY}
+  # - label: Mistral-Large-2411
+  #   base_url: https://api.portkey.ai/v1
+  #   model_name: Mistral-Large-2411
+  #   api_key: ${PORTKEY_API_KEY}
+  
+  # - label: gemini-3-pro-preview
+  #   base_url: https://api.portkey.ai/v1
+  #   model_name: gemini-3-pro-preview
+  #   api_key: ${PORTKEY_API_KEY}
+  
+  # - label: Llama-3.3-70B-Instruct
+  #   base_url: https://api.portkey.ai/v1
+  #   model_name: Llama-3.3-70B-Instruct
+  #   api_key: ${PORTKEY_API_KEY}
+  
+  - label: mercury-2
+    base_url: https://api.inceptionlabs.ai/v1
+    model_name: mercury-2
+    api_key: ${INCEPTION_API_KEY}
 
+  - label: qwen3-max
+    base_url: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    model_name: qwen3-max
+    api_key: ${DASHSCOPE_API_KEY}
   # Example: local model via Ollama / vLLM
   # - label: qwen3-8b
   #   base_url: http://localhost:11434/v1
