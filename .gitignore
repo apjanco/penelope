@@ -1,0 +1,29 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Input texts (large, potentially copyrighted)
+input/
+
+# LLM results (regenerable, can be large)
+results/
+
+# Chonkie chunk output
+*_chunks.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp

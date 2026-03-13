@@ -1,0 +1,35 @@
+# SOC Analysis — Model Configuration
+#
+# Define one or more LLM profiles to run the same text through.
+# Results from all models are combined in the output with a "model_label"
+# column so you can compare classifications side-by-side.
+#
+# Each entry needs:
+#   label      — short name used in output columns and filenames
+#   base_url   — OpenAI-compatible API endpoint
+#   model_name — model identifier sent in the API request
+#   api_key    — API key (or reference an env var with ${ENV_VAR_NAME})
+#
+# Optional:
+#   temperature — override default 0.1
+
+models:
+  - label: gpt-4o
+    base_url: https://api.openai.com/v1
+    model_name: gpt-4o
+    api_key: ${OPENAI_API_KEY}
+
+  - label: claude-sonnet
+    base_url: https://api.anthropic.com/v1
+    model_name: claude-sonnet-4-20250514
+    api_key: ${ANTHROPIC_API_KEY}
+
+  # Example: local model via Ollama / vLLM
+  # - label: qwen3-8b
+  #   base_url: http://localhost:11434/v1
+  #   model_name: qwen3:8b
+  #   api_key: not-needed
+
+# Chunking defaults (can still be overridden by CLI flags)
+chunk_size: 20000
+chunk_overlap: 1000
