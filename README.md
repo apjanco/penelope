@@ -57,6 +57,11 @@ python chunk.py --input input/
 
 # Step 2: Run LLM analysis
 python run.py --input chunking/ --output results/
+
+# Step 3: Build consensus datasets
+python consensus.py --track conservative
+python consensus.py --track moderate
+python consensus.py --track liberal
 ```
 
 ## Configuration
@@ -159,6 +164,52 @@ List chunks without making API calls:
 python run.py --input chunking/ --dry-run
 ```
 
+### Step 3 — Consensus (`consensus.py`)
+
+Combine multi-model results into filtered datasets with configurable strictness:
+
+```bash
+# Run the default track (moderate)
+python consensus.py
+
+# Run a specific track
+python consensus.py --track conservative
+
+# Run multiple tracks at once
+python consensus.py --track conservative --track moderate --track liberal
+
+# List available tracks
+python consensus.py --list
+
+# Custom output directory
+python consensus.py --track moderate --output consensus/
+```
+
+Tracks are configured in `consensus.yaml`:
+
+| Track | Agreement | Min models | Confidence | Description |
+|---|---|---|---|---|
+| **conservative** | full | 3 | high | Only high-confidence passages where all models agree on type |
+| **moderate** | partial | 2 | medium | Passages flagged by ≥2 models; majority-vote picks type |
+| **liberal** | any | 1 | low | Everything any model found (exploratory) |
+
+Output files are named `consensus_<track>.csv` / `.json` and include extra
+columns: `n_models`, `models_agreed`, and `agreement`.
+
+You can define custom tracks in `consensus.yaml` — for example, to filter by
+specific models or create a stricter threshold:
+
+```yaml
+tracks:
+  big_three:
+    models: [gpt-5, gemini-3-pro-preview, qwen3-max]
+    agreement: full
+    min_models: 2
+    min_confidence: high
+    resolve_type: majority
+    output_formats: [csv, json]
+```
+
 ### Chunking tools
 
 Two chunkers are included:
@@ -226,9 +277,12 @@ penelope/
 ├── requirements.txt      # Python dependencies
 ├── chunk.py              # Step 1: extract + chunk → chunking/
 ├── run.py                # Step 2: LLM analysis → results/
+├── consensus.py          # Step 3: build consensus datasets
+├── consensus.yaml        # Consensus track configuration
+├── app.py                # Streamlit comparison dashboard
 ├── input/                # Raw literary texts (.txt, .docx, .pdf)
 ├── chunking/             # Annotated texts with <chunk-N> markup (editable)
-├── results/              # CSV/JSON output
+├── results/              # CSV/JSON output + consensus files
 └── scripts/
     ├── config.py         # Config loader (.env + models.yaml)
     ├── models.py         # Pydantic schemas
@@ -236,7 +290,8 @@ penelope/
     ├── soc_chunker.py    # Chunker + markup writer/parser
     ├── soc_chonkie.py    # Chonkie library wrapper
     ├── analyze.py        # LLM analysis + response parsing
-    └── export.py         # CSV/JSON export + summary
+    ├── export.py         # CSV/JSON export + summary
+    └── consensus.py      # Consensus filtering & merging logic
 ```
 
 ## Requirements

@@ -71,16 +71,18 @@ def export_results(
     rows: list[ResultRow],
     output_dir: Path,
     formats: list[str] | None = None,
-    stem: str = "results",
 ) -> list[Path]:
-    """Export results in one or more formats.
+    """Export results in one or more formats, one file per model.
+
+    Creates separate CSV/JSON files for each model label, e.g.:
+        results/gpt-5.csv, results/gpt-5.json
+        results/gemini-3-pro-preview.csv, ...
 
     Args:
         rows: Analysis results to export.
         output_dir: Directory for output files.
         formats: List of format strings: 'csv', 'json', or both.
                  Defaults to both.
-        stem: Base filename without extension.
 
     Returns:
         List of paths to the created files.
@@ -91,17 +93,35 @@ def export_results(
     output_dir.mkdir(parents=True, exist_ok=True)
     created: list[Path] = []
 
-    if "csv" in formats:
-        csv_path = output_dir / f"{stem}.csv"
-        export_csv(rows, csv_path)
-        created.append(csv_path)
+    # Group rows by model label
+    by_model: dict[str, list[ResultRow]] = {}
+    for row in rows:
+        label = row.model_label or "default"
+        by_model.setdefault(label, []).append(row)
 
-    if "json" in formats:
-        json_path = output_dir / f"{stem}.json"
-        export_json(rows, json_path)
-        created.append(json_path)
+    for label, model_rows in sorted(by_model.items()):
+        # Sanitise label for use as a filename
+        safe_label = _safe_filename(label)
+
+        if "csv" in formats:
+            csv_path = output_dir / f"{safe_label}.csv"
+            export_csv(model_rows, csv_path)
+            created.append(csv_path)
+
+        if "json" in formats:
+            json_path = output_dir / f"{safe_label}.json"
+            export_json(model_rows, json_path)
+            created.append(json_path)
 
     return created
+
+
+def _safe_filename(label: str) -> str:
+    """Turn a model label into a filesystem-safe filename stem."""
+    import re
+    # Replace anything that isn't alphanumeric, hyphen, or underscore
+    safe = re.sub(r"[^\w\-]", "_", label).strip("_")
+    return safe or "default"
 
 
 def print_summary(rows: list[ResultRow]) -> None:

@@ -1,0 +1,76 @@
+# Penelope — Consensus Configuration
+#
+# Define one or more "tracks" that control how aggressively passages are
+# filtered before being included in the final combined output.
+#
+# Each track specifies:
+#   models            — which model labels to include (omit or [] for all)
+#   agreement         — "full" | "partial" | "any"
+#                        full     = only passages where every included model
+#                                   agrees on the SOC type
+#                        partial  = passages identified by ≥ min_models,
+#                                   even if they disagree on type
+#                        any      = all passages from included models (no
+#                                   cross-model filtering)
+#   min_models        — minimum number of models that must flag a passage
+#                        (ignored when agreement = "any")
+#   min_confidence    — lowest acceptable confidence: "high", "medium", "low"
+#                        high   → keep only high-confidence instances
+#                        medium → keep high + medium
+#                        low    → keep everything (no filter)
+#   resolve_type      — how to pick the SOC type when models disagree
+#                        majority  = most-common type wins; ties keep all
+#                        longest   = type from the model whose passage is longest
+#                        all       = keep every model's row (no merging)
+#   output_formats    — list of "csv" and/or "json"
+#
+# Usage:
+#   python consensus.py                          # runs the "default_track"
+#   python consensus.py --track conservative
+#   python consensus.py --track liberal
+#   python consensus.py --track conservative --track liberal   # run both
+
+# Which track to run when none is specified on the command line
+default_track: moderate
+
+tracks:
+  # ── Conservative ─────────────────────────────────────────────────
+  # Only high-confidence passages where ALL models agree on the type.
+  conservative:
+    models: []                # all available models
+    agreement: full
+    min_models: 3             # at least 3 models must flag it
+    min_confidence: high
+    resolve_type: majority
+    output_formats: [csv, json]
+
+  # ── Moderate (default) ───────────────────────────────────────────
+  # Passages flagged by ≥ 2 models with at least medium confidence.
+  # Partial agreement is allowed; majority-vote picks the type.
+  moderate:
+    models: []
+    agreement: partial
+    min_models: 2
+    min_confidence: medium
+    resolve_type: majority
+    output_formats: [csv, json]
+
+  # ── Liberal ──────────────────────────────────────────────────────
+  # Everything any model found, with low confidence or higher.
+  # Good for exploratory analysis.
+  liberal:
+    models: []
+    agreement: any
+    min_models: 1
+    min_confidence: low
+    resolve_type: all
+    output_formats: [csv, json]
+
+  # ── Custom example: only big commercial models ───────────────────
+  # big_three:
+  #   models: [gpt-5, gemini-3-pro-preview, qwen3-max]
+  #   agreement: partial
+  #   min_models: 2
+  #   min_confidence: medium
+  #   resolve_type: majority
+  #   output_formats: [csv, json]
