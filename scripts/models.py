@@ -18,14 +18,17 @@ class SocType(str, Enum):
     DIRECT_INTERIOR_MONOLOGUE = "direct_interior_monologue"
     INDIRECT_INTERIOR_MONOLOGUE = "indirect_interior_monologue"
     OMNISCIENT_DESCRIPTION = "omniscient_description"
+    # Deprecated — collapsed into OTHER_SOC when below training-data threshold
     SOLILOQUY = "soliloquy"
     FREE_ASSOCIATION = "free_association"
+    # Deprecated — collapsed into OTHER_SOC when below training-data threshold
     SPACE_MONTAGE = "space_montage"
     ORTHOGRAPHIC_MARKER = "orthographic_marker"
     IMAGERY = "imagery"
     SIMULATION_STATE_OF_MIND = "simulation_state_of_mind"
     REVERIE_FANTASY = "reverie_fantasy"
     HYBRID = "hybrid"
+    OTHER_SOC = "other_soc"
 
 
 class NarratorPosition(str, Enum):
@@ -79,7 +82,8 @@ class SocInstance(BaseModel):
         description="absent | minimal | present | dominant",
     )
     character_pov: str = Field(default="", description="Character whose consciousness is rendered")
-    explanation: str = Field(description="Reasoning for the classification")
+    is_soc: bool = Field(default=True, description="Whether this passage is a stream-of-consciousness instance")
+    explanation: str = Field(default="", description="Reasoning for the classification")
     evidence: list[str] = Field(
         default_factory=list,
         description="2-3 specific textual features supporting classification",
@@ -96,6 +100,12 @@ class LLMResponse(BaseModel):
     """The expected JSON structure returned by the LLM for a single chunk."""
 
     soc_instances: list[SocInstance] = Field(default_factory=list)
+
+
+class InferenceResponse(BaseModel):
+    """JSON structure returned by the fine-tuned local model."""
+
+    instances: list[SocInstance] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------

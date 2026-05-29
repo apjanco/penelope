@@ -1,0 +1,641 @@
+"""Build training / validation / test datasets from silver-label data.
+
+Usage
+-----
+python scripts/build_dataset.py \\
+    --silver-dir training_data/ \\
+    --neg-dir /path/to/gutenberg/texts/ \\
+    --output dataset/ \\
+    [--track conservative|moderate|liberal] \\
+    [--neg-per-file 5] \\
+    [--val-ratio 0.1] \\
+    [--test-ratio 0.1] \\
+    [--collapse-threshold 30] \\
+    [--seed 42]
+
+Silver data format (training_data/*.json)
+-----------------------------------------
+JSON array of records with fields:
+  model_label, source_file, chunk_id, chunk_label, chunk_index,
+  passage, soc_type, secondary_devices (comma-sep string),
+  affective_register, narrator_position, character_pov,
+  explanation, evidence (comma-sep string), confidence, notes
+
+Output
+------
+dataset/train.jsonl, dataset/val.jsonl, dataset/test.jsonl
+Each line is a JSON object with a "messages" key (OpenAI chat format).
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import random
+import re
+import sys
+from collections import Counter
+from pathlib import Path
+
+import pandas as pd
+
+# Prepend parent so we can import scripts.*
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from scripts.prompts import TRAINING_SYSTEM_PROMPT
+
+logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+
+MIN_OVERLAP_RATIO = 0.35          # passage grouping threshold (from consensus.py)
+CONFIDENCE_RANK = {"high": 3, "medium": 2, "low": 1}
+DEPRECATED_TYPES = {"soliloquy", "space_montage"}
+NEG_WORDS_TARGET = 300            # approximate word count for Gutenberg negatives
+NEG_THINK_STUB = (
+    "No stream-of-consciousness passages identified. "
+    "The text uses conventional narrative prose without rendering "
+    "consciousness from within a character's perspective."
+)
+
+# ---------------------------------------------------------------------------
+# Data loading
+# ---------------------------------------------------------------------------
+
+
+def load_silver(silver_dir: Path) -> pd.DataFrame:
+    """Load all model JSON files from silver_dir into a single DataFrame."""
+    frames: list[pd.DataFrame] = []
+    for p in sorted(silver_dir.glob("*.json")):
+        try:
+            records = json.loads(p.read_text(encoding="utf-8"))
+            if isinstance(records, list):
+                df = pd.DataFrame(records)
+                df["model_label"] = df.get("model_label", p.stem)
+                frames.append(df)
+                logger.info("Loaded %d rows from %s", len(df), p.name)
+        except Exception as exc:
+            logger.warning("Could not load %s: %s", p.name, exc)
+
+    if not frames:
+        raise ValueError(f"No valid JSON files found in {silver_dir}")
+
+    combined = pd.concat(frames, ignore_index=True)
+    combined["passage_norm"] = combined["passage"].apply(_normalise_text)
+    combined["passage_tokens"] = combined["passage_norm"].apply(
+        lambda t: set(t.split())
+    )
+    return combined
+
+
+# ---------------------------------------------------------------------------
+# Passage grouping (ported from scripts/consensus.py)
+# ---------------------------------------------------------------------------
+
+
+def _normalise_text(text: str) -> str:
+    text = text.lower()
+    text = re.sub(r"[^\w\s]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def _token_overlap(a: set[str], b: set[str]) -> float:
+    if not a or not b:
+        return 0.0
+    intersection = len(a & b)
+    smaller = min(len(a), len(b))
+    return intersection / smaller if smaller else 0.0
+
+
+def build_passage_groups(df: pd.DataFrame) -> list[dict]:
+    """Cluster passages across models by token overlap within the same chunk."""
+    groups: list[dict] = []
+    assigned: set[int] = set()
+
+    for chunk_id, chunk_df in df.groupby("chunk_id"):
+        for i in chunk_df.index:
+            if i in assigned:
+                continue
+            tokens_i = df.at[i, "passage_tokens"]
+            matched_group = None
+            for g in groups:
+                if g["chunk_id"] != chunk_id:
+                    continue
+                for member_idx in g["rows"]:
+                    if (
+                        _token_overlap(tokens_i, df.at[member_idx, "passage_tokens"])
+                        >= MIN_OVERLAP_RATIO
+                    ):
+                        matched_group = g
+                        break
+                if matched_group:
+                    break
+
+            if matched_group:
+                matched_group["rows"].append(i)
+                model = df.at[i, "model_label"]
+                if model not in matched_group["models"]:
+                    matched_group["models"].append(model)
+            else:
+                groups.append(
+                    {
+                        "group_id": len(groups),
+                        "rows": [i],
+                        "models": [df.at[i, "model_label"]],
+                        "chunk_id": chunk_id,
+                        "source_file": df.at[i, "source_file"],
+                    }
+                )
+            assigned.add(i)
+
+    for g in groups:
+        g["n_models"] = len(set(g["models"]))
+        passages = [df.at[idx, "passage"] for idx in g["rows"]]
+        g["representative"] = max(passages, key=len)
+
+    return groups
+
+
+# ---------------------------------------------------------------------------
+# Consensus tracks
+# ---------------------------------------------------------------------------
+
+
+def resolve_majority_type(df: pd.DataFrame, row_idxs: list[int]) -> str:
+    """Return the majority-vote soc_type for a group of model rows."""
+    type_counts: Counter[str] = Counter(df.at[idx, "soc_type"] for idx in row_idxs)
+    max_count = max(type_counts.values())
+    candidates = [t for t, c in type_counts.items() if c == max_count]
+    if len(candidates) == 1:
+        return candidates[0]
+    # Tie-break: highest average confidence
+    def _avg_conf(soc_type: str) -> float:
+        subset = [
+            idx for idx in row_idxs if df.at[idx, "soc_type"] == soc_type
+        ]
+        return sum(CONFIDENCE_RANK.get(df.at[i, "confidence"], 0) for i in subset) / len(subset)
+    return max(candidates, key=_avg_conf)
+
+
+def apply_consensus(
+    df: pd.DataFrame,
+    groups: list[dict],
+    min_models: int,
+    collapse_threshold: int,
+    type_counts: Counter[str],
+) -> list[dict]:
+    """Return positive training records according to min_models threshold.
+
+    Also flags hard negatives (exactly 1 model found SoC).
+    """
+    records: list[dict] = []
+    total_models = df["model_label"].nunique()
+
+    for g in groups:
+        n = g["n_models"]
+        row_idxs = g["rows"]
+
+        if n < min_models:
+            # Hard negative: only 1 model found SoC
+            if n == 1 and total_models >= 2:
+                rep_idx = row_idxs[0]
+                passage = g["representative"]
+                records.append(
+                    _make_record(
+                        passage=passage,
+                        soc_type="",
+                        is_soc=False,
+                        hard_negative=True,
+                        row=df.iloc[rep_idx],
+                        think_content=(
+                            "Only one of the annotators flagged this passage as SoC. "
+                            "The consensus is that this is NOT a stream-of-consciousness passage."
+                        ),
+                    )
+                )
+            continue
+
+        # Positive: resolve majority type
+        resolved_type = resolve_majority_type(df, row_idxs)
+
+        # Remap deprecated types to other_soc if below threshold
+        if resolved_type in DEPRECATED_TYPES:
+            resolved_type = "other_soc"
+
+        # Also remap if any type is below collapse threshold
+        if type_counts.get(resolved_type, 0) < collapse_threshold:
+            if resolved_type not in {"other_soc"}:
+                resolved_type = "other_soc"
+
+        # Pick best representative row (highest confidence, longest passage)
+        best_idx = max(
+            row_idxs,
+            key=lambda i: (CONFIDENCE_RANK.get(df.at[i, "confidence"], 0), len(df.at[i, "passage"])),
+        )
+        best_row = df.iloc[best_idx]
+        passage = g["representative"]
+
+        # Build combined explanation from all agreeing rows
+        explanations = list(
+            dict.fromkeys(
+                df.at[idx, "explanation"]
+                for idx in row_idxs
+                if df.at[idx, "soc_type"] == resolve_majority_type(df, row_idxs)
+                and df.at[idx, "explanation"]
+            )
+        )
+        combined_explanation = " ".join(explanations[:2])
+
+        # Parse secondary_devices (comma-sep string in silver data)
+        raw_devices = best_row.get("secondary_devices", "") or ""
+        secondary_devices = [
+            d.strip() for d in str(raw_devices).split(",") if d.strip()
+        ]
+
+        # Parse evidence (comma-sep string in silver data)
+        raw_evidence = best_row.get("evidence", "") or ""
+        evidence = [e.strip() for e in str(raw_evidence).split(",") if e.strip()]
+
+        think_content = (
+            f"{combined_explanation or best_row.get('explanation', '')}\n"
+            f"Confidence: {best_row.get('confidence', 'medium')}\n"
+            f"Evidence: {'; '.join(evidence[:3])}"
+        ).strip()
+
+        records.append(
+            _make_record(
+                passage=passage,
+                soc_type=resolved_type,
+                is_soc=True,
+                hard_negative=False,
+                row=best_row,
+                secondary_devices=secondary_devices,
+                evidence=evidence,
+                explanation=combined_explanation or str(best_row.get("explanation", "")),
+                think_content=think_content,
+            )
+        )
+
+    return records
+
+
+def _make_record(
+    passage: str,
+    soc_type: str,
+    is_soc: bool,
+    hard_negative: bool,
+    row: "pd.Series",
+    think_content: str = "",
+    secondary_devices: list[str] | None = None,
+    evidence: list[str] | None = None,
+    explanation: str = "",
+) -> dict:
+    """Build a single training record dict."""
+    if secondary_devices is None:
+        secondary_devices = []
+    if evidence is None:
+        evidence = []
+
+    if is_soc:
+        instance = {
+            "is_soc": True,
+            "passage": passage,
+            "soc_type": soc_type,
+            "secondary_devices": secondary_devices,
+            "affective_register": str(row.get("affective_register", "n/a") or "n/a"),
+            "narrator_position": str(row.get("narrator_position", "minimal") or "minimal"),
+            "character_pov": str(row.get("character_pov", "") or ""),
+            "explanation": explanation,
+            "evidence": evidence,
+            "confidence": str(row.get("confidence", "medium") or "medium"),
+            "notes": str(row.get("notes", "") or ""),
+        }
+        assistant_json = json.dumps({"instances": [instance]}, ensure_ascii=False)
+    else:
+        assistant_json = '{"instances": []}'
+
+    return {
+        "source_file": str(row.get("source_file", "")),
+        "chunk_id": str(row.get("chunk_id", "")),
+        "passage": passage,
+        "is_soc": is_soc,
+        "hard_negative": hard_negative,
+        "think_content": think_content,
+        "assistant_json": assistant_json,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Negatives from Gutenberg
+# ---------------------------------------------------------------------------
+
+
+def sample_gutenberg_negatives(
+    neg_dir: Path,
+    n_per_file: int,
+    rng: random.Random,
+) -> list[dict]:
+    """Sample negative (non-SoC) passages from Gutenberg .txt files."""
+    txt_files = sorted(neg_dir.glob("*.txt"))
+    if not txt_files:
+        logger.warning("No .txt files found in %s — skipping Gutenberg negatives", neg_dir)
+        return []
+
+    records: list[dict] = []
+    for txt_path in txt_files:
+        try:
+            text = txt_path.read_text(encoding="utf-8", errors="ignore")
+        except Exception as exc:
+            logger.warning("Could not read %s: %s", txt_path.name, exc)
+            continue
+
+        # Split into ~300-word passages
+        words = text.split()
+        if len(words) < NEG_WORDS_TARGET:
+            continue
+
+        passages: list[str] = []
+        for start in range(0, len(words) - NEG_WORDS_TARGET, NEG_WORDS_TARGET):
+            chunk = " ".join(words[start : start + NEG_WORDS_TARGET])
+            passages.append(chunk)
+
+        sampled = rng.sample(passages, min(n_per_file, len(passages)))
+        for passage in sampled:
+            records.append(
+                {
+                    "source_file": txt_path.name,
+                    "chunk_id": f"gutenberg_{txt_path.stem}",
+                    "passage": passage,
+                    "is_soc": False,
+                    "hard_negative": False,
+                    "think_content": NEG_THINK_STUB,
+                    "assistant_json": '{"instances": []}',
+                }
+            )
+
+    logger.info(
+        "Sampled %d Gutenberg negatives from %d files", len(records), len(txt_files)
+    )
+    return records
+
+
+# ---------------------------------------------------------------------------
+# Chat message formatting
+# ---------------------------------------------------------------------------
+
+
+def record_to_messages(record: dict) -> dict:
+    """Convert a training record into the messages chat format."""
+    user_content = (
+        f"Source: {record['source_file']}\n\n{record['passage']}"
+    )
+    think_block = record.get("think_content", "")
+    if think_block:
+        assistant_content = f"<think>\n{think_block}\n</think>\n{record['assistant_json']}"
+    else:
+        assistant_content = record["assistant_json"]
+
+    return {
+        "messages": [
+            {"role": "system", "content": TRAINING_SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+            {"role": "assistant", "content": assistant_content},
+        ]
+    }
+
+
+# ---------------------------------------------------------------------------
+# Split & write
+# ---------------------------------------------------------------------------
+
+
+def split_records(
+    records: list[dict],
+    val_ratio: float,
+    test_ratio: float,
+    rng: random.Random,
+) -> tuple[list[dict], list[dict], list[dict]]:
+    """Stratified split keeping is_soc ratio consistent across splits."""
+    positives = [r for r in records if r["is_soc"]]
+    negatives = [r for r in records if not r["is_soc"]]
+
+    def _split(items: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
+        shuffled = items.copy()
+        rng.shuffle(shuffled)
+        n = len(shuffled)
+        n_test = max(1, int(n * test_ratio))
+        n_val = max(1, int(n * val_ratio))
+        return (
+            shuffled[: n - n_test - n_val],
+            shuffled[n - n_test - n_val : n - n_test],
+            shuffled[n - n_test :],
+        )
+
+    pos_train, pos_val, pos_test = _split(positives)
+    neg_train, neg_val, neg_test = _split(negatives)
+
+    return (
+        pos_train + neg_train,
+        pos_val + neg_val,
+        pos_test + neg_test,
+    )
+
+
+def write_jsonl(records: list[dict], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as fh:
+        for rec in records:
+            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    logger.info("Wrote %d records to %s", len(records), path)
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+
+def main() -> None:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)-8s %(message)s",
+        datefmt="%H:%M:%S",
+    )
+
+    parser = argparse.ArgumentParser(
+        description="Build SFT training dataset from silver annotations."
+    )
+    parser.add_argument(
+        "--silver-dir",
+        type=Path,
+        default=Path("training_data"),
+        help="Directory containing model JSON annotation files (default: training_data/)",
+    )
+    parser.add_argument(
+        "--neg-dir",
+        type=Path,
+        default=None,
+        help="Directory of Gutenberg .txt files for clean negatives",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("dataset"),
+        help="Output directory for train/val/test JSONL files (default: dataset/)",
+    )
+    parser.add_argument(
+        "--track",
+        choices=["conservative", "moderate", "liberal"],
+        default="moderate",
+        help="Consensus track: conservative=4/4, moderate=3/4, liberal=2/4 (default: moderate)",
+    )
+    parser.add_argument(
+        "--neg-per-file",
+        type=int,
+        default=5,
+        help="Gutenberg negatives per source file (default: 5)",
+    )
+    parser.add_argument(
+        "--val-ratio",
+        type=float,
+        default=0.1,
+        help="Fraction of data for validation (default: 0.1)",
+    )
+    parser.add_argument(
+        "--test-ratio",
+        type=float,
+        default=0.1,
+        help="Fraction of data for test (default: 0.1)",
+    )
+    parser.add_argument(
+        "--collapse-threshold",
+        type=int,
+        default=30,
+        help="Min positive examples before a type is collapsed to other_soc (default: 30)",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed (default: 42)",
+    )
+    args = parser.parse_args()
+
+    rng = random.Random(args.seed)
+    min_models = {"conservative": 4, "moderate": 3, "liberal": 2}[args.track]
+
+    # ── Load silver data ───────────────────────────────────────────────
+    logger.info("Loading silver annotations from %s", args.silver_dir)
+    df = load_silver(args.silver_dir)
+    logger.info("Total silver rows: %d", len(df))
+
+    # ── Group passages across models ───────────────────────────────────
+    groups = build_passage_groups(df)
+    logger.info("Passage groups: %d", len(groups))
+
+    # Count types before collapse (for threshold)
+    raw_type_counts: Counter[str] = Counter(
+        df["soc_type"].value_counts().to_dict()
+    )
+    type_counts = Counter(raw_type_counts)
+
+    # ── Apply consensus ────────────────────────────────────────────────
+    records = apply_consensus(
+        df=df,
+        groups=groups,
+        min_models=min_models,
+        collapse_threshold=args.collapse_threshold,
+        type_counts=type_counts,
+    )
+    n_pos = sum(1 for r in records if r["is_soc"])
+    n_hard_neg = sum(1 for r in records if r["hard_negative"])
+    logger.info(
+        "Consensus records: %d positive, %d hard negatives", n_pos, n_hard_neg
+    )
+
+    # ── Add clean negatives from consensus (chunks with 0 SoC) ────────
+    # Any chunk_id where NO model found SoC is a clean negative
+    pos_chunk_ids = {r["chunk_id"] for r in records if r["is_soc"]}
+    all_chunk_ids = set(df["chunk_id"].unique())
+    clean_neg_chunk_ids = all_chunk_ids - pos_chunk_ids
+
+    # Sample one row per clean-negative chunk to get metadata
+    for chunk_id in sorted(clean_neg_chunk_ids):
+        chunk_rows = df[df["chunk_id"] == chunk_id]
+        row = chunk_rows.iloc[0]
+        # Use the first passage from that chunk
+        passage = str(row.get("passage", "") or "")
+        if not passage:
+            continue
+        records.append(
+            {
+                "source_file": str(row.get("source_file", "")),
+                "chunk_id": chunk_id,
+                "passage": passage,
+                "is_soc": False,
+                "hard_negative": False,
+                "think_content": NEG_THINK_STUB,
+                "assistant_json": '{"instances": []}',
+            }
+        )
+
+    logger.info(
+        "Added %d clean negatives from zero-SoC chunk_ids",
+        len(clean_neg_chunk_ids),
+    )
+
+    # ── Add Gutenberg negatives ────────────────────────────────────────
+    if args.neg_dir and args.neg_dir.exists():
+        gut_records = sample_gutenberg_negatives(args.neg_dir, args.neg_per_file, rng)
+        records.extend(gut_records)
+    elif args.neg_dir:
+        logger.warning("--neg-dir %s does not exist; skipping", args.neg_dir)
+
+    logger.info("Total records before split: %d", len(records))
+
+    # ── Print type distribution ────────────────────────────────────────
+    pos_types: Counter[str] = Counter(
+        r["assistant_json"] for r in records if r["is_soc"]
+    )
+    soc_type_counter: Counter[str] = Counter()
+    for r in records:
+        if r["is_soc"]:
+            try:
+                data = json.loads(r["assistant_json"])
+                for inst in data.get("instances", []):
+                    soc_type_counter[inst.get("soc_type", "unknown")] += 1
+            except Exception:
+                pass
+    logger.info("SoC type distribution: %s", dict(soc_type_counter.most_common()))
+
+    # ── Split ──────────────────────────────────────────────────────────
+    train, val, test = split_records(records, args.val_ratio, args.test_ratio, rng)
+    logger.info(
+        "Split: train=%d  val=%d  test=%d", len(train), len(val), len(test)
+    )
+
+    # ── Convert to chat format and write ──────────────────────────────
+    write_jsonl(
+        [record_to_messages(r) for r in train], args.output / "train.jsonl"
+    )
+    write_jsonl(
+        [record_to_messages(r) for r in val], args.output / "val.jsonl"
+    )
+    write_jsonl(
+        [record_to_messages(r) for r in test], args.output / "test.jsonl"
+    )
+
+    # Also write raw records (for evaluate.py)
+    write_jsonl(
+        [r for r in test],
+        args.output / "test_raw.jsonl",
+    )
+
+    logger.info("Done. Dataset written to %s/", args.output)
+
+
+if __name__ == "__main__":
+    main()

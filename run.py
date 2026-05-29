@@ -100,6 +100,17 @@ def parse_args() -> argparse.Namespace:
         help="List chunks without making LLM calls (useful for verifying chunking)",
     )
     parser.add_argument(
+        "--fast",
+        action="store_true",
+        help="Use non-thinking mode for faster (but potentially less accurate) inference",
+    )
+    parser.add_argument(
+        "--model-config",
+        type=Path,
+        default=None,
+        help="Path to model_config.yaml (default: auto-detect in project root)",
+    )
+    parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         help="Enable debug logging",
@@ -184,7 +195,12 @@ def main() -> None:
         return
 
     # ── Step 2: LLM Analysis (all models) ─────────────────────────────
-    all_rows: list[ResultRow] = analyze_chunks_multi(all_chunks, config)
+    all_rows: list[ResultRow] = analyze_chunks_multi(
+        all_chunks,
+        config,
+        model_config_path=args.model_config,
+        fast=args.fast,
+    )
 
     # ── Step 3: Export ─────────────────────────────────────────────────
     formats = args.formats or ["csv", "json"]

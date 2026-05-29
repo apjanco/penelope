@@ -1,0 +1,29 @@
+# penelope model configuration
+# Used by scripts/analyze.py for production inference.
+# Run scripts/export_model.py to build the merged model first.
+
+model:
+  # Local path or HuggingFace Hub ID for the merged (non-adapter) model.
+  # After export_model.py: ./models/penelope-soc-v1
+  # After HF push:         apjanco/penelope-soc-v1
+  path: apjanco/penelope-soc-v1
+
+  # Device map passed to from_pretrained. "auto" distributes across available GPUs/CPU.
+  device: auto
+
+  # Maximum tokens to generate per chunk (thinking block + JSON).
+  # 4096 comfortably fits multi-instance chapters with full think traces.
+  max_new_tokens: 4096
+
+  # Enable Qwen3 thinking mode (<think>...</think> before JSON output).
+  # Set to false with --fast in run.py for faster but potentially less accurate inference.
+  enable_thinking: true
+
+  # Inference batch size (set >1 only if GPU VRAM allows batched generation).
+  batch_size: 1
+
+  # Sampling parameters for thinking mode.
+  # For non-thinking mode (--fast), analyze.py uses temperature=0.7, top_p=0.8.
+  temperature: 0.6
+  top_p: 0.95
+  top_k: 20
