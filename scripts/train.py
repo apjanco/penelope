@@ -50,20 +50,19 @@ def _import_training_deps():
             AutoModelForCausalLM,
             AutoTokenizer,
             BitsAndBytesConfig,
-            DataCollatorForSeq2Seq,
+            Trainer,
             TrainingArguments,
         )
-        from trl import SFTTrainer
         return (
             torch, Dataset, DatasetDict, LoraConfig, TaskType,
             get_peft_model, prepare_model_for_kbit_training,
             AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig,
-            DataCollatorForSeq2Seq, TrainingArguments, SFTTrainer,
+            Trainer, TrainingArguments,
         )
     except ImportError as exc:
         logger.error(
             "Missing training dependency: %s\n"
-            "Install with: pip install transformers>=4.51.0 trl>=0.8.0 peft>=0.10.0 "
+            "Install with: pip install transformers>=4.51.0 peft>=0.10.0 "
             "datasets>=2.19.0 bitsandbytes>=0.43.0 torch>=2.2.0",
             exc,
         )
@@ -166,7 +165,7 @@ def train(args: argparse.Namespace) -> None:
         torch, Dataset, DatasetDict, LoraConfig, TaskType,
         get_peft_model, prepare_model_for_kbit_training,
         AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig,
-        DataCollatorForSeq2Seq, TrainingArguments, SFTTrainer,
+        Trainer, TrainingArguments,
     ) = _import_training_deps()
 
     logging.basicConfig(
@@ -193,6 +192,17 @@ def train(args: argparse.Namespace) -> None:
 
     # ── Model ──────────────────────────────────────────────────────────
     logger.info("Loading model in 4-bit: %s", args.base_model)
+
+    # Auto-detect flash_attention_2: requires sm_80+ (A100/H100) and the flash-attn package.
+    # Enabled explicitly with --flash-attn; otherwise falls back to sdpa then eager.
+    if args.flash_attn:
+        attn_impl = "flash_attention_2"
+    elif torch.cuda.is_available():
+        # Use scaled_dot_product_attention (built into PyTorch >= 2.0) as a middle ground
+        attn_impl = "sdpa"
+    else:
+        attn_impl = "eager"
+    logger.info("Attention implementation: %s", attn_impl)
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
@@ -204,7 +214,7 @@ def train(args: argparse.Namespace) -> None:
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=True,
-        attn_implementation="flash_attention_2" if args.flash_attn else "eager",
+        attn_implementation=attn_impl,
     )
     model = prepare_model_for_kbit_training(model)
     model.config.use_cache = False
@@ -266,12 +276,15 @@ def train(args: argparse.Namespace) -> None:
         greater_is_better=False,
         report_to="none",
         seed=args.seed,
-        dataloader_num_workers=0,
+        dataloader_num_workers=args.dataloader_workers,
         remove_unused_columns=False,
     )
 
     # ── Trainer ────────────────────────────────────────────────────────
-    trainer = SFTTrainer(
+    # Use Trainer directly (not SFTTrainer) since we pre-tokenize the dataset
+    # and apply a custom masking collator. SFTTrainer's internal formatting
+    # logic conflicts with pre-tokenized data in trl >= 0.8.
+    trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
@@ -356,7 +369,13 @@ def main() -> None:
     parser.add_argument(
         "--flash-attn",
         action="store_true",
-        help="Use flash_attention_2 (requires flash-attn package)",
+        help="Use flash_attention_2 (requires: pip install flash-attn --no-build-isolation)",
+    )
+    parser.add_argument(
+        "--dataloader-workers",
+        type=int,
+        default=4,
+        help="DataLoader worker processes (default: 4; use 0 for debugging)",
     )
     parser.add_argument(
         "--seed",

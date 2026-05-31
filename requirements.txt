@@ -10,10 +10,11 @@ pandas>=2.0.0
 
 # Fine-tuning and local inference
 transformers>=4.51.0
-trl>=0.8.0
 peft>=0.10.0
 datasets>=2.19.0
 torch>=2.2.0
 bitsandbytes>=0.43.0
 accelerate>=0.27.0
 scikit-learn>=1.4.0
+# flash-attn is optional but recommended on A100/H100:
+# pip install flash-attn --no-build-isolation
