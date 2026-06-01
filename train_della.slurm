@@ -27,15 +27,18 @@
 
 # ── Environment ─────────────────────────────────────────────────────────────
 module purge
-module load anaconda3/2024.6        # check available: module avail anaconda3
-module load cudatoolkit/12.8        # A100 compute capability 8.0
+module load anaconda3/2025.12       # check available: module avail anaconda3
+module load cudatoolkit/13.2        # A100 compute capability 8.0
 
 conda activate penelope             # see setup instructions below
+
+export HF_HOME=/scratch/gpfs/MM4/apjanco/.cache/huggingface
+export HF_HUB_OFFLINE=1            # no network calls on compute nodes
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 # Use /scratch/gpfs for all I/O (fast parallel filesystem; NOT /home).
 # Example: copy project to scratch before submitting, then point paths there.
-PROJECT_DIR="/scratch/gpfs/$USER/penelope"
+PROJECT_DIR="/scratch/gpfs/MM4/apjanco/penelope"
 DATASET_DIR="$PROJECT_DIR/dataset"
 ADAPTER_DIR="$PROJECT_DIR/adapter"
 

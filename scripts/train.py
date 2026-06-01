@@ -261,7 +261,7 @@ def train(args: argparse.Namespace) -> None:
         gradient_accumulation_steps=args.grad_accum,
         learning_rate=args.lr,
         weight_decay=0.01,
-        warmup_ratio=0.03,
+        warmup_steps=10,
         lr_scheduler_type="cosine",
         bf16=torch.cuda.is_bf16_supported(),
         fp16=not torch.cuda.is_bf16_supported(),
@@ -290,7 +290,7 @@ def train(args: argparse.Namespace) -> None:
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         data_collator=collator,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
     )
 
     logger.info("Starting training...")
