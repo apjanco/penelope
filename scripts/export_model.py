@@ -120,7 +120,7 @@ print(tokenizer.decode(outputs[0][inputs.input_ids.shape[1]:], skip_special_toke
     if args.push_to_hub:
         hub_id = args.hub_id
         logger.info("Pushing to HuggingFace Hub: %s", hub_id)
-        model.push_to_hub(hub_id, private=args.hub_private, safe_serialization=True)
+        model.push_to_hub(hub_id, private=args.hub_private)
         tokenizer.push_to_hub(hub_id, private=args.hub_private)
         logger.info("Successfully pushed to %s", hub_id)
 

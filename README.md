@@ -74,7 +74,8 @@ pip install -r requirements.txt
 #    path: apjanco/penelope-soc-v1    # HF Hub (auto-download)
 #    path: ./models/penelope-soc-v1   # local merged model
 
-# 3. Extract and chunk your texts
+# 3. Extract and chunk your texts. Most large language models are not able to process an entire work at once. This step breaks a work into chunks that the model is able to process.
+
 python chunk.py --input input/
 # Review and adjust <chunk-N> boundaries in chunking/ before proceeding
 
@@ -226,6 +227,9 @@ python scripts/download_gutenberg.py --output-dir negatives/ --delay 3.0
 
 Files are saved as `negatives/pg<ID>_<slug>.txt` with boilerplate stripped.
 Already-downloaded files are skipped on re-runs.
+
+#TODO update to include download of positives
+#TODO update to include processing of positives to create silver data
 
 ### 2. Build the dataset (`scripts/build_dataset.py`)
 
@@ -382,7 +386,7 @@ Passages from different runs are matched by token overlap (35% threshold).
 ## Deploy to HuggingFace Spaces (`deploy_hf.sh`)
 
 ```bash
-huggingface-cli login           # once
+hf login           # once
 ./deploy_hf.sh                  # pushes to apjanco/penelope
 ./deploy_hf.sh myorg/my-space   # custom space
 ```

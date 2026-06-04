@@ -15,27 +15,12 @@
 #                 reject custom temperature (e.g. GPT-5)
 
 models:
-  - label: gpt-5
-    base_url: https://api.portkey.ai/v1
-    model_name: gpt-5
-    api_key: ${PORTKEY_API_KEY}
+  - label: gpt-5.4
+    base_url: https://api.openai.com/v1
+    model_name: gpt-5.4
+    api_key: ${OPENAI_API_KEY}
     temperature: null  # GPT-5 only supports default temperature
-
-  - label: Mistral-Large-2411
-    base_url: https://api.portkey.ai/v1
-    model_name: Mistral-Large-2411
-    api_key: ${PORTKEY_API_KEY}
-  
-  - label: gemini-3-pro-preview
-    base_url: https://api.portkey.ai/v1
-    model_name: gemini-3-pro-preview
-    api_key: ${PORTKEY_API_KEY}
-  
-  - label: Llama-3.3-70B-Instruct
-    base_url: https://api.portkey.ai/v1
-    model_name: Llama-3.3-70B-Instruct
-    api_key: ${PORTKEY_API_KEY}
-  
+    
   - label: mercury-2
     base_url: https://api.inceptionlabs.ai/v1
     model_name: mercury-2

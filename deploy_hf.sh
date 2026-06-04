@@ -5,7 +5,7 @@ set -euo pipefail
 #
 # Prerequisites:
 #   pip install huggingface_hub
-#   huggingface-cli login          # authenticate once
+#   hf login          # authenticate once
 #
 # Usage:
 #   ./deploy_hf.sh                         # default: apjanco/penelope
