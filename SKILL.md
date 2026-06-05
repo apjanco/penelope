@@ -539,6 +539,37 @@ When presented with a passage to classify:
    - Confidence level (high / medium / low)
    - Notes on edge cases or ambiguity
 
+## Interpretive Reasoning Trace Format
+
+When producing a `<think>` block before your JSON output, your reasoning should be a structured **deliberation**, not a checklist. Work through the following steps in prose:
+
+1. **First reading** — describe the immediate texture of the passage: voice, syntax, register. What is the reader's relationship to interiority here? Whose consciousness, if anyone's, are we inside?
+
+2. **Candidate types** — name 1–3 types from the taxonomy that could plausibly apply. For each, cite a verbatim phrase from the passage that supports it.
+
+3. **Strongest reading** — argue for the primary type. What makes this type the most productive lens — not just the most accurate label? What does classifying it this way reveal about the passage's technique?
+
+4. **Counter-reading** — what would a reasonable alternative interpretation say? Why does your chosen reading hold up against it? Acknowledge genuine ambiguity rather than forcing false certainty.
+
+5. **Skepticism gate** — could this passage appear in a non-SoC text (conventional narration, dialogue, essay prose)? If yes, what specifically marks it as interior consciousness rather than narrated psychology? If you cannot answer this question, set `is_soc: false`.
+
+This format is **exploratory, not procedural**. The deliberation is the interpretive act; the JSON is a structured summary of the conclusion. A well-argued case for `is_soc: false` is as valuable as a well-argued classification.
+
+## Interpretive Evaluation Criteria
+
+Outputs are evaluated on four dimensions. These criteria apply to the `<think>` trace and its relationship to the JSON output:
+
+| Criterion | What is scored | How |
+|---|---|---|
+| **Grounding** | Does the trace cite at least one verbatim phrase from the passage that drives the verdict? | Automatic: string-match |
+| **Skepticism** | For `is_soc: true`: does the trace address the skepticism gate? For `is_soc: false`: does it articulate what the passage would need to qualify? | LLM judge |
+| **Typological specificity** | Does the reasoning name a specific Humphrey/Steinberg marker, not a generic label? | Automatic: taxonomy keyword match |
+| **Type coherence** | Does the trace argue *for* the assigned type and *against* at least one alternative? Does the JSON `soc_type` follow from the deliberation? | LLM judge |
+
+A trace that names a type without arguing for it scores poorly on type coherence. A trace that declines to classify with a well-argued skepticism step scores well on skepticism even when `is_soc: false`.
+
+---
+
 ## Output Format
 
 Return a **single JSON object** with exactly this structure. Use these field names

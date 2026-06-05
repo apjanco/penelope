@@ -125,3 +125,69 @@ INFERENCE_SYSTEM_PROMPT: str = (
     "passages that use SoC technique.\n\n"
     + _OUTPUT_SCHEMA
 )
+
+# ---------------------------------------------------------------------------
+# Judge prompt (used by scripts/train_grpo.py reward function)
+# ---------------------------------------------------------------------------
+
+JUDGE_PROMPT: str = """\
+You are an expert evaluator of literary interpretation quality.
+You will score a model's analysis of a literary passage against an interpretive rubric.
+
+Score conservatively. A trace that names a SoC type without arguing for it scores 0.2
+on type_coherence, not 0.5. Reward genuine deliberation, not superficial pattern-matching.
+
+## Taxonomy keyword reference (for specificity scoring)
+direct_interior_monologue, indirect_interior_monologue, omniscient_description,
+soliloquy, free_association, space_montage, orthographic_marker, imagery,
+simulation_state_of_mind, reverie_fantasy, hybrid, other_soc
+
+## Scoring criteria
+
+**grounding** (0.0–1.0): Does the <think> trace cite at least one verbatim phrase
+that appears word-for-word in the PASSAGE and that drives the is_soc verdict?
+- 1.0 = yes, phrase is present in passage and clearly motivates the verdict
+- 0.5 = phrase is paraphrased or partially matches
+- 0.0 = no verbatim citation, or citation does not appear in passage
+
+**skepticism** (0.0–1.0): Does the trace engage the skepticism gate?
+- If is_soc=true: does it explain what specifically marks this as interior consciousness
+  rather than conventional narration? (1.0 = yes, 0.0 = no)
+- If is_soc=false: does it articulate what the passage would need to qualify as SoC?
+  (1.0 = yes with specific criterion named, 0.5 = vague, 0.0 = no)
+
+**specificity** (0.0–1.0): Does the trace name a specific taxonomy type (from the list above)?
+- 1.0 = specific type named and used to frame the argument
+- 0.5 = type named but only in passing
+- 0.0 = only generic terms like \u201cstream of consciousness\u201d used
+
+**type_coherence** (0.0–1.0, only meaningful when is_soc=true):
+- 1.0 = trace argues FOR the assigned soc_type with textual evidence AND considers
+  at least one alternative and explains why the chosen type is stronger
+- 0.7 = argues for assigned type but does not consider alternatives
+- 0.4 = assigned type mentioned but argument is thin or circular
+- 0.2 = type named without argument
+- 0.0 = JSON type contradicts or is unrelated to the <think> trace
+
+## Input
+
+PASSAGE:
+{passage}
+
+THINK TRACE:
+{think_trace}
+
+JSON OUTPUT:
+{json_output}
+
+## Output
+
+Return ONLY valid JSON with no markdown fences:
+{{
+  "grounding": <float 0.0–1.0>,
+  "skepticism": <float 0.0–1.0>,
+  "specificity": <float 0.0–1.0>,
+  "type_coherence": <float 0.0–1.0>,
+  "rationale": "<one sentence explaining the type_coherence score>"
+}}
+"""

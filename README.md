@@ -39,17 +39,19 @@ input/                         model_config.yaml
 **Training pipeline** (separate, run once to produce the model):
 
 ```
-training_data/*.json          negatives/
-  (silver labels from    +   (Gutenberg
-   4 large LLMs)              plain text)
+positives/                     negatives/
+  (SoC texts →          +   (Gutenberg
+   silver.py →                plain text)
+   training_data/*.json)           │
         │                         │
         └──────────┬──────────────┘
                    ▼
          build_dataset.py  →  dataset/train.jsonl
-                                       dataset/val.jsonl
-                                       dataset/test.jsonl
                    ▼
-             train.py       →  adapter/
+             train.py       →  adapter-sft/
+                   ▼
+          train_grpo.py     →  adapter-grpo/
+       + judge_della.slurm     (Qwen3.6-27B vLLM, concurrent SLURM job)
                    ▼
           export_model.py   →  models/penelope-soc-v1
                    ▼
@@ -228,21 +230,59 @@ python scripts/download_gutenberg.py --output-dir negatives/ --delay 3.0
 Files are saved as `negatives/pg<ID>_<slug>.txt` with boilerplate stripped.
 Already-downloaded files are skipped on re-runs.
 
-#TODO update to include download of positives
-#TODO update to include processing of positives to create silver data
+### 1.5 — Download positive examples (`scripts/download_positives.py`)
+
+Downloads texts where stream-of-consciousness technique is prominent — Joyce,
+Woolf, Richardson, Schnitzler, late James, Flaubert, Stein, and others.
+Grouped by primary SoC technique (direct interior monologue, free indirect
+discourse, reverie/fantasy, soliloquy, hybrid). All works are US public domain.
+
+```bash
+# Download all curated SoC texts (~25 works) to positives/
+python scripts/download_positives.py --output-dir positives/
+
+# Print the catalog without downloading
+python scripts/download_positives.py --list
+
+# Filter by author name
+python scripts/download_positives.py --output-dir positives/ --author woolf
+
+# Download specific Gutenberg IDs only
+python scripts/download_positives.py --output-dir positives/ --ids 4300 5765
+
+# Slower rate to avoid Gutenberg throttling
+python scripts/download_positives.py --output-dir positives/ --delay 3.0
+```
+
+The `positives/` directory also includes several non-Gutenberg texts
+(Faulkner, Woolf later works) that must be sourced separately and placed
+there manually before chunking.
+
+After downloading, generate silver labels:
+
+```bash
+# Chunk the positive texts
+python chunk.py --input positives/ --output chunking_positives/
+
+# Run four LLMs to generate silver-label annotations
+python scripts/silver.py --input chunking_positives/ --output-dir training_data/
+```
+
+Silver labels are written to `training_data/<model_label>.json`. Run
+`scripts/silver.py --dry-run` first to verify chunk boundaries.
 
 ### 2. Build the dataset (`scripts/build_dataset.py`)
 
-Merges the four silver-label JSON files in `training_data/` with Gutenberg
-negatives, applies consensus filtering, collapses rare types, and splits into
-train / val / test JSONL files.
+Merges silver-label JSON files in `training_data/` (produced by `silver.py`
+from the `positives/` corpus) with Gutenberg negatives, applies consensus
+filtering, collapses rare types, and splits into train / val / test JSONL files.
 
 ```bash
 python scripts/build_dataset.py \
-    --silver-dir training_data/ \
+    --silver-dir silver_data/ \
     --neg-dir    negatives/ \
     --output     dataset/ \
-    --track      conservative     # conservative | moderate | liberal
+    --track      moderate     # conservative | moderate | liberal
 ```
 
 Output: `dataset/train.jsonl`, `dataset/val.jsonl`, `dataset/test.jsonl`.
@@ -259,15 +299,16 @@ Consensus tracks applied during build:
 
 ### 3. Fine-tune (`scripts/train.py`)
 
-QLoRA supervised fine-tuning of `Qwen/Qwen3-4B` on the constructed dataset.
-A custom `ThinkMaskingCollator` masks `<think>…</think>` tokens from the loss
-so that only the JSON output tokens receive gradient signal.
+QLoRA supervised fine-tuning of `Qwen/Qwen3-4B` on the generated dataset.
+Full-sequence loss is applied by default so the model learns both the
+interpretive reasoning trace and the JSON output. Pass `--mask-thinking` to
+train on JSON tokens only (reproduces v1 behaviour, not recommended).
 
 ```bash
 python scripts/train.py \
     --dataset        dataset/ \
     --base-model     Qwen/Qwen3-4B \
-    --adapter-output adapter/ \
+    --adapter-output adapter-sft/ \
     --epochs         3 \
     --batch-size     2 \
     --grad-accum     8 \
@@ -281,6 +322,31 @@ On Princeton Della, submit as a batch job:
 ```bash
 sbatch train_della.slurm     # A100 80 GB, ~2 h for 3 epochs on ~500 examples
 ```
+
+### 3.5 — GRPO training (`scripts/train_grpo.py`)
+
+Reinforcement learning from a vLLM-hosted Qwen3.6-27B judge. Requires the SFT
+adapter from step 3 and a running judge server (1×A100 80GB).
+
+```bash
+# 1. Start the judge server (~3–5 min to load Qwen3.6-27B)
+JUDGE_JOB=$(sbatch --parsable judge_della.slurm)
+
+# 2. Submit GRPO training — starts after judge is allocated
+sbatch --dependency=after:$JUDGE_JOB train_grpo.slurm
+```
+
+Reward function (defined in `SKILL.md`):
+
+| Component | Weight | Scorer |
+|---|---|---|
+| grounding | 0.2 | auto (verbatim phrase match) |
+| skepticism | 0.2 | LLM judge |
+| specificity | 0.2 | auto (taxonomy keyword match) |
+| type coherence | 0.4 | LLM judge |
+
+Output adapter is written to `adapter-grpo/`. Monitor KL divergence during
+training — a spike indicates reward hacking.
 
 ### 4. Evaluate (`scripts/evaluate.py`)
 
@@ -408,18 +474,23 @@ penelope/
 ├── consensus.py              # Step 3: merge multi-run results
 ├── app.py                    # Streamlit comparison dashboard
 ├── deploy_hf.sh              # Push app to HuggingFace Spaces
-├── train_della.slurm         # SLURM batch script for Princeton Della
+├── train_della.slurm         # SLURM script: SFT training on Della A100
+├── train_grpo.slurm          # SLURM script: GRPO training (depends on judge)
+├── judge_della.slurm         # SLURM script: vLLM judge server (1×A100)
 ├── test_cuda.slurm           # SLURM probe to find best cudatoolkit version
 ├── input/                    # Raw literary texts (.txt, .docx, .pdf)
 ├── chunking/                 # Annotated texts with <chunk-N> markup
 ├── negatives/                # Gutenberg plain-text negatives (pg<ID>_<slug>.txt)
+├── positives/                # SoC-positive texts (Gutenberg + manually placed)
 ├── training_data/            # Silver-label JSON from 4 large LLMs
 ├── dataset/                  # Built JSONL splits (train / val / test)
-├── adapter/                  # LoRA adapter weights after training
+├── adapter/                  # v1 adapter (think-masking; kept for reference)
+├── adapter-sft/              # SFT adapter trained with full-sequence loss
+├── adapter-grpo/             # GRPO adapter after interpretive reward training
 ├── models/                   # Merged model after export_model.py
 ├── results/                  # CSV/JSON inference output
 └── scripts/
-    ├── prompts.py                # TRAINING_ and INFERENCE_SYSTEM_PROMPT constants
+    ├── prompts.py                # system prompt constants + JUDGE_PROMPT
     ├── models.py                 # Pydantic schemas (SocInstance, Chunk, etc.)
     ├── config.py                 # Config loader
     ├── extract.py                # Text extraction (.txt, .docx, .pdf)
@@ -429,8 +500,13 @@ penelope/
     ├── export.py                 # CSV/JSON export + summary
     ├── consensus.py              # Consensus filtering and merging logic
     ├── download_gutenberg.py     # Download curated Gutenberg negatives
+    ├── download_positives.py     # Download curated SoC-positive texts
+    ├── silver.py                 # Run LLMs on chunks → training_data/<model>.json
     ├── build_dataset.py          # Silver + negatives → JSONL training splits
-    ├── train.py                  # QLoRA SFT training loop
+    ├── generate_traces.py        # Replace boilerplate traces with interpretive reasoning
+    ├── infer.py                  # CLI for single-passage inference (Typer)
+    ├── train.py                  # QLoRA SFT training loop (--mask-thinking flag)
+    ├── train_grpo.py             # GRPO training with vLLM judge reward
     ├── evaluate.py               # Per-class F1, confusion matrix
     └── export_model.py           # Merge adapter and push to HF Hub
 ```

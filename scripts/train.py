@@ -249,7 +249,13 @@ def train(args: argparse.Namespace) -> None:
     val_dataset = Dataset.from_list(val_tokenized)
 
     # ── Data collator ──────────────────────────────────────────────────
-    collator = ThinkMaskingCollator(tokenizer, think_end_ids)
+    if args.mask_thinking:
+        collator = ThinkMaskingCollator(tokenizer, think_end_ids)
+        logger.info("Think-masking enabled: <think> tokens excluded from loss")
+    else:
+        from transformers import DataCollatorWithPadding
+        collator = DataCollatorWithPadding(tokenizer, pad_to_multiple_of=8)
+        logger.info("Think-masking disabled: loss computed over full assistant turn")
 
     # ── Training arguments ─────────────────────────────────────────────
     output_dir = args.adapter_output
@@ -382,6 +388,16 @@ def main() -> None:
         type=int,
         default=42,
         help="Random seed (default: 42)",
+    )
+    parser.add_argument(
+        "--mask-thinking",
+        action="store_true",
+        default=False,
+        help=(
+            "Mask <think>...</think> tokens from the training loss (original behaviour). "
+            "Default is False: loss is computed over the full assistant turn including "
+            "the reasoning trace. Use --mask-thinking only to reproduce v1 training."
+        ),
     )
     args = parser.parse_args()
     train(args)

@@ -53,10 +53,19 @@ echo "Working dir: $PWD"
 nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
 python -c "import torch; print('PyTorch', torch.__version__, '| CUDA', torch.version.cuda, '| bf16 support:', torch.cuda.is_bf16_supported())"
 
+# ── Resolve base model from HF cache ─────────────────────────────────────────
+BASE_MODEL=$(find "$HF_HOME/hub/models--Qwen--Qwen3-4B/snapshots" \
+    -maxdepth 1 -mindepth 1 -type d 2>/dev/null | head -1)
+if [ -z "$BASE_MODEL" ]; then
+    echo "ERROR: Qwen3-4B not found in HF cache ($HF_HOME/hub/). Pre-download it on a login node."
+    exit 1
+fi
+echo "Base model : $BASE_MODEL"
+
 # ── Training ──────────────────────────────────────────────────────────────────
 python scripts/train.py \
     --dataset         "$DATASET_DIR" \
-    --base-model      Qwen/Qwen3-4B \
+    --base-model      "$BASE_MODEL" \
     --adapter-output  "$ADAPTER_DIR" \
     --epochs          3 \
     --batch-size      2 \
