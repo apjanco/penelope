@@ -120,9 +120,14 @@ def _call_judge(
             max_tokens=256,
         )
         raw = response.choices[0].message.content.strip()
-        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        # Strip any <think>...</think> block the judge model emits before the JSON
+        raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+        match = re.search(r"\{", raw)
         if match:
-            return json.loads(match.group(0))
+            # raw_decode stops at the first complete JSON object, ignoring any
+            # trailing text or second object — avoids "Extra data" errors.
+            obj, _ = json.JSONDecoder().raw_decode(raw, match.start())
+            return obj
     except Exception as exc:
         logger.warning("Judge call failed: %s", exc)
     return {"grounding": 0.5, "skepticism": 0.5, "specificity": 0.5, "type_coherence": 0.5, "rationale": "judge unavailable"}
@@ -140,42 +145,48 @@ def compute_reward(
     judge_model: str,
     judge_prompt: str,
 ) -> list[float]:
-    rewards = []
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    # Pre-parse each completion (fast, no I/O)
+    parsed_items = []
     for completion, passage in zip(completions, passages):
-        # Extract think and JSON
         think_match = re.search(r"<think>(.*?)</think>", completion, re.DOTALL)
         think = think_match.group(1).strip() if think_match else ""
         json_str = re.sub(r"<think>.*?</think>", "", completion, flags=re.DOTALL).strip()
         jmatch = re.search(r"\{.*\}", json_str, re.DOTALL)
         json_output = jmatch.group(0) if jmatch else "{}"
-
-        # Determine is_soc from JSON
         try:
-            parsed = json.loads(json_output)
-            is_soc = bool(parsed.get("instances"))
+            is_soc = bool(json.loads(json_output).get("instances"))
         except Exception:
             is_soc = False
-
-        # Automatic scores
         g = _grounding(think, passage)
         s = _specificity(think)
+        parsed_items.append((passage, think, json_output, is_soc, g, s))
 
-        # Judge scores
-        judge_scores = _call_judge(
+    # Fire all judge calls concurrently — cuts per-step latency from
+    # ~80 s (8 × sequential) to ~10 s (8 × parallel).
+    def _score(idx: int) -> tuple[int, dict]:
+        passage, think, json_output, _, _, _ = parsed_items[idx]
+        return idx, _call_judge(
             judge_client, judge_model, judge_prompt,
             passage, think, json_output,
         )
+
+    judge_results: list[dict] = [{}] * len(parsed_items)
+    with ThreadPoolExecutor(max_workers=len(parsed_items)) as pool:
+        for future in as_completed(pool.submit(_score, i) for i in range(len(parsed_items))):
+            idx, scores = future.result()
+            judge_results[idx] = scores
+
+    rewards = []
+    for (passage, think, json_output, is_soc, g, s), judge_scores in zip(parsed_items, judge_results):
         skepticism = float(judge_scores.get("skepticism", 0.5))
         type_coherence = float(judge_scores.get("type_coherence", 0.5))
-
-        # Neutral on type dimensions for negatives
         if not is_soc:
             s = 0.5
             type_coherence = 0.5
-
         reward = 0.2 * g + 0.2 * skepticism + 0.2 * s + 0.4 * type_coherence
         rewards.append(reward)
-
         logger.debug(
             "reward=%.3f  grounding=%.2f  skepticism=%.2f  specificity=%.2f  "
             "type_coherence=%.2f  rationale=%s",
@@ -297,9 +308,21 @@ def train(args: argparse.Namespace) -> None:
     # ── Reward wrapper ─────────────────────────────────────────────────
     judge_model_name = args.judge_model
 
-    def reward_fn(completions: list[str], passage: list[str], **_) -> list[float]:  # type: ignore[override]
+    def reward_fn(completions: list, passage: list[str], **_) -> list[float]:  # type: ignore[override]
+        # TRL wraps completions as [[{"role": "assistant", "content": "..."}], ...]
+        # for conversational (chat-format) prompts. Unwrap to plain strings.
+        flat: list[str] = []
+        for c in completions:
+            if isinstance(c, list):
+                text = next(
+                    (m["content"] for m in reversed(c) if isinstance(m, dict) and "content" in m),
+                    "",
+                )
+            else:
+                text = c
+            flat.append(text)
         return compute_reward(
-            completions=completions,
+            completions=flat,
             passages=passage,
             judge_client=judge_client,
             judge_model=judge_model_name,
@@ -320,7 +343,33 @@ def train(args: argparse.Namespace) -> None:
         "Monitor KL divergence in logs. If KL spikes while reward climbs, "
         "reduce --kl-coef or stop early to prevent reward hacking."
     )
-    trainer.train()
+    resume = args.resume or None
+    if resume:
+        logger.info("Resuming from latest checkpoint in %s", args.output / "checkpoints")
+    try:
+        trainer.train(resume_from_checkpoint=resume)
+    except ValueError as exc:
+        if "parameter group" in str(exc) and resume:
+            logger.warning(
+                "Optimizer state in checkpoint does not match current model "
+                "(parameter group size mismatch — model may have been reconfigured). "
+                "Dropping stale optimizer/scheduler state and resuming from model weights only."
+            )
+            ckpt_dir = args.output / "checkpoints"
+            checkpoints = sorted(
+                ckpt_dir.glob("checkpoint-*"),
+                key=lambda p: int(p.name.split("-")[-1]),
+            )
+            if checkpoints:
+                latest = checkpoints[-1]
+                for fname in ("optimizer.pt", "scheduler.pt"):
+                    stale = latest / fname
+                    if stale.exists():
+                        stale.unlink()
+                        logger.info("Removed stale %s from %s", fname, latest)
+            trainer.train(resume_from_checkpoint=resume)
+        else:
+            raise
 
     # ── Save ───────────────────────────────────────────────────────────
     args.output.mkdir(parents=True, exist_ok=True)
@@ -369,6 +418,8 @@ def main() -> None:
         help="KL divergence penalty coefficient. Increase if reward hacking occurs.",
     )
     parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument("--resume", action="store_true",
+        help="Resume from the latest checkpoint in --output/checkpoints/.")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     train(args)

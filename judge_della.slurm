@@ -20,11 +20,12 @@
 #SBATCH --job-name=penelope-judge
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=80G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
 #SBATCH --gres=gpu:1
 #SBATCH --constraint=gpu80         # 1×A100 80GB for Qwen3.6-27B in BF16
-#SBATCH --time=12:00:00            # keep alive for the duration of GRPO run
+#SBATCH --time=24:00:00
+#SBATCH --qos=gpu-short             
 #SBATCH --output=logs/judge_%j.out
 #SBATCH --error=logs/judge_%j.err
 #SBATCH --mail-type=begin,fail
@@ -79,6 +80,7 @@ vllm serve "$MODEL" \
     --max-model-len 8192 \
     --dtype bfloat16 \
     --gpu-memory-utilization 0.92 \
+    --enable-prefix-caching \
     &
 
 VLLM_PID=$!

@@ -20,11 +20,12 @@
 #SBATCH --job-name=penelope-grpo
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
 #SBATCH --gres=gpu:1
 #SBATCH --constraint=gpu80         # A100 80GB; QLoRA Qwen3-4B needs ~8 GB GPU
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
+#SBATCH --qos=gpu-short            # 24-hour blocks; resubmit with auto-resume
 #SBATCH --output=logs/grpo_%j.out
 #SBATCH --error=logs/grpo_%j.err
 #SBATCH --mail-type=begin,end,fail
@@ -91,6 +92,16 @@ if [ -z "$BASE_MODEL" ]; then
 fi
 echo "Base model : $BASE_MODEL"
 
+# ── Auto-resume if a checkpoint exists ──────────────────────────────────────
+RESUME_FLAG=""
+if compgen -G "$PROJECT_DIR/adapter-grpo/checkpoints/checkpoint-*" > /dev/null 2>&1; then
+    RESUME_FLAG="--resume"
+    LATEST=$(ls -d "$PROJECT_DIR/adapter-grpo/checkpoints/checkpoint-"* 2>/dev/null | sort -V | tail -1)
+    echo "Checkpoint detected: $LATEST — resuming."
+else
+    echo "No checkpoint found — starting from scratch."
+fi
+
 # ── GRPO Training ─────────────────────────────────────────────────────────────
 python scripts/train_grpo.py \
     --dataset        dataset/ \
@@ -105,7 +116,8 @@ python scripts/train_grpo.py \
     --lr             5e-6 \
     --group-size     8 \
     --kl-coef        0.1 \
-    --max-new-tokens 2048
+    --max-new-tokens 2048 \
+    $RESUME_FLAG
 
 echo "GRPO training complete. Adapter written to adapter-grpo/"
 
