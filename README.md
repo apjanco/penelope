@@ -361,6 +361,12 @@ python scripts/evaluate.py \
     --output     eval_results.json
 ```
 
+On Della:
+
+```bash
+sbatch evaluate_della.slurm
+``` 
+
 ### 5. Export and publish (`scripts/export_model.py`)
 
 Merge the LoRA adapter into the base model and optionally push to HF Hub:

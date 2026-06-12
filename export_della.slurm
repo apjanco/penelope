@@ -31,7 +31,7 @@ module load cudatoolkit/13.2
 conda activate penelope
 
 export HF_HOME=/scratch/gpfs/MM4/apjanco/.cache/huggingface
-# Leave HF_HUB_OFFLINE unset so push-to-hub can reach the internet
+export HF_HUB_OFFLINE=1             # no network calls on compute nodes
 
 PROJECT_DIR=/scratch/gpfs/MM4/apjanco/penelope
 
@@ -40,7 +40,7 @@ cd "$PROJECT_DIR"
 # ── Export ───────────────────────────────────────────────────────────────────
 python scripts/export_model.py \
     --base-model  Qwen/Qwen3-4B \
-    --adapter     "$PROJECT_DIR/adapter/" \
-    --output      "$PROJECT_DIR/models/penelope-soc-v1"
+    --adapter     "$PROJECT_DIR/adapter-grpo/checkpoints/checkpoint-4762" \
+    --output      "$PROJECT_DIR/models/penelope-soc-v2"
 
 echo "Done."
