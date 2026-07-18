@@ -23,7 +23,7 @@
 #SBATCH --output=logs/train_%j.out
 #SBATCH --error=logs/train_%j.err
 #SBATCH --mail-type=begin,end,fail
-#SBATCH --mail-user=                # fill in your Princeton email
+#SBATCH --mail-user=apjanco@princeton.edu                # fill in your Princeton email
 
 # ── Environment ─────────────────────────────────────────────────────────────
 module purge
@@ -40,7 +40,7 @@ export HF_HUB_OFFLINE=1            # no network calls on compute nodes
 # Example: copy project to scratch before submitting, then point paths there.
 PROJECT_DIR="/scratch/gpfs/MM4/apjanco/penelope"
 DATASET_DIR="$PROJECT_DIR/dataset"
-ADAPTER_DIR="$PROJECT_DIR/adapter"
+ADAPTER_DIR="$PROJECT_DIR/adapter-v3"
 
 cd "$PROJECT_DIR" || { echo "Project dir not found: $PROJECT_DIR"; exit 1; }
 mkdir -p logs
@@ -73,6 +73,7 @@ python scripts/train.py \
     --lr              2e-4 \
     --lora-rank       64 \
     --max-seq-len     4096 \
+    --think-loss-weight 0.4 \
     --flash-attn \
     --dataloader-workers 4
 

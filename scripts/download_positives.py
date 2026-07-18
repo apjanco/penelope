@@ -55,95 +55,153 @@ logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Curated SoC positives
-# Each tuple: (gutenberg_id, author, title, primary_soc_technique)
+# Each tuple: (gutenberg_id, author, title, primary_soc_technique, manual_filename)
+#
+# manual_filename — set when the file is already placed on disk and no download
+#   is needed.  Use id=0 to suppress the download step entirely.
 # Verify / browse at:  https://www.gutenberg.org/ebooks/<id>
 # ---------------------------------------------------------------------------
 
-CURATED_TEXTS: list[tuple[int, str, str, str]] = [
+CURATED_TEXTS: list[tuple[int, str, str, str, str | None]] = [
     # ── James Joyce ──────────────────────────────────────────────────────────
     # Defines direct interior monologue; most annotated SoC work in English
     (4300,  "James Joyce",      "Ulysses",
-     "direct_interior_monologue + hybrid — Molly Bloom soliloquy, Proteus chapter"),
+     "direct_interior_monologue + hybrid — Molly Bloom soliloquy, Proteus chapter",
+     None),
     (4217,  "James Joyce",      "A Portrait of the Artist as a Young Man",
-     "indirect_interior_monologue — FID intensifies through Stephen's development"),
+     "indirect_interior_monologue — FID intensifies through Stephen's development",
+     None),
     (2814,  "James Joyce",      "Dubliners",
-     "indirect_interior_monologue — epiphany moments, close-third interiority"),
+     "indirect_interior_monologue — epiphany moments, close-third interiority",
+     None),
 
     # ── Virginia Woolf ───────────────────────────────────────────────────────
     # Defines the modernist stream-of-consciousness novel
-    (5765,  "Virginia Woolf",   "Mrs Dalloway",
-     "indirect_interior_monologue + reverie_fantasy — landmark FID, time fluidity"),
-    (690,   "Virginia Woolf",   "To the Lighthouse",
-     "indirect_interior_monologue — 'Time Passes', close interior access"),
-    (43524, "Virginia Woolf",   "The Waves",
-     "direct_interior_monologue — six alternating interior soliloquies"),
-    (5550,  "Virginia Woolf",   "Jacob's Room",
-     "indirect_interior_monologue — experimental interiority, fragmented POV"),
+    (0,     "Virginia Woolf",   "Mrs Dalloway",
+     "indirect_interior_monologue + reverie_fantasy — manually cleaned edition",
+     "mrs_dalloway_cleaned.txt"),
+    (0,     "Virginia Woolf",   "To the Lighthouse",
+     "indirect_interior_monologue — 'Time Passes', close interior access",
+     "to_the_lighthouse_cleaned.txt"),  # PD in US (1927) but not on PG yet
+    (0,     "Virginia Woolf",   "The Waves",
+     "direct_interior_monologue — six alternating interior soliloquies",
+     "the_waves_cleaned.txt"),          # not PD in US until 2027
+    (5670,  "Virginia Woolf",   "Jacob's Room",
+     "indirect_interior_monologue — experimental interiority, fragmented POV",
+     None),   # PG 5670 ✓ (was 5550 = Georg Ebers novel)
+    (0,     "Virginia Woolf",   "Jacob's Room (cleaned)",
+     "indirect_interior_monologue — manually cleaned edition",
+     "jacobs_room.txt"),
+    (0,     "Virginia Woolf",   "Night and Day",
+     "indirect_interior_monologue — early Woolf; proto-modernist close interiority",
+     "night_and_day_cleaned.txt"),
+    (0,     "Virginia Woolf",   "Orlando",
+     "indirect_interior_monologue + reverie_fantasy — biographical fantasy; FID throughout",
+     "orlando_cleaned.txt"),
+    (0,     "Virginia Woolf",   "Between the Acts",
+     "indirect_interior_monologue + simulation_state_of_mind — final novel; pageant structure",
+     "between_the_acts.txt"),           # not PD in US until 2037
+    (0,     "Virginia Woolf",   "Flush",
+     "indirect_interior_monologue — dog's-eye FID; unusual focalization",
+     "flush.txt"),                      # not PD in US until 2029
+    (0,     "Virginia Woolf",   "The Years",
+     "indirect_interior_monologue — later Woolf; more restrained SoC",
+     "the_years.txt"),                  # not PD in US until 2033
+    (0,     "Virginia Woolf",   "The Voyage Out",
+     "indirect_interior_monologue — debut novel; proto-SoC interiority",
+     "the_voyage_out.txt"),
+
+    # ── William Faulkner ─────────────────────────────────────────────────────
+    # Radical stream-of-consciousness; Benjy and Quentin sections are landmark SoC
+    (0,     "William Faulkner", "The Sound and the Fury",
+     "direct_interior_monologue — Benjy's section; temporal fragmentation; Quentin reverie",
+     "sound_and_fury.txt"),             # 1929; became PD in US Jan 1 2025
+    (0,     "William Faulkner", "As I Lay Dying",
+     "direct_interior_monologue — 15 narrators; Darl's sections are pure SoC",
+     "as_I_lay_dying.txt"),             # 1930; became PD in US Jan 1 2026
 
     # ── Dorothy Richardson ───────────────────────────────────────────────────
     # Pilgrimage sequence: coined the phrase "stream of consciousness" in fiction
-    (4517,  "Dorothy Richardson", "Pointed Roofs",
-     "indirect_interior_monologue — vol. 1 of Pilgrimage; interior focalization"),
-    (4518,  "Dorothy Richardson", "Backwater",
-     "indirect_interior_monologue — vol. 2 of Pilgrimage"),
-    (4519,  "Dorothy Richardson", "Honeycomb",
-     "indirect_interior_monologue — vol. 3 of Pilgrimage"),
+    (3019,  "Dorothy Richardson", "Pointed Roofs",
+     "indirect_interior_monologue — vol. 1 of Pilgrimage; interior focalization",
+     None),   # PG 3019 ✓ (was 4517 = Ethan Frome by Edith Wharton)
+    (56221, "Dorothy Richardson", "Backwater",
+     "indirect_interior_monologue — vol. 2 of Pilgrimage",
+     None),   # PG 56221 ✓ (was 4518 = Madame de Treymes by Edith Wharton)
+    (56664, "Dorothy Richardson", "Honeycomb",
+     "indirect_interior_monologue — vol. 3 of Pilgrimage",
+     None),   # PG 56664 ✓ (was 4519 = Wharton short stories)
 
     # ── May Sinclair ─────────────────────────────────────────────────────────
     # Critic who named Richardson's technique; also practised it herself
     (34219, "May Sinclair",     "Mary Olivier: A Life",
-     "indirect_interior_monologue — interior monologue across a life"),
+     "indirect_interior_monologue — interior monologue across a life",
+     None),
 
     # ── Édouard Dujardin ─────────────────────────────────────────────────────
     # Widely credited as the first sustained SoC novel (1888); influenced Joyce
     (42984, "Edouard Dujardin", "We'll to the Woods No More",
-     "direct_interior_monologue — proto-SoC; real-time unmediated thought-stream"),
+     "direct_interior_monologue — proto-SoC; real-time unmediated thought-stream",
+     None),
 
     # ── Ford Madox Ford ──────────────────────────────────────────────────────
     # Unreliable first-person narrator; digressive memory/retrospective interiority
     (2775,  "Ford Madox Ford",  "The Good Soldier",
-     "reverie_fantasy + indirect_interior_monologue — unreliable retrospective narrator"),
+     "reverie_fantasy + indirect_interior_monologue — unreliable retrospective narrator",
+     None),
 
     # ── Henry James (late period) ────────────────────────────────────────────
     # Late James = dense FID; intense interior access to central consciousness.
     # NOTE: James appears in the EXCLUSION list for download_gutenberg.py (negatives).
     (432,   "Henry James",      "The Ambassadors",
-     "indirect_interior_monologue — elaborated FID; Strether's 'central consciousness'"),
-    (209,   "Henry James",      "The Wings of the Dove",
-     "indirect_interior_monologue — late-James FID, intensive psychological interiority"),
-    (1149,  "Henry James",      "The Turn of the Screw",
-     "indirect_interior_monologue — unreliable narrator, interior obsession"),
+     "indirect_interior_monologue — elaborated FID; Strether's 'central consciousness'",
+     None),
+    (29452, "Henry James",      "The Wings of the Dove (Volume 1)",
+     "indirect_interior_monologue — late-James FID, intensive psychological interiority",
+     None),   # PG 29452 ✓ (was 209 = Turn of the Screw)
+    (30059, "Henry James",      "The Wings of the Dove (Volume 2)",
+     "indirect_interior_monologue — late-James FID, intensive psychological interiority",
+     None),
+    (209,   "Henry James",      "The Turn of the Screw",
+     "indirect_interior_monologue — unreliable narrator, interior obsession",
+     None),   # PG 209 ✓ (was 1149 = Defoe)
 
     # ── Arthur Schnitzler ────────────────────────────────────────────────────
     # Austrian proto-SoC; 'Lieutenant Gustl' is the first German-language interior monologue
     (32220, "Arthur Schnitzler", "Lieutenant Gustl",
-     "direct_interior_monologue — unbroken real-time interior monologue"),
+     "direct_interior_monologue — unbroken real-time interior monologue",
+     None),
 
     # ── Kate Chopin ──────────────────────────────────────────────────────────
     # The Awakening: FID and interior reverie, proto-modernist interiority
     (160,   "Kate Chopin",      "The Awakening",
-     "indirect_interior_monologue + reverie_fantasy — FID, Edna's interior drift"),
+     "indirect_interior_monologue + reverie_fantasy — FID, Edna's interior drift",
+     None),
 
-    # ── Leo Tolstoy (translated) ──────────────────────────────────────────────
+    # ── Leo Tolstoy (translated) ─────────────────────────────────────────────
     # Anna Karenina's final chapters: sustained stream-of-consciousness monologue
     # (Constance Garnett translation, PD in US)
     (1399,  "Leo Tolstoy",      "Anna Karenina",
-     "indirect_interior_monologue + reverie_fantasy — Anna's final interior monologue"),
+     "indirect_interior_monologue + reverie_fantasy — Anna's final interior monologue",
+     None),
 
     # ── Fyodor Dostoevsky (translated) ───────────────────────────────────────
     # Notes from Underground: obsessive self-interrogating first-person monologue
     (600,   "Fyodor Dostoevsky", "Notes from Underground",
-     "soliloquy — proto-SoC; feverish self-address and internal contradiction"),
+     "soliloquy — proto-SoC; feverish self-address and internal contradiction",
+     None),
 
     # ── Gustave Flaubert (translated) ────────────────────────────────────────
     # Inventor of modern FID; Madame Bovary is a textbook FID example
     (2413,  "Gustave Flaubert", "Madame Bovary",
-     "indirect_interior_monologue — pioneering FID; Emma's reverie and fantasy"),
+     "indirect_interior_monologue — pioneering FID; Emma's reverie and fantasy",
+     None),
 
     # ── Gertrude Stein ────────────────────────────────────────────────────────
     # Three Lives: repetitive present-tense style; early American SoC experiment
     (15408, "Gertrude Stein",   "Three Lives",
-     "indirect_interior_monologue — repetitive interior style, present-tense consciousness"),
+     "indirect_interior_monologue — repetitive interior style, present-tense consciousness",
+     None),
 ]
 
 # ---------------------------------------------------------------------------
@@ -314,11 +372,12 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.list:
-        print(f"\n{'ID':>7}  {'Author':<26}  {'Title':<40}  SoC technique")
-        print("-" * 110)
-        for gid, author, title, technique in sorted(CURATED_TEXTS, key=lambda x: x[1]):
-            print(f"{gid:>7}  {author:<26}  {title:<40}  {technique}")
-        print(f"\nTotal: {len(CURATED_TEXTS)} texts")
+        print(f"\n{'ID':>7}  {'Author':<26}  {'Title':<42}  File / source")
+        print("-" * 115)
+        for gid, author, title, _technique, manual_filename in sorted(CURATED_TEXTS, key=lambda x: x[1]):
+            src = manual_filename if manual_filename else (f"pg{gid:05d}" if gid else "(no id)")
+            print(f"{gid or '':>7}  {author:<26}  {title:<42}  {src}")
+        print(f"\nTotal: {len(CURATED_TEXTS)} entries")
         return
 
     # ── Filter ───────────────────────────────────────────────────────
@@ -340,14 +399,16 @@ def main() -> None:
                 ", ".join(str(i) for i in sorted(missing)),
             )
             for gid in sorted(missing):
-                texts.append((gid, "unknown", f"pg{gid}", "unknown"))
+                texts.append((gid, "unknown", f"pg{gid}", "unknown", None))
 
-    # ── Deduplicate by ID ─────────────────────────────────────────────
+    # ── Deduplicate by ID ───────────────────────────────────────────────
+    # id=0 entries are kept even after dedup (each has a distinct manual_filename)
     seen: set[int] = set()
     deduped = []
     for entry in texts:
-        if entry[0] not in seen:
+        if entry[0] == 0 or entry[0] not in seen:
             deduped.append(entry)
+        if entry[0] != 0:
             seen.add(entry[0])
     texts = deduped
 
@@ -359,7 +420,15 @@ def main() -> None:
     logger.info("Downloading %d text(s) to %s/", len(texts), args.output_dir)
 
     n_ok = n_fail = 0
-    for gid, author, title, _technique in texts:
+    for gid, author, title, _technique, manual_filename in texts:
+        if gid == 0:
+            if manual_filename:
+                dest = args.output_dir / manual_filename
+                status = "present" if dest.exists() else "MISSING from disk"
+                logger.info("  skip (manually placed) %s — %s  [%s]", author, title, status)
+            else:
+                logger.info("  skip (id=0, no file) %s — %s", author, title)
+            continue
         ok = download_text(gid, author, title, args.output_dir, session, args.delay)
         if ok:
             n_ok += 1

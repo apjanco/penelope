@@ -99,6 +99,32 @@ def _build_judge_client(judge_url: str):
     return OpenAI(api_key="not-needed", base_url=judge_url)
 
 
+def _resolve_judge_model(client: Any, requested_model: str) -> str:
+    try:
+        response = client.models.list()
+    except Exception as exc:
+        logger.warning("Could not query judge model list; using %s: %s", requested_model, exc)
+        return requested_model
+
+    served_models = [getattr(model, "id", None) for model in getattr(response, "data", [])]
+    served_models = [model for model in served_models if model]
+    if not served_models:
+        logger.warning("Judge returned no served models; using %s", requested_model)
+        return requested_model
+
+    if requested_model in served_models:
+        return requested_model
+
+    resolved_model = served_models[0]
+    logger.warning(
+        "Judge model %s is not being served; using %s instead. Available models: %s",
+        requested_model,
+        resolved_model,
+        ", ".join(served_models),
+    )
+    return resolved_model
+
+
 def _call_judge(
     client: Any,
     judge_model: str,
@@ -245,6 +271,10 @@ def train(args: argparse.Namespace) -> None:
             if line:
                 train_records.append(json.loads(line))
 
+    if args.max_train_examples is not None:
+        train_records = train_records[: args.max_train_examples]
+        logger.info("Limiting GRPO training set to %d examples", len(train_records))
+
     # Extract passages for reward computation
     passages = []
     prompts = []
@@ -287,6 +317,7 @@ def train(args: argparse.Namespace) -> None:
     # ── GRPO config ────────────────────────────────────────────────────
     grpo_config = GRPOConfig(
         output_dir=str(args.output / "checkpoints"),
+        max_steps=args.max_steps,
         num_train_epochs=args.epochs,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum,
@@ -298,7 +329,7 @@ def train(args: argparse.Namespace) -> None:
         bf16=torch.cuda.is_bf16_supported(),
         fp16=not torch.cuda.is_bf16_supported(),
         logging_steps=5,
-        save_steps=100,
+        save_steps=args.save_steps,
         save_total_limit=2,
         report_to="none",
         seed=args.seed,
@@ -306,7 +337,8 @@ def train(args: argparse.Namespace) -> None:
     )
 
     # ── Reward wrapper ─────────────────────────────────────────────────
-    judge_model_name = args.judge_model
+    judge_model_name = _resolve_judge_model(judge_client, args.judge_model)
+    logger.info("Judge model: %s", judge_model_name)
 
     def reward_fn(completions: list, passage: list[str], **_) -> list[float]:  # type: ignore[override]
         # TRL wraps completions as [[{"role": "assistant", "content": "..."}], ...]
@@ -345,7 +377,15 @@ def train(args: argparse.Namespace) -> None:
     )
     resume = args.resume or None
     if resume:
-        logger.info("Resuming from latest checkpoint in %s", args.output / "checkpoints")
+        # Verify a checkpoint actually exists before passing resume_from_checkpoint=True.
+        # Transformers raises ValueError if the dir exists but has no checkpoint-* subdirs.
+        ckpt_dir = args.output / "checkpoints"
+        existing = sorted(ckpt_dir.glob("checkpoint-*"), key=lambda p: int(p.name.split("-")[-1])) if ckpt_dir.exists() else []
+        if not existing:
+            logger.warning("--resume passed but no checkpoint found in %s — starting from scratch.", ckpt_dir)
+            resume = None
+        else:
+            logger.info("Resuming from latest checkpoint in %s", ckpt_dir)
     try:
         trainer.train(resume_from_checkpoint=resume)
     except ValueError as exc:
@@ -405,7 +445,15 @@ def main() -> None:
         "--judge-model", default="Qwen/Qwen3.6-27B",
         help="Model name served by the judge vLLM instance.",
     )
+    parser.add_argument(
+        "--max-train-examples", type=int, default=None,
+        help="Optional cap on the number of examples loaded from dataset/train.jsonl.",
+    )
     parser.add_argument("--epochs", type=int, default=1)
+    parser.add_argument(
+        "--max-steps", type=int, default=-1,
+        help="Optional cap on optimizer steps. Use a small positive value for smoke tests.",
+    )
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--grad-accum", type=int, default=8)
     parser.add_argument("--lr", type=float, default=5e-6)
@@ -418,6 +466,10 @@ def main() -> None:
         help="KL divergence penalty coefficient. Increase if reward hacking occurs.",
     )
     parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument(
+        "--save-steps", type=int, default=100,
+        help="Checkpoint save interval in optimizer steps.",
+    )
     parser.add_argument("--resume", action="store_true",
         help="Resume from the latest checkpoint in --output/checkpoints/.")
     parser.add_argument("--seed", type=int, default=42)

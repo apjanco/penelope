@@ -1,0 +1,5 @@
+This is a steering document to keep everything in focus.
+
+Our end goal is to surface examples in Mrs. Dalloway and To The Lighthouse that problematize existing models and typologies of SoC. We want to highlight how these texts challenge conventional understandings of stream of consciousness and offer new perspectives on narrative structure, character development, and thematic exploration. By examining specific passages and techniques used by Virginia Woolf, we aim to demonstrate how her work complicates traditional literary frameworks and invites readers to reconsider how we define and typologize SoC.
+
+To that end, I'd like to borrow the teacher method from the NARA project. Our goal is to teach the model to not only learn the output schema, but to generate reasoning traces that lead to relevant predictions about the text based on the rubric and our typology of SoC types. 

@@ -81,6 +81,8 @@ class ThinkMaskingCollator:
     </think> token and sets labels[0 : pos+1] = -100.  Padding tokens
     and the prompt prefix (everything before <|im_start|>assistant) are
     also masked.
+
+    Legacy collator — use WeightedThinkCollator for v3 training.
     """
 
     def __init__(self, tokenizer, think_end_token_ids: list[int]):
@@ -117,6 +119,163 @@ class ThinkMaskingCollator:
 
         batch["labels"] = labels
         return batch
+
+
+class WeightedThinkCollator:
+    """Pads sequences and applies per-region loss weights.
+
+    Loss regions per sequence:
+      - Prompt (system + user turns, up to and excluding <think>):
+            labels = -100 (masked from loss entirely)
+      - Reasoning trace (<think> ... </think> inclusive):
+            labels = token IDs, token_weight = think_weight
+      - Structured output (tokens after </think>):
+            labels = token IDs, token_weight = 1.0
+
+    The companion WeightedThinkTrainer reads the ``token_weights`` tensor
+    produced here and applies it in a custom compute_loss, so the gradient
+    signal from the reasoning trace is scaled down relative to the
+    structured JSON output while still flowing back through the network.
+
+    Args:
+        tokenizer: the model tokenizer (for padding).
+        think_start_token_ids: token ids that encode ``<think>``.
+        think_end_token_ids: token ids that encode ``</think>``.
+        think_weight: loss weight for reasoning-trace tokens (0.0–1.0).
+            0.0 replicates ThinkMaskingCollator behaviour; 1.0 gives equal
+            weight to reasoning and output tokens.  Recommended: 0.3–0.5.
+    """
+
+    def __init__(
+        self,
+        tokenizer,
+        think_start_token_ids: list[int],
+        think_end_token_ids: list[int],
+        think_weight: float = 0.4,
+    ):
+        self.tokenizer = tokenizer
+        self.think_start_ids = think_start_token_ids
+        self.think_end_ids = think_end_token_ids
+        self.think_weight = think_weight
+
+    def __call__(self, features: list[dict[str, Any]]) -> dict[str, Any]:
+        import torch
+
+        batch = self.tokenizer.pad(
+            features,
+            padding=True,
+            return_tensors="pt",
+        )
+        input_ids = batch["input_ids"]           # (B, L)
+        attention_mask = batch["attention_mask"]  # (B, L)
+        B, L = input_ids.shape
+
+        labels = input_ids.clone()
+        labels[attention_mask == 0] = -100
+
+        token_weights = torch.zeros(B, L, dtype=torch.float32)
+
+        for i, seq in enumerate(input_ids):
+            seq_list = seq.tolist()
+
+            # Locate </think> (last occurrence)
+            think_end_pos = -1
+            for tid in self.think_end_ids:
+                for j in range(len(seq_list) - 1, -1, -1):
+                    if seq_list[j] == tid:
+                        think_end_pos = max(think_end_pos, j)
+                        break
+
+            # Locate <think> (last occurrence before </think>)
+            think_start_pos = -1
+            for tid in self.think_start_ids:
+                for j in range(think_end_pos, -1, -1):
+                    if seq_list[j] == tid:
+                        think_start_pos = max(think_start_pos, j)
+                        break
+
+            if think_start_pos >= 0 and think_end_pos >= think_start_pos:
+                # Mask prompt (everything before <think>)
+                labels[i, :think_start_pos] = -100
+
+                # Think region: keep labels at think_weight
+                token_weights[i, think_start_pos : think_end_pos + 1] = self.think_weight
+
+                # JSON output region: weight 1.0 up to the last real (non-padding) token
+                seq_len = int(attention_mask[i].sum().item())
+                token_weights[i, think_end_pos + 1 : seq_len] = 1.0
+            else:
+                # Fallback: no think block found — mask the whole sequence
+                labels[i, :] = -100
+
+        batch["labels"] = labels
+        batch["token_weights"] = token_weights
+        return batch
+
+
+# ---------------------------------------------------------------------------
+# Weighted-think trainer
+# ---------------------------------------------------------------------------
+
+
+def _make_weighted_think_trainer_class():
+    """Return a Trainer subclass that applies per-token weights from the collator.
+
+    Defined as a factory so the heavy ``transformers.Trainer`` import happens
+    only inside the training process, not at module import time.
+    """
+    from transformers import Trainer
+    import torch
+
+    class WeightedThinkTrainer(Trainer):
+        """Trainer that scales the reasoning-trace contribution to the loss.
+
+        The ``WeightedThinkCollator`` adds a ``token_weights`` tensor to each
+        batch.  This trainer pops it before the model forward pass and uses it
+        to compute a weighted cross-entropy:
+
+            loss = Σ(weight_i * ce_i) / Σ(weight_i)   for all non-masked tokens
+
+        where ``weight_i`` is ``think_weight`` for reasoning-trace tokens and
+        ``1.0`` for JSON-output tokens.  Prompt and padding tokens are masked
+        with labels=-100 and weight=0.0 so they contribute nothing.
+        """
+
+        def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None, **kwargs):
+            token_weights = inputs.pop("token_weights", None)
+
+            outputs = model(**inputs)
+
+            if token_weights is None:
+                # Fallback: no weights tensor (e.g. legacy collator)
+                loss = outputs.loss
+                return (loss, outputs) if return_outputs else loss
+
+            logits = outputs.logits
+            labels = inputs["labels"]
+
+            # Causal LM: predict token t+1 from token t, so shift by 1.
+            shift_logits = logits[..., :-1, :].contiguous()
+            shift_labels = labels[..., 1:].contiguous()
+            shift_weights = token_weights[..., 1:].to(logits.device)
+
+            loss_fct = torch.nn.CrossEntropyLoss(reduction="none", ignore_index=-100)
+            per_token_loss = loss_fct(
+                shift_logits.view(-1, shift_logits.size(-1)),
+                shift_labels.view(-1),
+            ).view(shift_labels.size())  # (B, L-1)
+
+            # Weighted mean over all non-masked positions.
+            # ignore_index=-100 already zeroes masked positions in per_token_loss,
+            # but we also zero them in the weight denominator so the scale is correct.
+            non_masked = (shift_labels != -100).float()
+            weighted_sum = (per_token_loss * shift_weights).sum()
+            weight_total = (shift_weights * non_masked).sum().clamp(min=1e-8)
+            loss = weighted_sum / weight_total
+
+            return (loss, outputs) if return_outputs else loss
+
+    return WeightedThinkTrainer
 
 
 # ---------------------------------------------------------------------------
@@ -185,7 +344,11 @@ def train(args: argparse.Namespace) -> None:
     tokenizer.padding_side = "right"
     tokenizer.model_max_length = args.max_seq_len
 
-    # Find the token id(s) for </think>
+    # Find the token id(s) for <think> and </think>
+    think_start_str = "<think>"
+    think_start_ids = tokenizer.encode(think_start_str, add_special_tokens=False)
+    logger.info("<think>  token ids: %s", think_start_ids)
+
     think_end_str = "</think>"
     think_end_ids = tokenizer.encode(think_end_str, add_special_tokens=False)
     logger.info("</think> token ids: %s", think_end_ids)
@@ -249,13 +412,23 @@ def train(args: argparse.Namespace) -> None:
     val_dataset = Dataset.from_list(val_tokenized)
 
     # ── Data collator ──────────────────────────────────────────────────
-    if args.mask_thinking:
-        collator = ThinkMaskingCollator(tokenizer, think_end_ids)
-        logger.info("Think-masking enabled: <think> tokens excluded from loss")
-    else:
-        from transformers import DataCollatorWithPadding
-        collator = DataCollatorWithPadding(tokenizer, pad_to_multiple_of=8)
-        logger.info("Think-masking disabled: loss computed over full assistant turn")
+    # Resolve effective think weight.  --mask-thinking is kept for backward
+    # compat with v1/v2 slurm scripts and forces the weight to 0.0.
+    effective_think_weight = 0.0 if args.mask_thinking else args.think_loss_weight
+
+    collator = WeightedThinkCollator(
+        tokenizer,
+        think_start_token_ids=think_start_ids,
+        think_end_token_ids=think_end_ids,
+        think_weight=effective_think_weight,
+    )
+    logger.info(
+        "Think loss weight: %.2f  (%s)",
+        effective_think_weight,
+        "reasoning trace excluded from loss" if effective_think_weight == 0.0
+        else "reasoning trace included at reduced weight" if effective_think_weight < 1.0
+        else "reasoning trace at full weight",
+    )
 
     # ── Training arguments ─────────────────────────────────────────────
     output_dir = args.adapter_output
@@ -287,10 +460,11 @@ def train(args: argparse.Namespace) -> None:
     )
 
     # ── Trainer ────────────────────────────────────────────────────────
-    # Use Trainer directly (not SFTTrainer) since we pre-tokenize the dataset
-    # and apply a custom masking collator. SFTTrainer's internal formatting
-    # logic conflicts with pre-tokenized data in trl >= 0.8.
-    trainer = Trainer(
+    # Use WeightedThinkTrainer (not SFTTrainer) since we pre-tokenize the
+    # dataset and apply a custom weighted collator.  SFTTrainer's internal
+    # formatting logic conflicts with pre-tokenized data in trl >= 0.8.
+    WeightedThinkTrainer = _make_weighted_think_trainer_class()
+    trainer = WeightedThinkTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
@@ -390,13 +564,26 @@ def main() -> None:
         help="Random seed (default: 42)",
     )
     parser.add_argument(
+        "--think-loss-weight",
+        type=float,
+        default=0.4,
+        metavar="W",
+        help=(
+            "Loss weight for <think>...</think> reasoning-trace tokens relative to "
+            "the JSON output tokens (weight=1.0).  Range 0.0–1.0.  "
+            "0.0 excludes the reasoning trace entirely (same as --mask-thinking).  "
+            "1.0 gives equal weight to reasoning and output.  "
+            "Recommended for v3: 0.4 (default)."
+        ),
+    )
+    parser.add_argument(
         "--mask-thinking",
         action="store_true",
         default=False,
         help=(
-            "Mask <think>...</think> tokens from the training loss (original behaviour). "
-            "Default is False: loss is computed over the full assistant turn including "
-            "the reasoning trace. Use --mask-thinking only to reproduce v1 training."
+            "DEPRECATED — use --think-loss-weight 0.0 instead.  "
+            "Forces think_loss_weight to 0.0, reproducing v1/v2 training behaviour "
+            "where <think>...</think> tokens are excluded from the loss entirely."
         ),
     )
     args = parser.parse_args()

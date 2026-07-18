@@ -43,7 +43,7 @@ export HF_HUB_OFFLINE=1             # no network calls on compute nodes
 # ── Paths ────────────────────────────────────────────────────────────────────
 PROJECT_DIR="/scratch/gpfs/MM4/apjanco/penelope"
 DATASET_DIR="$PROJECT_DIR/dataset"
-ADAPTER_DIR="$PROJECT_DIR/adapter-grpo/checkpoints/checkpoint-4762"
+ADAPTER_DIR="$PROJECT_DIR/adapter-v3-grpo/checkpoints/checkpoint-5291"
 OUTPUT="$PROJECT_DIR/logs/eval_${SLURM_JOB_ID}_results.json"
 
 cd "$PROJECT_DIR" || { echo "Project dir not found: $PROJECT_DIR"; exit 1; }
@@ -54,6 +54,7 @@ echo "Job ID     : $SLURM_JOB_ID"
 echo "Node       : $SLURMD_NODENAME"
 echo "GPUs       : $CUDA_VISIBLE_DEVICES"
 echo "Working dir: $PWD"
+echo "Adapter    : $ADAPTER_DIR"
 nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
 python -c "import torch; print('PyTorch', torch.__version__, '| CUDA', torch.version.cuda, '| bf16 support:', torch.cuda.is_bf16_supported())"
 

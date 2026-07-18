@@ -76,6 +76,7 @@ echo "Starting vLLM server..."
 
 vllm serve "$MODEL" \
     --port "$PORT" \
+    --served-model-name Qwen/Qwen3.6-27B \
     --tensor-parallel-size 1 \
     --max-model-len 8192 \
     --dtype bfloat16 \

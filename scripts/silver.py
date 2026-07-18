@@ -110,6 +110,15 @@ def _call_api(
             time.sleep(wait)
             last_exc = exc
         except APIError as exc:
+            # 400 errors (content filter, bad request) are deterministic —
+            # retrying will never succeed.
+            if getattr(exc, "status_code", None) == 400:
+                logger.warning(
+                    "Non-retriable 400 from %s (content filter or bad request): %s",
+                    profile.label, exc,
+                )
+                last_exc = exc
+                break
             logger.warning(
                 "API error on %s (attempt %d/%d): %s",
                 profile.label, attempt, max_retries, exc,

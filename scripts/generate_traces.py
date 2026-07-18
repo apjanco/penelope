@@ -40,10 +40,29 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import re
 import sys
 from pathlib import Path
 from typing import Any
+
+# Ensure the project root is on sys.path so `scripts.*` imports work whether
+# the script is invoked as `python scripts/generate_traces.py` (from root) or
+# run directly from inside the scripts/ directory.
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+# Load .env from the project root so API key env vars are available without
+# requiring the caller to source the file first.
+_ENV_FILE = _PROJECT_ROOT / ".env"
+if _ENV_FILE.exists():
+    with _ENV_FILE.open() as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith("#") and "=" in _line:
+                _k, _v = _line.split("=", 1)
+                os.environ.setdefault(_k.strip(), _v.strip())
 
 logger = logging.getLogger(__name__)
 
@@ -368,7 +387,6 @@ def main() -> None:
 
     # ── Build OpenAI client ────────────────────────────────────────────
     try:
-        import os
         from openai import OpenAI
     except ImportError:
         logger.error("openai package required: pip install openai")
@@ -486,8 +504,9 @@ def main() -> None:
 
     logger.info("Done. Review traces in %s before re-training.", args.output)
     logger.info(
-        "To rebuild dataset: python scripts/build_dataset.py "
-        "--traces %s", args.output
+        "Rebuilt datasets written to %s/*_traces.jsonl — use these directly for training:\n"
+        "  python scripts/train.py --dataset %s --use-traces",
+        args.dataset, args.dataset,
     )
 
 

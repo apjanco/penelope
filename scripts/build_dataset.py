@@ -336,6 +336,278 @@ def _make_record(
 
 
 # ---------------------------------------------------------------------------
+# Ambiguity index → multi-label and detection-boundary records
+# ---------------------------------------------------------------------------
+
+# Human-readable names for think-content templates
+_TYPE_READABLE: dict[str, str] = {
+    "direct_interior_monologue": "direct interior monologue",
+    "indirect_interior_monologue": "indirect interior monologue",
+    "omniscient_description": "omniscient description",
+    "free_association": "free association",
+    "orthographic_marker": "orthographic marker",
+    "imagery": "imagery",
+    "simulation_state_of_mind": "simulation of state of mind",
+    "reverie_fantasy": "reverie / fantasy",
+    "hybrid": "hybrid",
+    "other_soc": "other SoC technique",
+    "none": "not SoC",
+}
+
+
+def _type_name(t: str) -> str:
+    return _TYPE_READABLE.get(t, t.replace("_", " "))
+
+
+def _typological_think(rec: dict) -> str:
+    """Construct a stub think trace for a typological-boundary record.
+
+    Two SoC types are concurrently defensible.  generate_traces.py can
+    replace this stub with a richer frontier-model trace, but it is
+    structurally sufficient for SFT: it names the competing types, which
+    models hold each, and asserts that both are retained.
+    """
+    type_split: dict[str, list[str]] = rec.get("type_split", {})
+    # Filter to SoC types only (exclude "none" entries)
+    soc_types = {t: ms for t, ms in type_split.items() if t not in ("none", "None", "")}
+    cons: dict[str, float] = rec.get("within_model_consistency", {})
+
+    parts: list[str] = []
+    for t, models in sorted(soc_types.items(), key=lambda kv: -len(kv[1])):
+        model_str = ", ".join(models)
+        c_scores = ", ".join(
+            f"{m}: {cons.get(m, 0):.0%}" for m in models if m in cons
+        )
+        parts.append(
+            f"{_type_name(t).capitalize()} reading ({model_str})"
+            + (f" [consistency {c_scores}]" if c_scores else "")
+            + "."
+        )
+
+    type_list = " and ".join(_type_name(t) for t in sorted(soc_types))
+    header = (
+        f"This passage sits at a typological boundary between {type_list}. "
+        "Frontier models with high within-model consistency disagree on which "
+        "label applies, which indicates that both readings are structurally "
+        "supported by the text rather than one being erroneous. "
+        "Both are retained as concurrent truths."
+    )
+    cons_note = (
+        "Skepticism gate: the passage clearly renders interior experience — "
+        "the question is how to classify the mode, not whether SoC is present."
+    )
+    return "\n".join([header, ""] + parts + ["", cons_note])
+
+
+def _detection_think(rec: dict, soc_majority: bool) -> str:
+    """Construct a stub think trace for a detection-boundary record."""
+    type_split: dict[str, list[str]] = rec.get("type_split", {})
+    cons: dict[str, float] = rec.get("within_model_consistency", {})
+
+    soc_models = [
+        m for t, ms in type_split.items() if t not in ("none", "None", "") for m in ms
+    ]
+    none_models = [
+        m for t, ms in type_split.items() if t in ("none", "None") for m in ms
+    ]
+    soc_types = sorted(
+        {t for t in type_split if t not in ("none", "None", "")}
+    )
+    soc_type_str = ", ".join(_type_name(t) for t in soc_types) or "SoC"
+
+    if soc_majority:
+        return (
+            f"Models are divided on whether this passage constitutes SoC. "
+            f"{', '.join(soc_models)} read it as {soc_type_str}; "
+            f"{', '.join(none_models) or 'others'} find no SoC markers. "
+            "The weight of evidence supports SoC, but the skepticism gate is activated: "
+            "a passage of conventional narration or external description could look "
+            "similar. What distinguishes this reading is the presence of interior markers "
+            "that the dissenting model may have underweighted. "
+            "Confidence is low; the classification is tentative."
+        )
+    else:
+        return (
+            f"Models are divided. {', '.join(none_models) or 'the majority'} find "
+            f"no SoC markers here; {', '.join(soc_models) or 'a minority'} tentatively "
+            f"identify {soc_type_str}. "
+            "The majority read is non-SoC. "
+            "Skepticism gate: this passage could be conventional narration or external "
+            "description — no unambiguous interior marker distinguishes it from non-SoC "
+            "prose at this threshold. Classified as not SoC."
+        )
+
+
+def load_ambiguity_records(path: Path) -> list[dict]:
+    """Load ambiguity_index.jsonl and return training records.
+
+    boundary_type mappings
+    ----------------------
+    typological  → multi-label positive: one instance per SoC type in type_split.
+                   Both are concurrently true; the think trace names both readings.
+    detection    → single-label positive (SoC majority) or negative (none majority).
+                   The think trace engages the skepticism gate explicitly.
+    noisy        → skipped (3+ distinct type readings; signal too weak).
+    clean        → skipped (these passages are already in the consensus dataset;
+                   add them only when the ambiguity_index is the sole source).
+    """
+    if not path.exists():
+        logger.warning("--ambiguity-index %s not found; skipping.", path)
+        return []
+
+    records: list[dict] = []
+    n_typo = n_detect_pos = n_detect_neg = n_skip = 0
+
+    with path.open(encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            btype = rec.get("boundary_type", "")
+            passage = rec.get("passage", "")
+            if not passage:
+                continue
+
+            base = {
+                "source_file": rec.get("source_file", ""),
+                "chunk_id": rec.get("chunk_id", ""),
+                "passage": passage,
+                "hard_negative": False,
+                "_ambiguity_boundary": btype,  # metadata only, stripped before write
+                "_ambiguity_split": rec.get("split", ""),
+            }
+
+            if btype == "typological":
+                type_split = rec.get("type_split", {})
+                soc_types = sorted(
+                    t for t in type_split if t not in ("none", "None", "")
+                )
+                if len(soc_types) < 2:
+                    n_skip += 1
+                    continue
+
+                instances = [
+                    {
+                        "is_soc": True,
+                        "passage": passage,
+                        "soc_type": t,
+                        "secondary_devices": [],
+                        "affective_register": "n/a",
+                        "narrator_position": "minimal",
+                        "character_pov": "",
+                        "explanation": (
+                            f"Typological boundary: this reading ({_type_name(t)}) "
+                            f"is held by {', '.join(type_split[t])} with high "
+                            f"within-model consistency."
+                        ),
+                        "evidence": [],
+                        "confidence": "medium",
+                        "notes": (
+                            f"Concurrent truth: passage also classified as "
+                            + " / ".join(
+                                _type_name(o) for o in soc_types if o != t
+                            )
+                            + "."
+                        ),
+                    }
+                    for t in soc_types
+                ]
+                records.append(
+                    {
+                        **base,
+                        "is_soc": True,
+                        "think_content": _typological_think(rec),
+                        "assistant_json": json.dumps(
+                            {"instances": instances}, ensure_ascii=False
+                        ),
+                    }
+                )
+                n_typo += 1
+
+            elif btype == "detection":
+                type_split = rec.get("type_split", {})
+                soc_models = [
+                    m
+                    for t, ms in type_split.items()
+                    if t not in ("none", "None", "")
+                    for m in ms
+                ]
+                none_models = [
+                    m
+                    for t, ms in type_split.items()
+                    if t in ("none", "None")
+                    for m in ms
+                ]
+                soc_majority = len(soc_models) > len(none_models)
+
+                if soc_majority:
+                    # Most stable models say SoC — include as low-confidence positive
+                    primary_type = max(
+                        (
+                            t
+                            for t in type_split
+                            if t not in ("none", "None", "")
+                        ),
+                        key=lambda t: len(type_split[t]),
+                        default="other_soc",
+                    )
+                    instance = {
+                        "is_soc": True,
+                        "passage": passage,
+                        "soc_type": primary_type,
+                        "secondary_devices": [],
+                        "affective_register": "n/a",
+                        "narrator_position": "minimal",
+                        "character_pov": "",
+                        "explanation": (
+                            f"Detection boundary: {_type_name(primary_type)} "
+                            "classification held by majority of models, but "
+                            "at least one stable model finds no SoC markers."
+                        ),
+                        "evidence": [],
+                        "confidence": "low",
+                        "notes": "Detection boundary — classification is tentative.",
+                    }
+                    records.append(
+                        {
+                            **base,
+                            "is_soc": True,
+                            "think_content": _detection_think(rec, soc_majority=True),
+                            "assistant_json": json.dumps(
+                                {"instances": [instance]}, ensure_ascii=False
+                            ),
+                        }
+                    )
+                    n_detect_pos += 1
+                else:
+                    # None majority — negative with engaged skepticism trace
+                    records.append(
+                        {
+                            **base,
+                            "is_soc": False,
+                            "think_content": _detection_think(rec, soc_majority=False),
+                            "assistant_json": '{"instances": []}',
+                        }
+                    )
+                    n_detect_neg += 1
+
+            else:
+                # noisy or clean-consensus — skip
+                n_skip += 1
+
+    logger.info(
+        "Ambiguity index: %d typological, %d detection-pos, %d detection-neg, %d skipped",
+        n_typo, n_detect_pos, n_detect_neg, n_skip,
+    )
+    return records
+
+
+# ---------------------------------------------------------------------------
 # Negatives from Gutenberg
 # ---------------------------------------------------------------------------
 
@@ -526,6 +798,19 @@ def main() -> None:
         default=42,
         help="Random seed (default: 42)",
     )
+    parser.add_argument(
+        "--ambiguity-index",
+        type=Path,
+        default=None,
+        metavar="PATH",
+        help=(
+            "Path to silver_data/ambiguity_index.jsonl (produced by "
+            "build_ambiguity_dataset.py). When supplied, adds typological-boundary "
+            "passages as multi-label positives and detection-boundary passages as "
+            "low-confidence positives or explicit negatives. Ambiguity records "
+            "override consensus records for the same chunk_id."
+        ),
+    )
     args = parser.parse_args()
 
     rng = random.Random(args.seed)
@@ -597,6 +882,34 @@ def main() -> None:
         records.extend(gut_records)
     elif args.neg_dir:
         logger.warning("--neg-dir %s does not exist; skipping", args.neg_dir)
+
+    # ── Merge ambiguity-index records (v3) ─────────────────────────────
+    if args.ambiguity_index:
+        amb_records = load_ambiguity_records(args.ambiguity_index)
+        if amb_records:
+            # Build index of existing records by chunk_id so ambiguity records
+            # can replace weaker consensus entries for the same chunk.
+            existing_by_chunk: dict[str, int] = {
+                r["chunk_id"]: i for i, r in enumerate(records) if r.get("chunk_id")
+            }
+            replaced = 0
+            appended = 0
+            for arec in amb_records:
+                cid = arec.get("chunk_id", "")
+                # Strip internal metadata keys before storing
+                clean = {k: v for k, v in arec.items() if not k.startswith("_")}
+                if cid and cid in existing_by_chunk:
+                    records[existing_by_chunk[cid]] = clean
+                    replaced += 1
+                else:
+                    records.append(clean)
+                    if cid:
+                        existing_by_chunk[cid] = len(records) - 1
+                    appended += 1
+            logger.info(
+                "Ambiguity records: %d replaced consensus entries, %d appended",
+                replaced, appended,
+            )
 
     logger.info("Total records before split: %d", len(records))
 

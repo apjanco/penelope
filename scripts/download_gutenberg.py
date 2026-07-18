@@ -94,24 +94,24 @@ CURATED_TEXTS: list[tuple[int, str, str]] = [
 
     # ── H.G. Wells (early) ──────────────────────────────────────────────────
     # Scientific romance; externalized third-person omniscient narration
-    (36,    "H.G. Wells", "The Time Machine"),
-    (718,   "H.G. Wells", "The War of the Worlds"),
+    (35,    "H.G. Wells", "The Time Machine"),       # PG 35 ✓ (was 36 = War of the Worlds)
+    (36,    "H.G. Wells", "The War of the Worlds"),   # PG 36 ✓ (was 718 = Tono-Bungay)
     (159,   "H.G. Wells", "The Island of Doctor Moreau"),
     (776,   "H.G. Wells", "When the Sleeper Wakes"),
     (1743,  "H.G. Wells", "The Invisible Man"),
 
     # ── Jules Verne ─────────────────────────────────────────────────────────
     # Pure action-adventure; virtually no interiority
-    (164,   "Jules Verne", "Around the World in Eighty Days"),
-    (103,   "Jules Verne", "Twenty Thousand Leagues Under the Sea"),
+    (103,   "Jules Verne", "Around the World in Eighty Days"),     # PG 103 ✓ (was labeled as 20k Leagues)
+    (164,   "Jules Verne", "Twenty Thousand Leagues Under the Sea"), # PG 164 ✓ (was labeled as ATW)
     (83,    "Jules Verne", "The Mysterious Island"),
     (3526,  "Jules Verne", "Michael Strogoff"),
     (4791,  "Jules Verne", "From the Earth to the Moon"),
 
     # ── H. Rider Haggard ────────────────────────────────────────────────────
     # Adventure narration; narrator records events not thoughts
-    (2166,  "H. Rider Haggard", "She"),
-    (2166,  "H. Rider Haggard", "King Solomon's Mines"),  # may share ID; try both
+    (3155,  "H. Rider Haggard", "She"),                    # PG 3155 ✓ (was 2166 = King Solomon's Mines)
+    (2166,  "H. Rider Haggard", "King Solomon's Mines"),   # PG 2166 ✓
 
     # ── Anthony Hope ────────────────────────────────────────────────────────
     (95,    "Anthony Hope", "The Prisoner of Zenda"),
@@ -130,8 +130,8 @@ CURATED_TEXTS: list[tuple[int, str, str]] = [
     # which is acceptable — retrospective memoir ≠ streaming present-thought.
     (98,    "Charles Dickens", "A Tale of Two Cities"),
     (730,   "Charles Dickens", "Oliver Twist"),
-    (821,   "Charles Dickens", "Hard Times"),
-    (588,   "Charles Dickens", "Dombey and Son"),
+    (786,   "Charles Dickens", "Hard Times"),          # PG 786 ✓ (was 821 = Dombey and Son)
+    (821,   "Charles Dickens", "Dombey and Son"),      # PG 821 ✓ (was 588 = Edwin Drood)
     (967,   "Charles Dickens", "Martin Chuzzlewit"),
     (1400,  "Charles Dickens", "Great Expectations"),
     (766,   "Charles Dickens", "David Copperfield"),
@@ -148,18 +148,18 @@ CURATED_TEXTS: list[tuple[int, str, str]] = [
     # Huck's voice is colloquial/observational, not associative inner flow.
     (74,    "Mark Twain", "The Adventures of Tom Sawyer"),
     (76,    "Mark Twain", "Adventures of Huckleberry Finn"),
-    (102,   "Mark Twain", "The Prince and the Pauper"),
-    (245,   "Mark Twain", "Life on the Mississippi"),  # non-fiction, very safe
+    (1837,  "Mark Twain", "The Prince and the Pauper"),  # PG 1837 ✓ (was 102 = Pudd'nhead Wilson)
+    (245,   "Mark Twain", "Life on the Mississippi"),    # non-fiction, very safe
 
     # ── Jerome K. Jerome ────────────────────────────────────────────────────
     # Comic travel; surface observation, no interiority
     (308,   "Jerome K. Jerome", "Three Men in a Boat"),
-    (1400,  "Jerome K. Jerome", "Three Men on the Bummel"),  # double-check ID
+    (2183,  "Jerome K. Jerome", "Three Men on the Bummel"),   # PG 2183 ✓ (was 1400 = Great Expectations)
 
     # ── Walter Scott ────────────────────────────────────────────────────────
     # Historical adventure; externalized
     (82,    "Walter Scott", "Ivanhoe"),
-    (84,    "Walter Scott", "Waverley"),
+    (5998,  "Walter Scott", "Waverley"),  # PG 5998 ✓ (was 84 = Frankenstein by Mary Shelley)
 
     # ── Alexandre Dumas ─────────────────────────────────────────────────────
     # Plot-driven action; no interiority
@@ -169,7 +169,7 @@ CURATED_TEXTS: list[tuple[int, str, str]] = [
 
     # ── Rudyard Kipling ─────────────────────────────────────────────────────
     # Short stories / adventure; externalized narration
-    (2775,  "Rudyard Kipling", "Plain Tales from the Hills"),
+    (1858,  "Rudyard Kipling", "Plain Tales from the Hills"),  # PG 1858 ✓ (was 2775 = The Good Soldier by Ford Madox Ford!)
     (2226,  "Rudyard Kipling", "The Jungle Book"),
     (236,   "Rudyard Kipling", "Kim"),  # note: Kim has some interiority, use with caution
 
@@ -181,7 +181,7 @@ CURATED_TEXTS: list[tuple[int, str, str]] = [
 
     # ── O. Henry ────────────────────────────────────────────────────────────
     # American short stories; ironic external narration
-    (2776,  "O. Henry", "Cabbages and Kings"),
+    (2777,  "O. Henry", "Cabbages and Kings"),  # PG 2777 ✓ (was 2776 = The Four Million)
 
     # ── Anthony Trollope (extra) ─────────────────────────────────────────────
     # Adding more Trollope for range; he's one of the cleanest choices
@@ -372,6 +372,9 @@ def main() -> None:
 
     n_ok = n_fail = 0
     for gid, author, title in texts:
+        if gid == 0:
+            logger.info("  skip (id=0) %s — %s (not on PG)", author, title)
+            continue
         ok = download_text(gid, author, title, args.output_dir, session, args.delay)
         if ok:
             n_ok += 1

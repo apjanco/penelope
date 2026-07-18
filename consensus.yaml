@@ -66,6 +66,28 @@ tracks:
     resolve_type: all
     output_formats: [csv, json]
 
+  # ── Ambiguous (v3 boundary-case track) ──────────────────────────
+  # Selects passages where stable models (within-model consistency ≥ 0.8)
+  # disagree on exactly two distinct SoC types (typological boundary) or
+  # disagree between a SoC type and "none" (detection boundary).
+  #
+  # This track is NOT processed by the standard consensus.py pipeline.
+  # It is read by scripts/build_ambiguity_dataset.py, which requires
+  # resampled data in silver_data/resampled/ (produced by scripts/resample.py).
+  # The agreement mode "systematic_disagreement" is handled only by that script.
+  #
+  # Run with:
+  #   python scripts/build_ambiguity_dataset.py           # from resampled data
+  #   python scripts/build_ambiguity_dataset.py --single-pass  # upper-bound estimate
+  ambiguous:
+    models: []
+    agreement: systematic_disagreement
+    min_models_per_side: 1            # at least one stable model on each side
+    min_within_model_consistency: 0.8 # fraction of k runs matching mode type
+    max_type_split: 2                 # noisy if > 2 distinct types among stable models
+    test_ratio: 0.10                  # fraction of boundary cases reserved for test
+    output_formats: [jsonl]
+
   # ── Custom example: only big commercial models ───────────────────
   # big_three:
   #   models: [gpt-5, gemini-3-pro-preview, qwen3-max]

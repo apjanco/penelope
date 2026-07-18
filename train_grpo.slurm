@@ -2,30 +2,25 @@
 # ============================================================================
 # Penelope SoC — GRPO training on Princeton Della
 #
-# Reads the judge endpoint written by judge_della.slurm, then runs GRPO
-# reinforcement learning on top of the SFT adapter.
+# Self-contained 2-GPU job: starts vLLM judge on GPU 0, runs GRPO training
+# on GPU 1. No separate judge_della.slurm needed.
 #
-# Submit AFTER judge_della.slurm:
-#   JUDGE_JOB=$(sbatch --parsable judge_della.slurm)
-#   sbatch --dependency=after:$JUDGE_JOB train_grpo.slurm
-#
-# Or submit independently if the judge is already running:
+# Submit:
 #   sbatch train_grpo.slurm
 #
 # Monitor:
 #   tail -f logs/grpo_<JOBID>.out
-#   watch -n 30 cat judge_endpoint.txt    # confirm judge is reachable
 # ============================================================================
 
 #SBATCH --job-name=penelope-grpo
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=16G
-#SBATCH --gres=gpu:1
-#SBATCH --constraint=gpu80         # A100 80GB; QLoRA Qwen3-4B needs ~8 GB GPU
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=80G
+#SBATCH --gres=gpu:2
+#SBATCH --constraint=gpu80         # 2×A100 80GB: GPU 0 = vLLM judge, GPU 1 = GRPO training
 #SBATCH --time=24:00:00
-#SBATCH --qos=gpu-short            # 24-hour blocks; resubmit with auto-resume
+#SBATCH --qos=gpu-medium           # gpu-medium allows longer wall time than gpu-short
 #SBATCH --output=logs/grpo_%j.out
 #SBATCH --error=logs/grpo_%j.err
 #SBATCH --mail-type=begin,end,fail
@@ -44,6 +39,7 @@ export TRANSFORMERS_OFFLINE=1
 
 PROJECT_DIR="/scratch/gpfs/MM4/apjanco/penelope"
 ENDPOINT_FILE="$PROJECT_DIR/judge_endpoint.txt"
+PORT=8000
 
 cd "$PROJECT_DIR" || { echo "Project dir not found: $PROJECT_DIR"; exit 1; }
 mkdir -p logs
@@ -55,31 +51,54 @@ echo "Working dir: $PWD"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 python -c "import torch; print('PyTorch', torch.__version__, '| CUDA', torch.version.cuda)"
 
-# ── Wait for judge endpoint ──────────────────────────────────────────────────
-MAX_WAIT=1200    # judge may still be loading when this job starts
+# ── Start judge (vLLM) on GPU 0 ─────────────────────────────────────────────
+# GPU 0 = Qwen3.6-27B judge (~55 GB BF16)
+# GPU 1 = QLoRA GRPO training (~8 GB)
+rm -f "$ENDPOINT_FILE"
+
+export VLLM_USE_FLASHINFER_SAMPLER=0
+export CPATH="/usr/local/cuda-13.2/targets/x86_64-linux/include${CPATH:+:$CPATH}"
+
+JUDGE_MODEL=$(find "$HF_HOME/hub/models--Qwen--Qwen3.6-27B/snapshots" \
+    -maxdepth 1 -mindepth 1 -type d 2>/dev/null | head -1)
+if [ -z "$JUDGE_MODEL" ]; then
+    echo "ERROR: Qwen3.6-27B not found in HF cache. Pre-download on a login node."
+    exit 1
+fi
+echo "Judge model: $JUDGE_MODEL"
+
+CUDA_VISIBLE_DEVICES=0 vllm serve "$JUDGE_MODEL" \
+    --port "$PORT" \
+    --served-model-name Qwen/Qwen3.6-27B \
+    --tensor-parallel-size 1 \
+    --max-model-len 8192 \
+    --dtype bfloat16 \
+    --gpu-memory-utilization 0.92 \
+    --enable-prefix-caching \
+    &
+VLLM_PID=$!
+echo "vLLM PID: $VLLM_PID (GPU 0)"
+
+# Wait for judge to be ready
+MAX_WAIT=600
 WAITED=0
 INTERVAL=15
-
-echo "Waiting for judge endpoint ($ENDPOINT_FILE)..."
-until [ -f "$ENDPOINT_FILE" ]; do
+echo "Waiting for judge server (max ${MAX_WAIT}s)..."
+until curl -sf "http://localhost:$PORT/health" > /dev/null 2>&1; do
     sleep $INTERVAL
     WAITED=$((WAITED + INTERVAL))
     if [ $WAITED -ge $MAX_WAIT ]; then
-        echo "ERROR: Judge endpoint not available after ${MAX_WAIT}s. Is judge_della.slurm running?"
+        echo "ERROR: Judge did not start within ${MAX_WAIT}s."
+        kill $VLLM_PID 2>/dev/null
         exit 1
     fi
     echo "  waited ${WAITED}s..."
 done
+echo "Judge ready after ${WAITED}s."
 
-export JUDGE_URL=$(cat "$ENDPOINT_FILE")
+export JUDGE_URL="http://localhost:$PORT/v1"
+echo "$JUDGE_URL" > "$ENDPOINT_FILE"
 echo "Judge URL  : $JUDGE_URL"
-
-# Verify judge is reachable before starting expensive training
-if ! curl -sf "${JUDGE_URL%/v1}/health" > /dev/null 2>&1; then
-    echo "ERROR: Judge health check failed at $JUDGE_URL"
-    exit 1
-fi
-echo "Judge health check passed."
 
 # ── Resolve base model path from HF cache ───────────────────────────────────
 # Passing the Hub ID offline can fail if refs/main is missing from the cache.
@@ -94,20 +113,20 @@ echo "Base model : $BASE_MODEL"
 
 # ── Auto-resume if a checkpoint exists ──────────────────────────────────────
 RESUME_FLAG=""
-if compgen -G "$PROJECT_DIR/adapter-grpo/checkpoints/checkpoint-*" > /dev/null 2>&1; then
+if compgen -G "$PROJECT_DIR/adapter-v3-grpo/checkpoints/checkpoint-*" > /dev/null 2>&1; then
     RESUME_FLAG="--resume"
-    LATEST=$(ls -d "$PROJECT_DIR/adapter-grpo/checkpoints/checkpoint-"* 2>/dev/null | sort -V | tail -1)
+    LATEST=$(ls -d "$PROJECT_DIR/adapter-v3-grpo/checkpoints/checkpoint-"* 2>/dev/null | sort -V | tail -1)
     echo "Checkpoint detected: $LATEST — resuming."
 else
     echo "No checkpoint found — starting from scratch."
 fi
 
-# ── GRPO Training ─────────────────────────────────────────────────────────────
-python scripts/train_grpo.py \
+# ── GRPO Training on GPU 1 ───────────────────────────────────────────────────
+CUDA_VISIBLE_DEVICES=1 python scripts/train_grpo.py \
     --dataset        dataset/ \
     --base-model     "$BASE_MODEL" \
-    --sft-adapter    "$PROJECT_DIR/adapter" \
-    --output         adapter-grpo/ \
+    --sft-adapter    "$PROJECT_DIR/adapter-v3" \
+    --output         adapter-v3-grpo/ \
     --judge-url      "$JUDGE_URL" \
     --judge-model    Qwen/Qwen3.6-27B \
     --epochs         1 \
@@ -120,6 +139,10 @@ python scripts/train_grpo.py \
     $RESUME_FLAG
 
 echo "GRPO training complete. Adapter written to adapter-grpo/"
+
+# ── Shut down judge ──────────────────────────────────────────────────────────
+kill $VLLM_PID 2>/dev/null
+echo "Judge server stopped."
 
 # ── Optional: cancel judge job when done ────────────────────────────────────
 # Uncomment if you want to automatically release the judge GPU:

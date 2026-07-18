@@ -184,7 +184,10 @@ def evaluate(args: argparse.Namespace) -> None:
     logger.info("Test examples: %d", len(raw_records))
 
     # ── Load fine-tuned model ──────────────────────────────────────────
-    logger.info("Loading fine-tuned model: %s", args.model)
+    if args.adapter:
+        logger.info("Loading adapter: %s (base: %s)", args.adapter, args.base_model)
+    else:
+        logger.info("Loading fine-tuned model: %s", args.model)
     model, tokenizer = load_model_and_tokenizer(
         model_path=args.model,
         adapter_path=str(args.adapter) if args.adapter else None,
@@ -260,6 +263,11 @@ def evaluate(args: argparse.Namespace) -> None:
 
     # ── Write results ─────────────────────────────────────────────────
     output = {
+        "config": {
+            "adapter": str(args.adapter) if args.adapter else None,
+            "base_model": args.base_model if args.adapter else None,
+            "model": args.model if not args.adapter else None,
+        },
         "n_examples": len(raw_records),
         "binary_detection": binary_metrics,
         "type_classification": type_metrics,
