@@ -1,0 +1,140 @@
+% CHR 2027 LIGHTNING TALK SUBMISSION
+% Built from the official ACH LaTeX template (anthology-ch.cls, downloaded
+% from https://anthology.ach.org/resources/ach-latex-template.zip).
+% DO NOT change the documentclass. Add the 'final' option only for the
+% camera-ready version -- the submission version renders "Anonymous
+% Submission" automatically regardless of the \author fields below, per
+% CHR's double-blind review policy.
+%\documentclass[final]{anthology-ch} % for the final version
+\documentclass{anthology-ch}         % for the submission
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+% TITLE OF THE SUBMISSION
+\title{Training a Model to Disagree: Stream-of-Consciousness Typology as a
+Site of Productive Ambiguity}
+
+% AUTHOR AND AFFILIATION INFORMATION
+% TODO: fill in real author name(s), ORCID(s), and affiliation(s) for the
+% camera-ready version. Submission-mode rendering is anonymized automatically
+% by the class file, so these values are safe to leave populated now.
+\author[1]{Author One}[
+  orcid=0000-0000-0000-0000
+]
+
+\affiliation{1}{TODO: Department, University, City, Country}
+
+% KEYWORDS
+\keywords[eng]{stream of consciousness, literary typology, large language
+models, interpretive ambiguity, Virginia Woolf}
+
+% METADATA FOR THE PUBLICATION -- leave defaults for submission
+\pubyear{2027}
+\pubvolume{1}
+\pagestart{1}
+\pageend{1}
+\paperorder{1}
+\conferencename{Proceedings of the Computational Humanities Research Conference 2027}
+\conferenceeditors{}
+\doi{00000/00000}
+\customhead{}
+
+\addbibresource{bibliography.bib}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Stream-of-consciousness (SoC) narration is a canonical case of a literary
+technique that resists stable typology. We present preliminary results from
+a pipeline that fine-tunes a local language model to detect and classify SoC
+in Virginia Woolf's fiction against a taxonomy synthesizing Robert Humphrey
+and Erwin Steinberg, and argue -- from a corpus-wide analysis of cross-model
+disagreement -- that the persistent failure of frontier LLMs to agree on SoC
+type is not noise to be filtered out, but a signal that tracks genuine,
+scholarly-recognized ambiguity in the text. We describe a shift from
+training on consensus to training a model that reports competing readings
+directly, and situate this as a case study in modelling interpretive
+ambiguity computationally.
+\end{abstract}
+
+\section{Motivation}
+
+Stream-of-consciousness narration is a canonical test case for the limits of
+literary typology: as Hoyt Long and Richard Jean So put it, ``no one can
+agree on what it is, yet everyone seems to know it when they see it''
+\cite{longso2016patternrecognition}. Decades of scholarship -- from Robert
+Humphrey's foundational 1954 taxonomy onward -- have proposed competing
+schemes for classifying SoC's techniques (interior monologue, free indirect
+discourse, free association, orthographic markers, and more) without
+settling where one shades into another \cite{humphrey1954stream}. We argue
+that this persistent disagreement is not a defect to be engineered away, but
+the most useful signal a computational method can capture about the form.
+
+\section{Method}
+
+This talk presents preliminary results from Penelope, a pipeline that
+fine-tunes a local language model (Qwen3-4B) to detect and classify SoC
+passages in literary prose against a ten-class taxonomy synthesizing
+Humphrey and Erwin Steinberg \cite{humphrey1954stream, steinberg1973stream}.
+Our corpus centers on Virginia Woolf's \textit{Mrs Dalloway} and \textit{To
+the Lighthouse}, alongside a comparative set spanning Dorothy Richardson,
+James Joyce, William Faulkner, and May Sinclair. Training labels come from
+multiple frontier LLMs prompted independently on the same passages; a
+consensus pipeline originally treated cross-model disagreement as noise to
+be filtered out, keeping only passages where models converged on a single
+type.
+
+\section{Findings}
+
+Corpus-level analysis of that discarded disagreement produced the finding
+that reframed the project. Measuring cross-model agreement across fifteen
+works, we found it never exceeds 27\%, and falls as low as 8\% for
+Richardson's \textit{Pilgrimage} volumes. The overwhelming majority of
+multi-model passage groups are \textit{disagreements}, not exceptions. When
+we distinguish systematic disagreement (each model stably, repeatedly
+assigning a different type across resamples) from random noise (a single
+model flip-flopping between labels), a clear pattern emerges: the most
+contested boundary across every author in the corpus is between
+\textit{indirect interior monologue} and \textit{omniscient description} --
+precisely the boundary literary critics identify as Woolf's most distinctive
+and most contested technique, the point where free indirect discourse makes
+it genuinely undecidable whether we are hearing the narrator or the
+character \cite{zhang2019woolf}.
+
+\section{Reframing the Model}
+
+We treat this as evidence that model disagreement is tracking something real
+about the text, not merely about model weakness. We are now training a
+successor model (v3) to represent this directly: instead of collapsing a
+passage to one label, the model learns to report \textit{both} defensible
+readings, the textual evidence for each, and an explicit statement of where
+and why the typology's boundary breaks down at that point in the passage.
+This inverts the usual goal of a text classifier. Success is not measured by
+whether the model converges with a single ground truth, but by whether its
+stated uncertainty tracks the same passages where literary critics, and our
+panel of frontier models, already disagree.
+
+\section{Discussion}
+
+We situate this as a case study in modelling interpretive ambiguity
+computationally: rather than treating annotator or model disagreement as a
+data-quality problem to be resolved by better prompting or larger consensus
+panels, we ask what a classifier looks like when disagreement itself is the
+object of study. We discuss the practical mechanics -- resampling frontier
+models at temperature to distinguish stable from unstable disagreement,
+representing dual readings in a training target, and reward-shaping a
+reinforcement-learning stage to favor ``skeptical,'' evidence-grounded
+reasoning over confident misclassification -- as well as the limits of this
+approach, including the risk of a model that hedges indiscriminately rather
+than locating ambiguity precisely. We close by asking what this suggests for
+computational literary typology more broadly: if applying a systematic
+typology to a whole text reliably produces ambiguity rather than resolution,
+perhaps that instability is itself the most faithful thing a model can
+report back.
+
+\printbibliography
+
+\end{document}

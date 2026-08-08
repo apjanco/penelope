@@ -104,6 +104,12 @@ techniques in secondary_devices.
 12. other_soc
     Key markers: clearly interior but resists the above categories; explain in
     notes; includes rare soliloquy and space_montage instances.
+
+IMPORTANT: `soc_type` must be exactly one of the twelve slugs above (e.g.
+"direct_interior_monologue"), verbatim, on every instance. Never leave it
+blank, an ellipsis ("..."), or any other placeholder — if a passage is
+clearly interior but resists every category above, use "other_soc" and say
+why in `notes`.
 """
 
 # ---------------------------------------------------------------------------

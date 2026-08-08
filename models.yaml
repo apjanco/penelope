@@ -31,6 +31,20 @@ models:
     model_name: qwen3-max
     api_key: ${DASHSCOPE_API_KEY}
 
+  # Local vLLM readers (technique_v_genre/serve_vllm.slurm). base_url is
+  # tied to whatever compute node SLURM assigned this job — re-check
+  # technique_v_genre/endpoints/<served_name>.txt and update here each time
+  # the server job is resubmitted (job restarts land on a different node).
+  - label: qwen3-reasoning
+    base_url: http://della-l07g3:8000/v1   # job 11942782 (gpu-test, expires ~59min) — smoke test only
+    model_name: qwen3-reasoning
+    api_key: not-needed
+
+  - label: qwen3.6-local
+    base_url: http://della-l07g3:8000/v1   # job 12122936, fills content-filtered qwen3-max gaps (see technique_v_genre/fill_qwen_gaps.slurm)
+    model_name: qwen3.6-local
+    api_key: not-needed
+
   # Example: local model via Ollama / vLLM
   # - label: qwen3-8b
   #   base_url: http://localhost:11434/v1
