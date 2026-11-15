@@ -1,0 +1,5 @@
+The submission jumps straight to the final step of such a project, the analysis of automatically generated annotations, and skips the steps that would give those annotations meaning. Before the results can be interpreted, the following would be needed:
+- an annotation scheme or guidelines that turn Cohn's categories into operational decisions for passages;
+- a test of this scheme on the material, and human inter-annotator agreement;
+- an evaluation of the LLM annotations against the human ones.
+Without these, we do not know what the models' scores measure, or whether they correspond to Cohn's categories at all. All findings (Woolf's "quiet" band, the position of The Waves, the valley at quoted monologue) therefore remain uninterpretable. This is aggravated by the fact that the models have very likely read the critical literature on Woolf and Joyce, so their scores may reproduce the very reputation the study wants to test.

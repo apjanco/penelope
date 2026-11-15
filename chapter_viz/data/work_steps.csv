@@ -1,0 +1,126 @@
+author,reader,from_year,to_year,from_title,to_title,step,level
+Ford,gpt-5.4,1915,1924,The Good Soldier,Some Do Not...,0.0611,0.5469
+Ford,gpt-5.4,1924,1925,Some Do Not...,No More Parades,0.286,0.8329
+Ford,gpt-5.4,1925,1926,No More Parades,A Man Could Stand Up—,-0.0081,0.8248
+Ford,gpt-5.4,1926,1928,A Man Could Stand Up—,The Last Post,-0.1946,0.6302
+Faulkner,gpt-5.4,1926,1929,Soldiers' Pay,The Sound and the Fury,1.0141,1.9335
+Faulkner,gpt-5.4,1929,1930,The Sound and the Fury,As I Lay Dying,-0.3378,1.5957
+Woolf,gpt-5.4,1915,1919,The Voyage Out,Night and Day,-0.0442,0.2469
+Woolf,gpt-5.4,1919,1922,Night and Day,Jacob's Room,0.2922,0.5391
+Woolf,gpt-5.4,1922,1925,Jacob's Room,Mrs Dalloway,0.3519,0.891
+Woolf,gpt-5.4,1925,1927,Mrs Dalloway,To the Lighthouse,-0.2007,0.6903
+Woolf,gpt-5.4,1927,1928,To the Lighthouse,Orlando,-0.2859,0.4044
+Woolf,gpt-5.4,1928,1931,Orlando,The Waves,2.0655,2.4699
+Woolf,gpt-5.4,1931,1933,The Waves,Flush,-2.1439,0.326
+Woolf,gpt-5.4,1933,1937,Flush,The Years,0.6321,0.9581
+Woolf,gpt-5.4,1937,1941,The Years,Between the Acts,-0.0379,0.9202
+Joyce,gpt-5.4,1914,1916,Dubliners,A Portrait of the Artist as a Young Man,0.3159,0.5514
+Joyce,gpt-5.4,1916,1922,A Portrait of the Artist as a Young Man,Ulysses,1.0926,1.644
+Sinclair,gpt-5.4,1897,1907,Audrey Craven,The Helpmate,-0.0345,0.2039
+Sinclair,gpt-5.4,1907,1913,The Helpmate,The Combined Maze,0.0551,0.259
+Sinclair,gpt-5.4,1913,1914,The Combined Maze,The Three Sisters,0.0664,0.3254
+Sinclair,gpt-5.4,1914,1917,The Three Sisters,The Tree of Heaven,0.278,0.6034
+Sinclair,gpt-5.4,1917,1919,The Tree of Heaven,Mary Olivier: A Life,0.27,0.8734
+Sinclair,gpt-5.4,1919,1920,Mary Olivier: A Life,The Romantic,-0.2283,0.6451
+Sinclair,gpt-5.4,1920,1922,The Romantic,Life and Death of Harriett Frean,-0.162,0.4831
+James,gpt-5.4,1875,1881,Roderick Hudson,The Portrait of a Lady (vol. 1),-0.1593,0.1982
+James,gpt-5.4,1881,1881,The Portrait of a Lady (vol. 1),The Portrait of a Lady (vol. 2),0.0399,0.2381
+James,gpt-5.4,1881,1897,The Portrait of a Lady (vol. 2),What Maisie Knew,-0.0685,0.1696
+James,gpt-5.4,1897,1902,What Maisie Knew,The Wings of the Dove (vol. 1),0.1263,0.2959
+James,gpt-5.4,1902,1902,The Wings of the Dove (vol. 1),The Wings of the Dove (vol. 2),-0.0443,0.2516
+James,gpt-5.4,1902,1903,The Wings of the Dove (vol. 2),The Ambassadors,0.0751,0.3267
+James,gpt-5.4,1903,1904,The Ambassadors,The Golden Bowl,-0.0323,0.2944
+Richardson,gpt-5.4,1915,1916,Pointed Roofs,Backwater,0.0514,0.8009
+Richardson,gpt-5.4,1916,1917,Backwater,Honeycomb,0.1004,0.9013
+Richardson,gpt-5.4,1917,1919,Honeycomb,Interim,-0.003,0.8983
+Richardson,gpt-5.4,1919,1919,Interim,The Tunnel,0.1487,1.047
+Richardson,gpt-5.4,1919,1921,The Tunnel,Deadlock,-0.2898,0.7572
+Richardson,gpt-5.4,1921,1923,Deadlock,Revolving Lights,0.1354,0.8926
+Richardson,gpt-5.4,1923,1925,Revolving Lights,The Trap,-0.0765,0.8161
+Richardson,gpt-5.4,1925,1927,The Trap,Oberland,-0.3978,0.4183
+Ford,qwen3-max,1915,1924,The Good Soldier,Some Do Not...,-0.3381,0.8144
+Ford,qwen3-max,1924,1925,Some Do Not...,No More Parades,0.2304,1.0448
+Ford,qwen3-max,1925,1926,No More Parades,A Man Could Stand Up—,-0.088,0.9568
+Ford,qwen3-max,1926,1928,A Man Could Stand Up—,The Last Post,-0.0762,0.8806
+Faulkner,qwen3-max,1926,1929,Soldiers' Pay,The Sound and the Fury,1.5235,2.5855
+Faulkner,qwen3-max,1929,1930,The Sound and the Fury,As I Lay Dying,-0.3126,2.2729
+Woolf,qwen3-max,1915,1919,The Voyage Out,Night and Day,-0.0052,0.5115
+Woolf,qwen3-max,1919,1922,Night and Day,Jacob's Room,0.1281,0.6396
+Woolf,qwen3-max,1922,1925,Jacob's Room,Mrs Dalloway,0.2416,0.8812
+Woolf,qwen3-max,1925,1927,Mrs Dalloway,To the Lighthouse,-0.1444,0.7368
+Woolf,qwen3-max,1927,1928,To the Lighthouse,Orlando,-0.0831,0.6537
+Woolf,qwen3-max,1928,1931,Orlando,The Waves,1.8796,2.5333
+Woolf,qwen3-max,1931,1933,The Waves,Flush,-2.1055,0.4278
+Woolf,qwen3-max,1933,1937,Flush,The Years,0.5686,0.9964
+Woolf,qwen3-max,1937,1941,The Years,Between the Acts,0.123,1.1194
+Joyce,qwen3-max,1914,1916,Dubliners,A Portrait of the Artist as a Young Man,0.2338,0.8684
+Joyce,qwen3-max,1916,1922,A Portrait of the Artist as a Young Man,Ulysses,1.0531,1.9215
+Sinclair,qwen3-max,1897,1907,Audrey Craven,The Helpmate,-0.1022,0.2634
+Sinclair,qwen3-max,1907,1913,The Helpmate,The Combined Maze,0.2299,0.4933
+Sinclair,qwen3-max,1913,1914,The Combined Maze,The Three Sisters,-0.0785,0.4148
+Sinclair,qwen3-max,1914,1917,The Three Sisters,The Tree of Heaven,0.4204,0.8352
+Sinclair,qwen3-max,1917,1919,The Tree of Heaven,Mary Olivier: A Life,0.3032,1.1384
+Sinclair,qwen3-max,1919,1920,Mary Olivier: A Life,The Romantic,-0.2043,0.9341
+Sinclair,qwen3-max,1920,1922,The Romantic,Life and Death of Harriett Frean,-0.122,0.8121
+James,qwen3-max,1875,1881,Roderick Hudson,The Portrait of a Lady (vol. 1),-0.2109,0.4121
+James,qwen3-max,1881,1881,The Portrait of a Lady (vol. 1),The Portrait of a Lady (vol. 2),0.0516,0.4637
+James,qwen3-max,1881,1897,The Portrait of a Lady (vol. 2),What Maisie Knew,0.1307,0.5944
+James,qwen3-max,1897,1902,What Maisie Knew,The Wings of the Dove (vol. 1),-0.0422,0.5522
+James,qwen3-max,1902,1902,The Wings of the Dove (vol. 1),The Wings of the Dove (vol. 2),0.0551,0.6073
+James,qwen3-max,1902,1903,The Wings of the Dove (vol. 2),The Ambassadors,0.0868,0.6941
+James,qwen3-max,1903,1904,The Ambassadors,The Golden Bowl,-0.0559,0.6382
+Richardson,qwen3-max,1915,1916,Pointed Roofs,Backwater,-0.0334,0.9793
+Richardson,qwen3-max,1916,1917,Backwater,Honeycomb,0.045,1.0243
+Richardson,qwen3-max,1917,1919,Honeycomb,Interim,0.016,1.0403
+Richardson,qwen3-max,1919,1919,Interim,The Tunnel,0.0614,1.1017
+Richardson,qwen3-max,1919,1921,The Tunnel,Deadlock,-0.1598,0.9419
+Richardson,qwen3-max,1921,1923,Deadlock,Revolving Lights,0.0715,1.0134
+Richardson,qwen3-max,1923,1925,Revolving Lights,The Trap,0.0091,1.0225
+Richardson,qwen3-max,1925,1927,The Trap,Oberland,-0.2685,0.754
+Ford,jev,1915,1924,The Good Soldier,Some Do Not...,0.1376,0.7069
+Ford,jev,1924,1925,Some Do Not...,No More Parades,0.2442,0.9511
+Ford,jev,1925,1926,No More Parades,A Man Could Stand Up—,-0.0514,0.8997
+Ford,jev,1926,1928,A Man Could Stand Up—,The Last Post,-0.0845,0.8152
+Faulkner,jev,1926,1927,Soldiers' Pay,Mosquitoes,-0.0965,0.6676
+Faulkner,jev,1927,1929,Mosquitoes,The Sound and the Fury,1.1922,1.8598
+Faulkner,jev,1929,1930,The Sound and the Fury,As I Lay Dying,-0.2663,1.5935
+Faulkner,jev,1930,1931,As I Lay Dying,Sanctuary,-0.8947,0.6988
+Faulkner,jev,1931,1932,Sanctuary,Light in August,0.1438,0.8426
+Faulkner,jev,1932,1935,Light in August,Pylon,0.1724,1.015
+Faulkner,jev,1935,1936,Pylon,"Absalom, Absalom!",-0.0048,1.0102
+Woolf,jev,1915,1919,The Voyage Out,Night and Day,-0.0386,0.4121
+Woolf,jev,1919,1922,Night and Day,Jacob's Room,0.3708,0.7829
+Woolf,jev,1922,1925,Jacob's Room,Mrs Dalloway,0.1464,0.9293
+Woolf,jev,1925,1927,Mrs Dalloway,To the Lighthouse,-0.0776,0.8517
+Woolf,jev,1927,1928,To the Lighthouse,Orlando,-0.2512,0.6005
+Woolf,jev,1928,1931,Orlando,The Waves,1.5136,2.1141
+Woolf,jev,1931,1933,The Waves,Flush,-1.6304,0.4837
+Woolf,jev,1933,1937,Flush,The Years,0.3852,0.8689
+Woolf,jev,1937,1941,The Years,Between the Acts,0.1987,1.0676
+Joyce,jev,1914,1916,Dubliners,A Portrait of the Artist as a Young Man,0.3235,0.6642
+Joyce,jev,1916,1922,A Portrait of the Artist as a Young Man,Ulysses,1.0339,1.6981
+Sinclair,jev,1897,1907,Audrey Craven,The Helpmate,-0.0394,0.3397
+Sinclair,jev,1907,1913,The Helpmate,The Combined Maze,0.0538,0.3935
+Sinclair,jev,1913,1914,The Combined Maze,The Three Sisters,0.0782,0.4717
+Sinclair,jev,1914,1917,The Three Sisters,The Tree of Heaven,0.3906,0.8623
+Sinclair,jev,1917,1919,The Tree of Heaven,Mary Olivier: A Life,0.1103,0.9726
+Sinclair,jev,1919,1920,Mary Olivier: A Life,The Romantic,-0.1097,0.8629
+Sinclair,jev,1920,1922,The Romantic,Life and Death of Harriett Frean,-0.2679,0.595
+James,jev,1875,1881,Roderick Hudson,The Portrait of a Lady (vol. 1),-0.1132,0.4091
+James,jev,1881,1881,The Portrait of a Lady (vol. 1),The Portrait of a Lady (vol. 2),0.0481,0.4572
+James,jev,1881,1897,The Portrait of a Lady (vol. 2),What Maisie Knew,-0.0078,0.4494
+James,jev,1897,1902,What Maisie Knew,The Wings of the Dove (vol. 1),0.2068,0.6562
+James,jev,1902,1902,The Wings of the Dove (vol. 1),The Wings of the Dove (vol. 2),-0.1055,0.5507
+James,jev,1902,1903,The Wings of the Dove (vol. 2),The Ambassadors,0.0421,0.5928
+James,jev,1903,1904,The Ambassadors,The Golden Bowl,0.1444,0.7372
+Richardson,jev,1915,1916,Pointed Roofs,Backwater,0.0757,0.8576
+Richardson,jev,1916,1917,Backwater,Honeycomb,0.0722,0.9298
+Richardson,jev,1917,1919,Honeycomb,Interim,0.1535,1.0833
+Richardson,jev,1919,1919,Interim,The Tunnel,-0.0404,1.0429
+Richardson,jev,1919,1921,The Tunnel,Deadlock,0.0271,1.07
+Richardson,jev,1921,1923,Deadlock,Revolving Lights,0.0166,1.0866
+Richardson,jev,1923,1925,Revolving Lights,The Trap,-0.1392,0.9474
+Richardson,jev,1925,1927,The Trap,Oberland,-0.1185,0.8289
+Richardson,jev,1927,1931,Oberland,Dawn's Left Hand,0.0978,0.9267
+Richardson,jev,1931,1935,Dawn's Left Hand,Clear Horizon,-0.1821,0.7446
+Richardson,jev,1935,1938,Clear Horizon,Dimple Hill,0.1478,0.8924

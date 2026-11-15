@@ -1,0 +1,25 @@
+# Netlify config for the annotation page.
+#
+# Drag-and-drop: just drag the _site folder onto Netlify. This file is not used.
+#
+# Git-based deploy: in Netlify's UI set the site's BASE DIRECTORY to
+#   technique_v_genre/human_review
+# and this file is picked up from there. There is no build step — _site is
+# committed, because the page is generated on Della by build_page.py and the
+# generated file is itself part of the research record.
+#
+# NOTE: a Netlify site is public to anyone with the URL. Free-tier Netlify has
+# no password protection; site-level passwords and Identity-based access are
+# paid features. See README.md, "Deploying it", before pointing this at a
+# public URL.
+
+[build]
+  publish = "_site"
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Referrer-Policy = "no-referrer"
+    X-Content-Type-Options = "nosniff"

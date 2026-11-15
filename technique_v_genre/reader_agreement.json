@@ -1,0 +1,134 @@
+{
+ "majority": {
+  "n_passages": 16953,
+  "categorical": {
+   "observed": 56.5,
+   "chance": 29.3,
+   "kappa": 0.385
+  },
+  "ordinal": {
+   "observed": 67.3,
+   "chance": 34.2,
+   "kappa": 0.5035
+  },
+  "level_within_one_pct_of_all": 95.8,
+  "level_one_apart_pct_of_disagreements": 87.3,
+  "type_disagreements": 7370,
+  "top_type_disagreements": [
+   {
+    "pair": "indirect_interior_monologue vs omniscient_description",
+    "n": 3170,
+    "pct_of_passages": 18.7,
+    "pct_of_disagreements": 43.0
+   },
+   {
+    "pair": "direct_interior_monologue vs quoted_monologue",
+    "n": 445,
+    "pct_of_passages": 2.6,
+    "pct_of_disagreements": 6.0
+   },
+   {
+    "pair": "indirect_interior_monologue vs quoted_monologue",
+    "n": 439,
+    "pct_of_passages": 2.6,
+    "pct_of_disagreements": 6.0
+   },
+   {
+    "pair": "hybrid vs indirect_interior_monologue",
+    "n": 435,
+    "pct_of_passages": 2.6,
+    "pct_of_disagreements": 5.9
+   },
+   {
+    "pair": "indirect_interior_monologue vs reverie_fantasy",
+    "n": 428,
+    "pct_of_passages": 2.5,
+    "pct_of_disagreements": 5.8
+   },
+   {
+    "pair": "direct_interior_monologue vs hybrid",
+    "n": 405,
+    "pct_of_passages": 2.4,
+    "pct_of_disagreements": 5.5
+   },
+   {
+    "pair": "omniscient_description vs simulation_state_of_mind",
+    "n": 350,
+    "pct_of_passages": 2.1,
+    "pct_of_disagreements": 4.7
+   },
+   {
+    "pair": "indirect_interior_monologue vs simulation_state_of_mind",
+    "n": 334,
+    "pct_of_passages": 2.0,
+    "pct_of_disagreements": 4.5
+   }
+  ]
+ },
+ "any_run": {
+  "n_passages": 17510,
+  "categorical": {
+   "observed": 56.8,
+   "chance": 29.4,
+   "kappa": 0.3883
+  },
+  "ordinal": {
+   "observed": 67.6,
+   "chance": 34.3,
+   "kappa": 0.5072
+  },
+  "level_within_one_pct_of_all": 95.8,
+  "level_one_apart_pct_of_disagreements": 87.0,
+  "type_disagreements": 7560,
+  "top_type_disagreements": [
+   {
+    "pair": "indirect_interior_monologue vs omniscient_description",
+    "n": 3239,
+    "pct_of_passages": 18.5,
+    "pct_of_disagreements": 42.8
+   },
+   {
+    "pair": "direct_interior_monologue vs quoted_monologue",
+    "n": 457,
+    "pct_of_passages": 2.6,
+    "pct_of_disagreements": 6.0
+   },
+   {
+    "pair": "indirect_interior_monologue vs quoted_monologue",
+    "n": 445,
+    "pct_of_passages": 2.5,
+    "pct_of_disagreements": 5.9
+   },
+   {
+    "pair": "hybrid vs indirect_interior_monologue",
+    "n": 437,
+    "pct_of_passages": 2.5,
+    "pct_of_disagreements": 5.8
+   },
+   {
+    "pair": "indirect_interior_monologue vs reverie_fantasy",
+    "n": 429,
+    "pct_of_passages": 2.5,
+    "pct_of_disagreements": 5.7
+   },
+   {
+    "pair": "direct_interior_monologue vs hybrid",
+    "n": 406,
+    "pct_of_passages": 2.3,
+    "pct_of_disagreements": 5.4
+   },
+   {
+    "pair": "omniscient_description vs simulation_state_of_mind",
+    "n": 370,
+    "pct_of_passages": 2.1,
+    "pct_of_disagreements": 4.9
+   },
+   {
+    "pair": "indirect_interior_monologue vs simulation_state_of_mind",
+    "n": 341,
+    "pct_of_passages": 1.9,
+    "pct_of_disagreements": 4.5
+   }
+  ]
+ }
+}

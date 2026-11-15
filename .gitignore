@@ -22,6 +22,54 @@ results/
 # Chonkie chunk output
 *_chunks.json
 
+# Derived text corpora (chunked/labelled novel text; same reasoning as chunking/)
+positives/
+negatives/
+chunking_positives/
+silver_data/
+dataset/
+training_data/traces/
+training_data/*.bak*
+
+# Model weights and checkpoints (multi-GB; published via Hugging Face)
+models/
+adapter/
+adapter-*/
+
+# Job logs and runtime state
+logs/
+technique_v_genre/logs/
+*_endpoint.txt
+technique_v_genre/endpoints/
+*.lock
+
+# technique_v_genre: anything that carries passage text. Includes the
+# coauthor-supplied works still in US copyright (jev_new_works.txt), and
+# scored rows embed passage_text. Too large for GitHub regardless (~1.2 GB).
+technique_v_genre/passages/
+technique_v_genre/scored/
+technique_v_genre/scored_jev/
+technique_v_genre/scored_local/
+technique_v_genre/scored_masked/
+technique_v_genre/ocr_control/texts/
+technique_v_genre/ocr_control/passages/
+technique_v_genre/ocr_control/scored/
+technique_v_genre/quote_control/passages/
+technique_v_genre/quote_control/scored/
+technique_v_genre/calibration/*.jsonl
+technique_v_genre/experiment_d_*.jsonl
+technique_v_genre/woolf_disagreement_examples.csv
+technique_v_genre/human_review/annotation_set.json
+technique_v_genre/human_review/annotate.html
+technique_v_genre/human_review/_site/
+
+# Caches
+technique_v_genre/metadata_cache/
+technique_v_genre/cohn_icc_features.pkl
+
+# Copyrighted reference PDFs dropped in the repo root
+/*.pdf
+
 # OS junk
 .DS_Store
 Thumbs.db

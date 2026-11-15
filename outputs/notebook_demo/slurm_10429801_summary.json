@@ -1,0 +1,32 @@
+[
+  {
+    "model_id":"v3_grpo",
+    "n_cases":14,
+    "tp":3,
+    "tn":5,
+    "fp":0,
+    "fn":6,
+    "precision":1.0,
+    "recall":0.333,
+    "f1":0.5,
+    "accuracy":0.571,
+    "ece_proxy":0.175,
+    "brier_proxy":0.227,
+    "aurc_proxy":0.2495
+  },
+  {
+    "model_id":"v3_sft",
+    "n_cases":14,
+    "tp":5,
+    "tn":5,
+    "fp":0,
+    "fn":4,
+    "precision":1.0,
+    "recall":0.556,
+    "f1":0.714,
+    "accuracy":0.714,
+    "ece_proxy":0.0964,
+    "brier_proxy":0.168,
+    "aurc_proxy":0.1282
+  }
+]

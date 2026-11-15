@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mediation Figures</title>
+<style>
+  :root{
+    color-scheme: light;
+    --surface-1:#fcfcfb; --surface-2:#f5f4f1;
+    --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#898781;
+    --accent:#2a78d6; --deemph:#898781;
+    --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --sans: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif: ui-serif,Georgia,"Times New Roman",serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --surface-1:#1a1a19; --surface-2:#232322;
+      --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#898781;
+      --accent:#3987e5; --deemph:#898781;
+      --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --surface-1:#1a1a19; --surface-2:#232322;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#898781;
+    --accent:#3987e5; --deemph:#898781;
+    --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface-1);color:var(--text-primary);font-family:var(--sans);
+       font-size:15px;line-height:1.55}
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 16px 80px}
+  header.pg{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;
+            border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:8px}
+  h1{font-family:var(--serif);font-size:1.6rem;margin:0 0 4px;font-weight:600}
+  .sub{color:var(--text-secondary);font-size:.92rem;margin:0}
+  .draft{display:inline-block;border:1px solid var(--border);background:var(--surface-2);
+         color:var(--text-secondary);border-radius:999px;padding:3px 11px;font-size:.74rem;
+         letter-spacing:.06em;text-transform:uppercase}
+  button.theme{border:1px solid var(--border);background:var(--surface-2);color:var(--text-primary);
+          border-radius:8px;padding:7px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+  figure{margin:44px 0 0;padding:0}
+  figcaption{font-size:.87rem;color:var(--text-secondary);margin-top:12px;max-width:74ch}
+  h2{font-family:var(--serif);font-size:1.18rem;margin:0 0 2px;font-weight:600}
+  .lede{color:var(--text-secondary);font-size:.9rem;margin:0 0 14px;max-width:76ch}
+  .panels{display:grid;gap:18px}
+  @media(min-width:860px){.panels{grid-template-columns:repeat(3,1fr)}}
+  .panel{border:1px solid var(--border);border-radius:10px;padding:12px 10px 8px;background:var(--surface-1);min-width:0}
+  .ptitle{font-size:.8rem;color:var(--text-secondary);margin:0 0 8px;padding-left:4px}
+  .ptitle b{color:var(--text-primary);font-weight:600}
+  .legend{display:flex;gap:16px;align-items:center;margin:10px 0 0;font-size:.82rem;color:var(--text-secondary)}
+  .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .gl{stroke:var(--grid);stroke-width:1}
+  .bl{stroke:var(--baseline);stroke-width:1}
+  .tick{fill:var(--text-muted);font-size:9.5px}
+  .rowlab{fill:var(--text-primary);font-size:10.5px}
+  .rown{fill:var(--text-muted);font-size:9px}
+  .dot{stroke:var(--surface-1);stroke-width:2;cursor:pointer}
+  .iqr{fill:var(--deemph);opacity:.16}
+  .iqr.acc{fill:var(--accent);opacity:.17}
+  .dlab{fill:var(--text-secondary);font-size:9px}
+  .tiles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:20px}
+  .tile{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--surface-2)}
+  .tile .lab{font-size:.76rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em}
+  .tile .val{font-size:2rem;font-family:var(--serif);margin:4px 0 0;line-height:1.1}
+  .tile .note{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+  .arrow{color:var(--accent);font-weight:600}
+  table{border-collapse:collapse;width:100%;font-size:.82rem;margin-top:10px}
+  th,td{text-align:left;padding:5px 9px;border-bottom:1px solid var(--border)}
+  th{color:var(--text-secondary);font-weight:600}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  details{margin-top:14px}
+  summary{cursor:pointer;color:var(--text-secondary);font-size:.85rem}
+  .tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--surface-2);
+       color:var(--text-primary);border:1px solid var(--border);border-radius:8px;padding:8px 10px;
+       font-size:.8rem;box-shadow:0 6px 20px rgba(0,0,0,.18);z-index:50;max-width:260px}
+  .tip b{display:block;font-size:.86rem}
+  .tip i{color:var(--text-secondary);font-style:normal}
+  .warn{border-left:3px solid var(--accent);background:var(--surface-2);padding:11px 14px;
+        border-radius:0 8px 8px 0;font-size:.85rem;color:var(--text-secondary);margin:16px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="pg">
+  <div>
+    <h1>Mediation figures</h1>
+    <p class="sub">Cohn's mediation cline (0–3) across 54 works, 7 authors, 1875–1941 · <span class="draft">final data</span></p>
+  </div>
+  <button class="theme" id="t">Toggle theme</button>
+</header>
+
+<div class="warn" id="status"></div>
+
+<!-- FIG 1 -->
+<figure>
+  <h2>Figure 1 · The fingerprint is a shape, not a level</h2>
+  <p class="lede">Each mark is one work's mean mediation level. Woolf is highlighted; the other six
+  authors are context. Shaded band = interquartile range. Faceted by reader because the scale is
+  <em>not</em> calibrated between readers — the point is that the ordering survives the instrument.</p>
+  <div class="panels" id="f1"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent)"></span>Woolf</span>
+    <span><span class="sw" style="background:var(--deemph)"></span>Other authors</span>
+    <span>band = IQR</span>
+  </div>
+  <figcaption id="cap1"></figcaption>
+  <details><summary>Table view</summary><div id="tbl1"></div></details>
+</figure>
+
+<!-- FIG 2 -->
+<figure>
+  <h2>Figure 2 · Career trajectories</h2>
+  <p class="lede">Work-level mediation by publication year, one panel per author, shared axes.
+  Reader: <b>jev</b> — the only reader covering all 54 works. gpt-5.4 and qwen3-max stop at the 46 public-domain ones, because seven of the eight coauthor-supplied texts are in copyright.</p>
+  <div class="panels" id="f2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
+  <figcaption id="cap2"></figcaption>
+</figure>
+
+
+<!-- FIG 5 -->
+<figure>
+  <h2>Figure 5 · Novel-to-novel movement over a career</h2>
+  <p class="lede">Each bar is the change in mediation level from one novel to the next, placed at the
+  later novel's year. Bars right of the baseline mean the author moved toward less-mediated narration;
+  left means more mediated. The question is not how high an author sits but <em>how far they move, and
+  whether they come back</em>. Reader: <b>jev</b> (all 54 works).</p>
+  <div class="panels" id="f5" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent)"></span>Woolf</span>
+    <span><span class="sw" style="background:var(--deemph)"></span>Other authors</span>
+    <span>shaded = 3-step rolling mean of |step|, this author's local norm</span>
+    <span>dotted = corpus norm (median |step|)</span>
+    <span>dashed = &plusmn;0.8, "big" step</span>
+  </div>
+  <figcaption id="cap5"></figcaption>
+  <details><summary>Max step by reader — is the shape an artefact of one instrument?</summary>
+    <div id="f5rob"></div>
+  </details>
+</figure>
+
+
+<!-- FIG 6 -->
+<figure>
+  <h2>Figure 6 · Do works cluster by author?</h2>
+  <p class="lede">Every work placed by how mediated it is on average (x) against how much it varies
+  internally (y). One mark per work. The question this answers is mostly a negative one, and that is
+  why it is worth printing. Reader: <b>qwen3-max</b>.</p>
+  <div id="f6"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent)"></span>Woolf</span>
+    <span><span class="sw" style="background:var(--deemph)"></span>Other authors</span>
+    <span>no cluster hulls drawn — see caption</span>
+  </div>
+  <figcaption id="cap6"></figcaption>
+  <details><summary>Check it yourself — one panel per author against the same cloud</summary>
+    <div class="panels" id="f6facet" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:12px"></div>
+  </details>
+</figure>
+
+
+<!-- FIG 7 -->
+<figure>
+  <h2>Figure 7a · Three dimensions: mediation &times; internal variation &times; year</h2>
+  <p class="lede">Figure 6 with publication year as a third axis. <b>Drag to rotate</b>; nearer works are
+  drawn larger and more opaque. Reader: <b>jev</b> (all 54 works).</p>
+  <div id="f7" style="touch-action:none;cursor:grab"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent)"></span>Woolf</span>
+    <span><span class="sw" style="background:var(--deemph)"></span>Other authors</span>
+    <span id="f7ang"></span>
+    <button class="theme" id="f7reset" style="padding:4px 9px;font-size:.78rem">Reset view</button>
+  </div>
+  <figcaption id="cap7"></figcaption>
+</figure>
+
+<!-- FIG 7b -->
+<figure>
+  <h2>Figure 7b · The same third dimension, as a path instead of an axis</h2>
+  <p class="lede">Identical axes to Figure 6, but each author's works are joined in chronological order.
+  Time becomes the direction you travel through the space rather than a third axis. Open circle = first
+  novel, filled = last.</p>
+  <div class="panels" id="f7b" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr))"></div>
+  <figcaption id="cap7b"></figcaption>
+</figure>
+
+
+<!-- FIG 8 -->
+<figure>
+  <h2>Figure 8 &middot; Two axes, not three categories</h2>
+  <p class="lede">How far an author travels and returns (vertical) against how much they move the rest
+  of the time (horizontal). Baseline volatility is the mean step size <em>with every step of 0.8 or
+  more removed</em>, so it measures the norm rather than the departure from it. Reader: <b>jev</b>,
+  the only reader covering all 54 works.</p>
+  <div id="f8"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--accent)"></span>Woolf</span>
+    <span><span class="sw" style="background:var(--deemph)"></span>Other authors</span>
+    <span>hollow = fewer than 5 works, too few for a baseline</span>
+  </div>
+  <figcaption id="cap8"></figcaption>
+</figure>
+
+<!-- FIG 3 -->
+<figure>
+  <h2>Figure 3 · Why the ordinal scale, not the categories</h2>
+  <p class="lede">Same judgements, same passages — only the target representation differs.</p>
+  <div class="tiles" id="f3tiles"></div>
+  <p class="lede" style="margin-top:4px">Where reader disagreement actually comes from:</p>
+  <div id="f3bars"></div>
+  <figcaption id="cap3"></figcaption>
+</figure>
+
+<!-- FIG 4 -->
+<figure>
+  <h2>Figure 4 · Ambiguity, measured directly</h2>
+  <p class="lede">Gap between the top two mediation-level probabilities, per passage, from Jev.
+  A small gap means the passage is genuinely undecidable — measured, not inferred from readers disagreeing.</p>
+  <div id="f4"></div>
+  <figcaption id="cap4"></figcaption>
+</figure>
+
+</div>
+<div class="tip" id="tip"></div>
+<script id="payload" type="application/json">{"works": [{"a": "Faulkner", "t": "Absalom, Absalom!", "y": 1936, "r": "jev", "m": 1.01, "n": 782}, {"a": "Faulkner", "t": "As I Lay Dying", "y": 1930, "r": "gpt-5.4", "m": 1.596, "n": 846}, {"a": "Faulkner", "t": "As I Lay Dying", "y": 1930, "r": "qwen3-max", "m": 2.273, "n": 634}, {"a": "Faulkner", "t": "As I Lay Dying", "y": 1930, "r": "jev", "m": 1.593, "n": 278}, {"a": "Woolf", "t": "Between the Acts", "y": 1941, "r": "gpt-5.4", "m": 0.92, "n": 652}, {"a": "Woolf", "t": "Between the Acts", "y": 1941, "r": "qwen3-max", "m": 1.119, "n": 620}, {"a": "Woolf", "t": "Between the Acts", "y": 1941, "r": "jev", "m": 1.068, "n": 207}, {"a": "Richardson", "t": "Clear Horizon", "y": 1935, "r": "jev", "m": 0.745, "n": 278}, {"a": "Richardson", "t": "Dawn's Left Hand", "y": 1931, "r": "jev", "m": 0.927, "n": 273}, {"a": "Richardson", "t": "Dimple Hill", "y": 1938, "r": "jev", "m": 0.892, "n": 288}, {"a": "Woolf", "t": "Flush", "y": 1933, "r": "gpt-5.4", "m": 0.326, "n": 454}, {"a": "Woolf", "t": "Flush", "y": 1933, "r": "qwen3-max", "m": 0.428, "n": 388}, {"a": "Woolf", "t": "Flush", "y": 1933, "r": "jev", "m": 0.484, "n": 153}, {"a": "Woolf", "t": "Jacob's Room", "y": 1922, "r": "gpt-5.4", "m": 0.539, "n": 792}, {"a": "Woolf", "t": "Jacob's Room", "y": 1922, "r": "qwen3-max", "m": 0.64, "n": 713}, {"a": "Woolf", "t": "Jacob's Room", "y": 1922, "r": "jev", "m": 0.783, "n": 258}, {"a": "Faulkner", "t": "Light in August", "y": 1932, "r": "jev", "m": 0.843, "n": 686}, {"a": "Faulkner", "t": "Mosquitoes", "y": 1927, "r": "jev", "m": 0.668, "n": 346}, {"a": "Woolf", "t": "Night and Day", "y": 1919, "r": "gpt-5.4", "m": 0.247, "n": 2507}, {"a": "Woolf", "t": "Night and Day", "y": 1919, "r": "qwen3-max", "m": 0.511, "n": 2131}, {"a": "Woolf", "t": "Night and Day", "y": 1919, "r": "jev", "m": 0.412, "n": 808}, {"a": "Woolf", "t": "Orlando", "y": 1928, "r": "gpt-5.4", "m": 0.404, "n": 1182}, {"a": "Woolf", "t": "Orlando", "y": 1928, "r": "qwen3-max", "m": 0.654, "n": 924}, {"a": "Woolf", "t": "Orlando", "y": 1928, "r": "jev", "m": 0.601, "n": 373}, {"a": "James", "t": "Roderick Hudson", "y": 1875, "r": "gpt-5.4", "m": 0.357, "n": 1768}, {"a": "James", "t": "Roderick Hudson", "y": 1875, "r": "qwen3-max", "m": 0.623, "n": 1053}, {"a": "James", "t": "Roderick Hudson", "y": 1875, "r": "jev", "m": 0.522, "n": 582}, {"a": "James", "t": "The Ambassadors", "y": 1903, "r": "gpt-5.4", "m": 0.327, "n": 2862}, {"a": "James", "t": "The Ambassadors", "y": 1903, "r": "qwen3-max", "m": 0.694, "n": 1958}, {"a": "James", "t": "The Ambassadors", "y": 1903, "r": "jev", "m": 0.593, "n": 948}, {"a": "Ford", "t": "The Good Soldier", "y": 1915, "r": "gpt-5.4", "m": 0.486, "n": 1266}, {"a": "Ford", "t": "The Good Soldier", "y": 1915, "r": "qwen3-max", "m": 1.153, "n": 1069}, {"a": "Ford", "t": "The Good Soldier", "y": 1915, "r": "jev", "m": 0.569, "n": 404}, {"a": "Joyce", "t": "Dubliners", "y": 1914, "r": "gpt-5.4", "m": 0.235, "n": 794}, {"a": "Joyce", "t": "Dubliners", "y": 1914, "r": "qwen3-max", "m": 0.635, "n": 468}, {"a": "Joyce", "t": "Dubliners", "y": 1914, "r": "jev", "m": 0.341, "n": 226}, {"a": "James", "t": "The Portrait of a Lady (vol. 1)", "y": 1881, "r": "gpt-5.4", "m": 0.198, "n": 1519}, {"a": "James", "t": "The Portrait of a Lady (vol. 1)", "y": 1881, "r": "qwen3-max", "m": 0.412, "n": 796}, {"a": "James", "t": "The Portrait of a Lady (vol. 1)", "y": 1881, "r": "jev", "m": 0.409, "n": 484}, {"a": "James", "t": "The Portrait of a Lady (vol. 2)", "y": 1881, "r": "gpt-5.4", "m": 0.238, "n": 1684}, {"a": "James", "t": "The Portrait of a Lady (vol. 2)", "y": 1881, "r": "qwen3-max", "m": 0.464, "n": 1087}, {"a": "James", "t": "The Portrait of a Lady (vol. 2)", "y": 1881, "r": "jev", "m": 0.457, "n": 538}, {"a": "Richardson", "t": "Pointed Roofs", "y": 1915, "r": "gpt-5.4", "m": 0.75, "n": 950}, {"a": "Richardson", "t": "Pointed Roofs", "y": 1915, "r": "qwen3-max", "m": 1.013, "n": 864}, {"a": "Richardson", "t": "Pointed Roofs", "y": 1915, "r": "jev", "m": 0.782, "n": 321}, {"a": "Joyce", "t": "A Portrait of the Artist as a Young Man", "y": 1916, "r": "gpt-5.4", "m": 0.551, "n": 1217}, {"a": "Joyce", "t": "A Portrait of the Artist as a Young Man", "y": 1916, "r": "qwen3-max", "m": 0.868, "n": 965}, {"a": "Joyce", "t": "A Portrait of the Artist as a Young Man", "y": 1916, "r": "jev", "m": 0.664, "n": 411}, {"a": "James", "t": "The Golden Bowl", "y": 1904, "r": "gpt-5.4", "m": 0.294, "n": 3682}, {"a": "James", "t": "The Golden Bowl", "y": 1904, "r": "qwen3-max", "m": 0.638, "n": 2739}, {"a": "James", "t": "The Golden Bowl", "y": 1904, "r": "jev", "m": 0.737, "n": 1210}, {"a": "Joyce", "t": "Ulysses", "y": 1922, "r": "gpt-5.4", "m": 1.644, "n": 3980}, {"a": "Joyce", "t": "Ulysses", "y": 1922, "r": "qwen3-max", "m": 1.921, "n": 2942}, {"a": "Joyce", "t": "Ulysses", "y": 1922, "r": "jev", "m": 1.698, "n": 1136}, {"a": "James", "t": "What Maisie Knew", "y": 1897, "r": "gpt-5.4", "m": 0.17, "n": 1692}, {"a": "James", "t": "What Maisie Knew", "y": 1897, "r": "qwen3-max", "m": 0.594, "n": 1240}, {"a": "James", "t": "What Maisie Knew", "y": 1897, "r": "jev", "m": 0.449, "n": 534}, {"a": "Sinclair", "t": "Life and Death of Harriett Frean", "y": 1922, "r": "gpt-5.4", "m": 0.483, "n": 356}, {"a": "Sinclair", "t": "Life and Death of Harriett Frean", "y": 1922, "r": "qwen3-max", "m": 0.812, "n": 314}, {"a": "Sinclair", "t": "Life and Death of Harriett Frean", "y": 1922, "r": "jev", "m": 0.595, "n": 121}, {"a": "Sinclair", "t": "Mary Olivier: A Life", "y": 1919, "r": "gpt-5.4", "m": 0.873, "n": 1967}, {"a": "Sinclair", "t": "Mary Olivier: A Life", "y": 1919, "r": "qwen3-max", "m": 1.138, "n": 1741}, {"a": "Sinclair", "t": "Mary Olivier: A Life", "y": 1919, "r": "jev", "m": 0.973, "n": 656}, {"a": "Sinclair", "t": "The Three Sisters", "y": 1914, "r": "gpt-5.4", "m": 0.325, "n": 1423}, {"a": "Sinclair", "t": "The Three Sisters", "y": 1914, "r": "qwen3-max", "m": 0.415, "n": 1068}, {"a": "Sinclair", "t": "The Three Sisters", "y": 1914, "r": "jev", "m": 0.472, "n": 477}, {"a": "Sinclair", "t": "The Romantic", "y": 1920, "r": "gpt-5.4", "m": 0.645, "n": 727}, {"a": "Sinclair", "t": "The Romantic", "y": 1920, "r": "qwen3-max", "m": 0.934, "n": 546}, {"a": "Sinclair", "t": "The Romantic", "y": 1920, "r": "jev", "m": 0.863, "n": 248}, {"a": "Sinclair", "t": "The Tree of Heaven", "y": 1917, "r": "gpt-5.4", "m": 0.603, "n": 1548}, {"a": "Sinclair", "t": "The Tree of Heaven", "y": 1917, "r": "qwen3-max", "m": 0.835, "n": 1250}, {"a": "Sinclair", "t": "The Tree of Heaven", "y": 1917, "r": "jev", "m": 0.862, "n": 523}, {"a": "Sinclair", "t": "The Helpmate", "y": 1907, "r": "gpt-5.4", "m": 0.204, "n": 1780}, {"a": "Sinclair", "t": "The Helpmate", "y": 1907, "r": "qwen3-max", "m": 0.263, "n": 1306}, {"a": "Sinclair", "t": "The Helpmate", "y": 1907, "r": "jev", "m": 0.34, "n": 580}, {"a": "Sinclair", "t": "The Combined Maze", "y": 1913, "r": "gpt-5.4", "m": 0.259, "n": 1583}, {"a": "Sinclair", "t": "The Combined Maze", "y": 1913, "r": "qwen3-max", "m": 0.493, "n": 1123}, {"a": "Sinclair", "t": "The Combined Maze", "y": 1913, "r": "jev", "m": 0.394, "n": 521}, {"a": "James", "t": "The Wings of the Dove (vol. 1)", "y": 1902, "r": "gpt-5.4", "m": 0.296, "n": 1460}, {"a": "James", "t": "The Wings of the Dove (vol. 1)", "y": 1902, "r": "qwen3-max", "m": 0.552, "n": 1139}, {"a": "James", "t": "The Wings of the Dove (vol. 1)", "y": 1902, "r": "jev", "m": 0.656, "n": 477}, {"a": "Sinclair", "t": "Audrey Craven", "y": 1897, "r": "gpt-5.4", "m": 0.238, "n": 1183}, {"a": "Sinclair", "t": "Audrey Craven", "y": 1897, "r": "qwen3-max", "m": 0.366, "n": 867}, {"a": "Sinclair", "t": "Audrey Craven", "y": 1897, "r": "jev", "m": 0.379, "n": 393}, {"a": "James", "t": "The Wings of the Dove (vol. 2)", "y": 1902, "r": "gpt-5.4", "m": 0.252, "n": 1868}, {"a": "James", "t": "The Wings of the Dove (vol. 2)", "y": 1902, "r": "qwen3-max", "m": 0.607, "n": 1309}, {"a": "James", "t": "The Wings of the Dove (vol. 2)", "y": 1902, "r": "jev", "m": 0.551, "n": 612}, {"a": "Richardson", "t": "Backwater", "y": 1916, "r": "gpt-5.4", "m": 0.801, "n": 879}, {"a": "Richardson", "t": "Backwater", "y": 1916, "r": "qwen3-max", "m": 0.979, "n": 772}, {"a": "Richardson", "t": "Backwater", "y": 1916, "r": "jev", "m": 0.858, "n": 302}, {"a": "Richardson", "t": "The Tunnel", "y": 1919, "r": "gpt-5.4", "m": 1.047, "n": 1618}, {"a": "Richardson", "t": "The Tunnel", "y": 1919, "r": "qwen3-max", "m": 1.102, "n": 1406}, {"a": "Richardson", "t": "The Tunnel", "y": 1919, "r": "jev", "m": 1.043, "n": 536}, {"a": "Richardson", "t": "Honeycomb", "y": 1917, "r": "gpt-5.4", "m": 0.901, "n": 871}, {"a": "Richardson", "t": "Honeycomb", "y": 1917, "r": "qwen3-max", "m": 1.024, "n": 782}, {"a": "Richardson", "t": "Honeycomb", "y": 1917, "r": "jev", "m": 0.93, "n": 285}, {"a": "Richardson", "t": "Deadlock", "y": 1921, "r": "gpt-5.4", "m": 0.757, "n": 1351}, {"a": "Richardson", "t": "Deadlock", "y": 1921, "r": "qwen3-max", "m": 0.942, "n": 1256}, {"a": "Richardson", "t": "Deadlock", "y": 1921, "r": "jev", "m": 1.07, "n": 457}, {"a": "Richardson", "t": "Interim", "y": 1919, "r": "gpt-5.4", "m": 0.898, "n": 954}, {"a": "Richardson", "t": "Interim", "y": 1919, "r": "qwen3-max", "m": 1.04, "n": 894}, {"a": "Richardson", "t": "Interim", "y": 1919, "r": "jev", "m": 1.083, "n": 324}, {"a": "Richardson", "t": "Revolving Lights", "y": 1923, "r": "gpt-5.4", "m": 0.893, "n": 1034}, {"a": "Richardson", "t": "Revolving Lights", "y": 1923, "r": "qwen3-max", "m": 1.013, "n": 971}, {"a": "Richardson", "t": "Revolving Lights", "y": 1923, "r": "jev", "m": 1.087, "n": 358}, {"a": "Ford", "t": "Some Do Not...", "y": 1924, "r": "gpt-5.4", "m": 0.547, "n": 1536}, {"a": "Ford", "t": "Some Do Not...", "y": 1924, "r": "qwen3-max", "m": 0.814, "n": 1137}, {"a": "Ford", "t": "Some Do Not...", "y": 1924, "r": "jev", "m": 0.707, "n": 505}, {"a": "Richardson", "t": "The Trap", "y": 1925, "r": "gpt-5.4", "m": 0.816, "n": 609}, {"a": "Richardson", "t": "The Trap", "y": 1925, "r": "qwen3-max", "m": 1.022, "n": 578}, {"a": "Richardson", "t": "The Trap", "y": 1925, "r": "jev", "m": 0.947, "n": 209}, {"a": "Ford", "t": "No More Parades", "y": 1925, "r": "gpt-5.4", "m": 0.833, "n": 1388}, {"a": "Ford", "t": "No More Parades", "y": 1925, "r": "qwen3-max", "m": 1.045, "n": 1072}, {"a": "Ford", "t": "No More Parades", "y": 1925, "r": "jev", "m": 0.951, "n": 450}, {"a": "Woolf", "t": "Mrs Dalloway", "y": 1925, "r": "gpt-5.4", "m": 0.891, "n": 1138}, {"a": "Woolf", "t": "Mrs Dalloway", "y": 1925, "r": "qwen3-max", "m": 0.881, "n": 1086}, {"a": "Woolf", "t": "Mrs Dalloway", "y": 1925, "r": "jev", "m": 0.929, "n": 368}, {"a": "Faulkner", "t": "The Sound and the Fury", "y": 1929, "r": "gpt-5.4", "m": 1.933, "n": 1188}, {"a": "Faulkner", "t": "The Sound and the Fury", "y": 1929, "r": "qwen3-max", "m": 2.586, "n": 871}, {"a": "Faulkner", "t": "The Sound and the Fury", "y": 1929, "r": "jev", "m": 1.86, "n": 378}, {"a": "Richardson", "t": "Oberland", "y": 1927, "r": "gpt-5.4", "m": 0.418, "n": 655}, {"a": "Richardson", "t": "Oberland", "y": 1927, "r": "qwen3-max", "m": 0.754, "n": 626}, {"a": "Richardson", "t": "Oberland", "y": 1927, "r": "jev", "m": 0.829, "n": 228}, {"a": "Faulkner", "t": "Pylon", "y": 1935, "r": "jev", "m": 1.015, "n": 333}, {"a": "Faulkner", "t": "Sanctuary", "y": 1931, "r": "jev", "m": 0.699, "n": 249}, {"a": "Ford", "t": "A Man Could Stand Up\u2014", "y": 1926, "r": "gpt-5.4", "m": 0.825, "n": 1159}, {"a": "Ford", "t": "A Man Could Stand Up\u2014", "y": 1926, "r": "qwen3-max", "m": 0.957, "n": 1064}, {"a": "Ford", "t": "A Man Could Stand Up\u2014", "y": 1926, "r": "jev", "m": 0.9, "n": 379}, {"a": "Ford", "t": "The Last Post", "y": 1928, "r": "gpt-5.4", "m": 0.63, "n": 1160}, {"a": "Ford", "t": "The Last Post", "y": 1928, "r": "qwen3-max", "m": 0.881, "n": 1064}, {"a": "Ford", "t": "The Last Post", "y": 1928, "r": "jev", "m": 0.815, "n": 368}, {"a": "Faulkner", "t": "Soldiers' Pay", "y": 1926, "r": "gpt-5.4", "m": 0.919, "n": 1142}, {"a": "Faulkner", "t": "Soldiers' Pay", "y": 1926, "r": "qwen3-max", "m": 1.062, "n": 936}, {"a": "Faulkner", "t": "Soldiers' Pay", "y": 1926, "r": "jev", "m": 0.764, "n": 407}, {"a": "Woolf", "t": "The Voyage Out", "y": 1915, "r": "gpt-5.4", "m": 0.291, "n": 1872}, {"a": "Woolf", "t": "The Voyage Out", "y": 1915, "r": "qwen3-max", "m": 0.517, "n": 1438}, {"a": "Woolf", "t": "The Voyage Out", "y": 1915, "r": "jev", "m": 0.451, "n": 639}, {"a": "Woolf", "t": "The Waves", "y": 1931, "r": "gpt-5.4", "m": 2.47, "n": 1211}, {"a": "Woolf", "t": "The Waves", "y": 1931, "r": "qwen3-max", "m": 2.533, "n": 1200}, {"a": "Woolf", "t": "The Waves", "y": 1931, "r": "jev", "m": 2.114, "n": 412}, {"a": "Woolf", "t": "The Years", "y": 1937, "r": "gpt-5.4", "m": 0.958, "n": 1931}, {"a": "Woolf", "t": "The Years", "y": 1937, "r": "qwen3-max", "m": 0.996, "n": 1680}, {"a": "Woolf", "t": "The Years", "y": 1937, "r": "jev", "m": 0.869, "n": 633}, {"a": "Woolf", "t": "To the Lighthouse", "y": 1927, "r": "gpt-5.4", "m": 0.69, "n": 1847}, {"a": "Woolf", "t": "To the Lighthouse", "y": 1927, "r": "qwen3-max", "m": 0.737, "n": 1763}, {"a": "Woolf", "t": "To the Lighthouse", "y": 1927, "r": "jev", "m": 0.852, "n": 445}], "spread": [{"author": "Faulkner", "reader": "gpt-5.4", "n_works": 3.0, "min": 0.9194, "max": 1.9335, "range": 1.0141, "sd": 0.4216, "iqr": 1.0141, "median": 1.5957, "mean": 1.4829, "first_year": 1926.0, "last_year": 1930.0}, {"author": "Faulkner", "reader": "jev", "n_works": 8.0, "min": 0.6676, "max": 1.8598, "range": 1.1922, "sd": 0.4105, "iqr": 0.8294, "median": 0.9264, "mean": 1.0564, "first_year": 1926.0, "last_year": 1936.0}, {"author": "Faulkner", "reader": "qwen3-max", "n_works": 3.0, "min": 1.062, "max": 2.5855, "range": 1.5235, "sd": 0.657, "iqr": 1.5235, "median": 2.2729, "mean": 1.9735, "first_year": 1926.0, "last_year": 1930.0}, {"author": "Ford", "reader": "gpt-5.4", "n_works": 5.0, "min": 0.4858, "max": 0.8329, "range": 0.3471, "sd": 0.1421, "iqr": 0.2779, "median": 0.6302, "mean": 0.6641, "first_year": 1915.0, "last_year": 1928.0}, {"author": "Ford", "reader": "jev", "n_works": 5.0, "min": 0.5693, "max": 0.9511, "range": 0.3818, "sd": 0.1373, "iqr": 0.1928, "median": 0.8152, "mean": 0.7884, "first_year": 1915.0, "last_year": 1928.0}, {"author": "Ford", "reader": "qwen3-max", "n_works": 5.0, "min": 0.8144, "max": 1.1525, "range": 0.3381, "sd": 0.1194, "iqr": 0.1642, "median": 0.9568, "mean": 0.9698, "first_year": 1915.0, "last_year": 1928.0}, {"author": "James", "reader": "gpt-5.4", "n_works": 8.0, "min": 0.1696, "max": 0.3575, "range": 0.1879, "sd": 0.0598, "iqr": 0.0886, "median": 0.273, "mean": 0.2665, "first_year": 1875.0, "last_year": 1904.0}, {"author": "James", "reader": "jev", "n_works": 8.0, "min": 0.4091, "max": 0.7372, "range": 0.3281, "sd": 0.1045, "iqr": 0.199, "median": 0.5365, "mean": 0.5469, "first_year": 1875.0, "last_year": 1904.0}, {"author": "James", "reader": "qwen3-max", "n_works": 8.0, "min": 0.4121, "max": 0.6941, "range": 0.282, "sd": 0.0875, "iqr": 0.086, "median": 0.6008, "mean": 0.5731, "first_year": 1875.0, "last_year": 1904.0}, {"author": "Joyce", "reader": "gpt-5.4", "n_works": 3.0, "min": 0.2355, "max": 1.644, "range": 1.4085, "sd": 0.6035, "iqr": 1.4085, "median": 0.5514, "mean": 0.8103, "first_year": 1914.0, "last_year": 1922.0}, {"author": "Joyce", "reader": "jev", "n_works": 3.0, "min": 0.3407, "max": 1.6981, "range": 1.3574, "sd": 0.5789, "iqr": 1.3574, "median": 0.6642, "mean": 0.901, "first_year": 1914.0, "last_year": 1922.0}, {"author": "Joyce", "reader": "qwen3-max", "n_works": 3.0, "min": 0.6346, "max": 1.9215, "range": 1.2869, "sd": 0.5597, "iqr": 1.2869, "median": 0.8684, "mean": 1.1415, "first_year": 1914.0, "last_year": 1922.0}, {"author": "Richardson", "reader": "gpt-5.4", "n_works": 9.0, "min": 0.4183, "max": 1.047, "range": 0.6287, "sd": 0.163, "iqr": 0.1411, "median": 0.8161, "mean": 0.809, "first_year": 1915.0, "last_year": 1927.0}, {"author": "Richardson", "reader": "jev", "n_works": 12.0, "min": 0.7446, "max": 1.0866, "range": 0.342, "sd": 0.1132, "iqr": 0.2124, "median": 0.9283, "mean": 0.9327, "first_year": 1915.0, "last_year": 1938.0}, {"author": "Richardson", "reader": "qwen3-max", "n_works": 9.0, "min": 0.754, "max": 1.1017, "range": 0.3477, "sd": 0.0921, "iqr": 0.045, "median": 1.0134, "mean": 0.9878, "first_year": 1915.0, "last_year": 1927.0}, {"author": "Sinclair", "reader": "gpt-5.4", "n_works": 8.0, "min": 0.2039, "max": 0.8734, "range": 0.6695, "sd": 0.2234, "iqr": 0.3861, "median": 0.4042, "mean": 0.454, "first_year": 1897.0, "last_year": 1922.0}, {"author": "Sinclair", "reader": "jev", "n_works": 8.0, "min": 0.3397, "max": 0.9726, "range": 0.6329, "sd": 0.2376, "iqr": 0.4694, "median": 0.5333, "mean": 0.6096, "first_year": 1897.0, "last_year": 1922.0}, {"author": "Sinclair", "reader": "qwen3-max", "n_works": 8.0, "min": 0.2634, "max": 1.1384, "range": 0.875, "sd": 0.2936, "iqr": 0.5193, "median": 0.6527, "mean": 0.6571, "first_year": 1897.0, "last_year": 1922.0}, {"author": "Woolf", "reader": "gpt-5.4", "n_works": 10.0, "min": 0.2469, "max": 2.4699, "range": 2.223, "sd": 0.6209, "iqr": 0.5942, "median": 0.6147, "mean": 0.7737, "first_year": 1915.0, "last_year": 1941.0}, {"author": "Woolf", "reader": "jev", "n_works": 10.0, "min": 0.4121, "max": 2.1141, "range": 1.702, "sd": 0.4694, "iqr": 0.4456, "median": 0.8173, "mean": 0.8562, "first_year": 1915.0, "last_year": 1941.0}, {"author": "Woolf", "reader": "qwen3-max", "n_works": 10.0, "min": 0.4278, "max": 2.5333, "range": 2.1055, "sd": 0.5832, "iqr": 0.4797, "median": 0.6952, "mean": 0.9016, "first_year": 1915.0, "last_year": 1941.0}], "rel": {"n_passages": 17510, "categorical": {"observed": 56.8, "chance": 29.4, "kappa": 0.388}, "ordinal": {"observed": 67.6, "chance": 34.3, "kappa": 0.507}, "within_one_level": 95.8, "two_plus_apart": 4.2, "disagreements": [{"pair": "indirect_interior_monologue vs omniscient_description", "pct": 18.5, "n": 3239}, {"pair": "direct_interior_monologue vs quoted_monologue", "pct": 2.6, "n": 457}, {"pair": "indirect_interior_monologue vs quoted_monologue", "pct": 2.5, "n": 445}, {"pair": "hybrid vs indirect_interior_monologue", "pct": 2.5, "n": 437}, {"pair": "indirect_interior_monologue vs reverie_fantasy", "pct": 2.5, "n": 429}, {"pair": "direct_interior_monologue vs hybrid", "pct": 2.3, "n": 406}, {"pair": "omniscient_description vs simulation_state_of_mind", "pct": 2.1, "n": 370}, {"pair": "indirect_interior_monologue vs simulation_state_of_mind", "pct": 1.9, "n": 341}]}, "ambHist": [1425, 1606, 1475, 1504, 1539, 1411, 1498, 1439, 1441, 1383, 1383, 1372, 1367, 1248, 1183, 1046, 996, 652, 353, 76], "ambTotal": 24397, "ambUnder10": 12.4, "steps": [{"author": "Ford", "reader": "gpt-5.4", "from_year": 1915, "to_year": 1924, "from_title": "The Good Soldier", "to_title": "Some Do Not...", "step": 0.0611, "level": 0.5469}, {"author": "Ford", "reader": "gpt-5.4", "from_year": 1924, "to_year": 1925, "from_title": "Some Do Not...", "to_title": "No More Parades", "step": 0.286, "level": 0.8329}, {"author": "Ford", "reader": "gpt-5.4", "from_year": 1925, "to_year": 1926, "from_title": "No More Parades", "to_title": "A Man Could Stand Up\u2014", "step": -0.0081, "level": 0.8248}, {"author": "Ford", "reader": "gpt-5.4", "from_year": 1926, "to_year": 1928, "from_title": "A Man Could Stand Up\u2014", "to_title": "The Last Post", "step": -0.1946, "level": 0.6302}, {"author": "Faulkner", "reader": "gpt-5.4", "from_year": 1926, "to_year": 1929, "from_title": "Soldiers' Pay", "to_title": "The Sound and the Fury", "step": 1.0141, "level": 1.9335}, {"author": "Faulkner", "reader": "gpt-5.4", "from_year": 1929, "to_year": 1930, "from_title": "The Sound and the Fury", "to_title": "As I Lay Dying", "step": -0.3378, "level": 1.5957}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1915, "to_year": 1919, "from_title": "The Voyage Out", "to_title": "Night and Day", "step": -0.0442, "level": 0.2469}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1919, "to_year": 1922, "from_title": "Night and Day", "to_title": "Jacob's Room", "step": 0.2922, "level": 0.5391}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1922, "to_year": 1925, "from_title": "Jacob's Room", "to_title": "Mrs Dalloway", "step": 0.3519, "level": 0.891}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1925, "to_year": 1927, "from_title": "Mrs Dalloway", "to_title": "To the Lighthouse", "step": -0.2007, "level": 0.6903}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1927, "to_year": 1928, "from_title": "To the Lighthouse", "to_title": "Orlando", "step": -0.2859, "level": 0.4044}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1928, "to_year": 1931, "from_title": "Orlando", "to_title": "The Waves", "step": 2.0655, "level": 2.4699}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1931, "to_year": 1933, "from_title": "The Waves", "to_title": "Flush", "step": -2.1439, "level": 0.326}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1933, "to_year": 1937, "from_title": "Flush", "to_title": "The Years", "step": 0.6321, "level": 0.9581}, {"author": "Woolf", "reader": "gpt-5.4", "from_year": 1937, "to_year": 1941, "from_title": "The Years", "to_title": "Between the Acts", "step": -0.0379, "level": 0.9202}, {"author": "Joyce", "reader": "gpt-5.4", "from_year": 1914, "to_year": 1916, "from_title": "Dubliners", "to_title": "A Portrait of the Artist as a Young Man", "step": 0.3159, "level": 0.5514}, {"author": "Joyce", "reader": "gpt-5.4", "from_year": 1916, "to_year": 1922, "from_title": "A Portrait of the Artist as a Young Man", "to_title": "Ulysses", "step": 1.0926, "level": 1.644}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1897, "to_year": 1907, "from_title": "Audrey Craven", "to_title": "The Helpmate", "step": -0.0345, "level": 0.2039}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1907, "to_year": 1913, "from_title": "The Helpmate", "to_title": "The Combined Maze", "step": 0.0551, "level": 0.259}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1913, "to_year": 1914, "from_title": "The Combined Maze", "to_title": "The Three Sisters", "step": 0.0664, "level": 0.3254}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1914, "to_year": 1917, "from_title": "The Three Sisters", "to_title": "The Tree of Heaven", "step": 0.278, "level": 0.6034}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1917, "to_year": 1919, "from_title": "The Tree of Heaven", "to_title": "Mary Olivier: A Life", "step": 0.27, "level": 0.8734}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1919, "to_year": 1920, "from_title": "Mary Olivier: A Life", "to_title": "The Romantic", "step": -0.2283, "level": 0.6451}, {"author": "Sinclair", "reader": "gpt-5.4", "from_year": 1920, "to_year": 1922, "from_title": "The Romantic", "to_title": "Life and Death of Harriett Frean", "step": -0.162, "level": 0.4831}, {"author": "James", "reader": "gpt-5.4", "from_year": 1875, "to_year": 1881, "from_title": "Roderick Hudson", "to_title": "The Portrait of a Lady (vol. 1)", "step": -0.1593, "level": 0.1982}, {"author": "James", "reader": "gpt-5.4", "from_year": 1881, "to_year": 1881, "from_title": "The Portrait of a Lady (vol. 1)", "to_title": "The Portrait of a Lady (vol. 2)", "step": 0.0399, "level": 0.2381}, {"author": "James", "reader": "gpt-5.4", "from_year": 1881, "to_year": 1897, "from_title": "The Portrait of a Lady (vol. 2)", "to_title": "What Maisie Knew", "step": -0.0685, "level": 0.1696}, {"author": "James", "reader": "gpt-5.4", "from_year": 1897, "to_year": 1902, "from_title": "What Maisie Knew", "to_title": "The Wings of the Dove (vol. 1)", "step": 0.1263, "level": 0.2959}, {"author": "James", "reader": "gpt-5.4", "from_year": 1902, "to_year": 1902, "from_title": "The Wings of the Dove (vol. 1)", "to_title": "The Wings of the Dove (vol. 2)", "step": -0.0443, "level": 0.2516}, {"author": "James", "reader": "gpt-5.4", "from_year": 1902, "to_year": 1903, "from_title": "The Wings of the Dove (vol. 2)", "to_title": "The Ambassadors", "step": 0.0751, "level": 0.3267}, {"author": "James", "reader": "gpt-5.4", "from_year": 1903, "to_year": 1904, "from_title": "The Ambassadors", "to_title": "The Golden Bowl", "step": -0.0323, "level": 0.2944}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1915, "to_year": 1916, "from_title": "Pointed Roofs", "to_title": "Backwater", "step": 0.0514, "level": 0.8009}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1916, "to_year": 1917, "from_title": "Backwater", "to_title": "Honeycomb", "step": 0.1004, "level": 0.9013}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1917, "to_year": 1919, "from_title": "Honeycomb", "to_title": "Interim", "step": -0.003, "level": 0.8983}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1919, "to_year": 1919, "from_title": "Interim", "to_title": "The Tunnel", "step": 0.1487, "level": 1.047}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1919, "to_year": 1921, "from_title": "The Tunnel", "to_title": "Deadlock", "step": -0.2898, "level": 0.7572}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1921, "to_year": 1923, "from_title": "Deadlock", "to_title": "Revolving Lights", "step": 0.1354, "level": 0.8926}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1923, "to_year": 1925, "from_title": "Revolving Lights", "to_title": "The Trap", "step": -0.0765, "level": 0.8161}, {"author": "Richardson", "reader": "gpt-5.4", "from_year": 1925, "to_year": 1927, "from_title": "The Trap", "to_title": "Oberland", "step": -0.3978, "level": 0.4183}, {"author": "Ford", "reader": "qwen3-max", "from_year": 1915, "to_year": 1924, "from_title": "The Good Soldier", "to_title": "Some Do Not...", "step": -0.3381, "level": 0.8144}, {"author": "Ford", "reader": "qwen3-max", "from_year": 1924, "to_year": 1925, "from_title": "Some Do Not...", "to_title": "No More Parades", "step": 0.2304, "level": 1.0448}, {"author": "Ford", "reader": "qwen3-max", "from_year": 1925, "to_year": 1926, "from_title": "No More Parades", "to_title": "A Man Could Stand Up\u2014", "step": -0.088, "level": 0.9568}, {"author": "Ford", "reader": "qwen3-max", "from_year": 1926, "to_year": 1928, "from_title": "A Man Could Stand Up\u2014", "to_title": "The Last Post", "step": -0.0762, "level": 0.8806}, {"author": "Faulkner", "reader": "qwen3-max", "from_year": 1926, "to_year": 1929, "from_title": "Soldiers' Pay", "to_title": "The Sound and the Fury", "step": 1.5235, "level": 2.5855}, {"author": "Faulkner", "reader": "qwen3-max", "from_year": 1929, "to_year": 1930, "from_title": "The Sound and the Fury", "to_title": "As I Lay Dying", "step": -0.3126, "level": 2.2729}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1915, "to_year": 1919, "from_title": "The Voyage Out", "to_title": "Night and Day", "step": -0.0052, "level": 0.5115}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1919, "to_year": 1922, "from_title": "Night and Day", "to_title": "Jacob's Room", "step": 0.1281, "level": 0.6396}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1922, "to_year": 1925, "from_title": "Jacob's Room", "to_title": "Mrs Dalloway", "step": 0.2416, "level": 0.8812}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1925, "to_year": 1927, "from_title": "Mrs Dalloway", "to_title": "To the Lighthouse", "step": -0.1444, "level": 0.7368}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1927, "to_year": 1928, "from_title": "To the Lighthouse", "to_title": "Orlando", "step": -0.0831, "level": 0.6537}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1928, "to_year": 1931, "from_title": "Orlando", "to_title": "The Waves", "step": 1.8796, "level": 2.5333}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1931, "to_year": 1933, "from_title": "The Waves", "to_title": "Flush", "step": -2.1055, "level": 0.4278}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1933, "to_year": 1937, "from_title": "Flush", "to_title": "The Years", "step": 0.5686, "level": 0.9964}, {"author": "Woolf", "reader": "qwen3-max", "from_year": 1937, "to_year": 1941, "from_title": "The Years", "to_title": "Between the Acts", "step": 0.123, "level": 1.1194}, {"author": "Joyce", "reader": "qwen3-max", "from_year": 1914, "to_year": 1916, "from_title": "Dubliners", "to_title": "A Portrait of the Artist as a Young Man", "step": 0.2338, "level": 0.8684}, {"author": "Joyce", "reader": "qwen3-max", "from_year": 1916, "to_year": 1922, "from_title": "A Portrait of the Artist as a Young Man", "to_title": "Ulysses", "step": 1.0531, "level": 1.9215}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1897, "to_year": 1907, "from_title": "Audrey Craven", "to_title": "The Helpmate", "step": -0.1022, "level": 0.2634}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1907, "to_year": 1913, "from_title": "The Helpmate", "to_title": "The Combined Maze", "step": 0.2299, "level": 0.4933}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1913, "to_year": 1914, "from_title": "The Combined Maze", "to_title": "The Three Sisters", "step": -0.0785, "level": 0.4148}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1914, "to_year": 1917, "from_title": "The Three Sisters", "to_title": "The Tree of Heaven", "step": 0.4204, "level": 0.8352}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1917, "to_year": 1919, "from_title": "The Tree of Heaven", "to_title": "Mary Olivier: A Life", "step": 0.3032, "level": 1.1384}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1919, "to_year": 1920, "from_title": "Mary Olivier: A Life", "to_title": "The Romantic", "step": -0.2043, "level": 0.9341}, {"author": "Sinclair", "reader": "qwen3-max", "from_year": 1920, "to_year": 1922, "from_title": "The Romantic", "to_title": "Life and Death of Harriett Frean", "step": -0.122, "level": 0.8121}, {"author": "James", "reader": "qwen3-max", "from_year": 1875, "to_year": 1881, "from_title": "Roderick Hudson", "to_title": "The Portrait of a Lady (vol. 1)", "step": -0.2109, "level": 0.4121}, {"author": "James", "reader": "qwen3-max", "from_year": 1881, "to_year": 1881, "from_title": "The Portrait of a Lady (vol. 1)", "to_title": "The Portrait of a Lady (vol. 2)", "step": 0.0516, "level": 0.4637}, {"author": "James", "reader": "qwen3-max", "from_year": 1881, "to_year": 1897, "from_title": "The Portrait of a Lady (vol. 2)", "to_title": "What Maisie Knew", "step": 0.1307, "level": 0.5944}, {"author": "James", "reader": "qwen3-max", "from_year": 1897, "to_year": 1902, "from_title": "What Maisie Knew", "to_title": "The Wings of the Dove (vol. 1)", "step": -0.0422, "level": 0.5522}, {"author": "James", "reader": "qwen3-max", "from_year": 1902, "to_year": 1902, "from_title": "The Wings of the Dove (vol. 1)", "to_title": "The Wings of the Dove (vol. 2)", "step": 0.0551, "level": 0.6073}, {"author": "James", "reader": "qwen3-max", "from_year": 1902, "to_year": 1903, "from_title": "The Wings of the Dove (vol. 2)", "to_title": "The Ambassadors", "step": 0.0868, "level": 0.6941}, {"author": "James", "reader": "qwen3-max", "from_year": 1903, "to_year": 1904, "from_title": "The Ambassadors", "to_title": "The Golden Bowl", "step": -0.0559, "level": 0.6382}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1915, "to_year": 1916, "from_title": "Pointed Roofs", "to_title": "Backwater", "step": -0.0334, "level": 0.9793}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1916, "to_year": 1917, "from_title": "Backwater", "to_title": "Honeycomb", "step": 0.045, "level": 1.0243}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1917, "to_year": 1919, "from_title": "Honeycomb", "to_title": "Interim", "step": 0.016, "level": 1.0403}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1919, "to_year": 1919, "from_title": "Interim", "to_title": "The Tunnel", "step": 0.0614, "level": 1.1017}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1919, "to_year": 1921, "from_title": "The Tunnel", "to_title": "Deadlock", "step": -0.1598, "level": 0.9419}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1921, "to_year": 1923, "from_title": "Deadlock", "to_title": "Revolving Lights", "step": 0.0715, "level": 1.0134}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1923, "to_year": 1925, "from_title": "Revolving Lights", "to_title": "The Trap", "step": 0.0091, "level": 1.0225}, {"author": "Richardson", "reader": "qwen3-max", "from_year": 1925, "to_year": 1927, "from_title": "The Trap", "to_title": "Oberland", "step": -0.2685, "level": 0.754}, {"author": "Ford", "reader": "jev", "from_year": 1915, "to_year": 1924, "from_title": "The Good Soldier", "to_title": "Some Do Not...", "step": 0.1376, "level": 0.7069}, {"author": "Ford", "reader": "jev", "from_year": 1924, "to_year": 1925, "from_title": "Some Do Not...", "to_title": "No More Parades", "step": 0.2442, "level": 0.9511}, {"author": "Ford", "reader": "jev", "from_year": 1925, "to_year": 1926, "from_title": "No More Parades", "to_title": "A Man Could Stand Up\u2014", "step": -0.0514, "level": 0.8997}, {"author": "Ford", "reader": "jev", "from_year": 1926, "to_year": 1928, "from_title": "A Man Could Stand Up\u2014", "to_title": "The Last Post", "step": -0.0845, "level": 0.8152}, {"author": "Faulkner", "reader": "jev", "from_year": 1926, "to_year": 1927, "from_title": "Soldiers' Pay", "to_title": "Mosquitoes", "step": -0.0965, "level": 0.6676}, {"author": "Faulkner", "reader": "jev", "from_year": 1927, "to_year": 1929, "from_title": "Mosquitoes", "to_title": "The Sound and the Fury", "step": 1.1922, "level": 1.8598}, {"author": "Faulkner", "reader": "jev", "from_year": 1929, "to_year": 1930, "from_title": "The Sound and the Fury", "to_title": "As I Lay Dying", "step": -0.2663, "level": 1.5935}, {"author": "Faulkner", "reader": "jev", "from_year": 1930, "to_year": 1931, "from_title": "As I Lay Dying", "to_title": "Sanctuary", "step": -0.8947, "level": 0.6988}, {"author": "Faulkner", "reader": "jev", "from_year": 1931, "to_year": 1932, "from_title": "Sanctuary", "to_title": "Light in August", "step": 0.1438, "level": 0.8426}, {"author": "Faulkner", "reader": "jev", "from_year": 1932, "to_year": 1935, "from_title": "Light in August", "to_title": "Pylon", "step": 0.1724, "level": 1.015}, {"author": "Faulkner", "reader": "jev", "from_year": 1935, "to_year": 1936, "from_title": "Pylon", "to_title": "Absalom, Absalom!", "step": -0.0048, "level": 1.0102}, {"author": "Woolf", "reader": "jev", "from_year": 1915, "to_year": 1919, "from_title": "The Voyage Out", "to_title": "Night and Day", "step": -0.0386, "level": 0.4121}, {"author": "Woolf", "reader": "jev", "from_year": 1919, "to_year": 1922, "from_title": "Night and Day", "to_title": "Jacob's Room", "step": 0.3708, "level": 0.7829}, {"author": "Woolf", "reader": "jev", "from_year": 1922, "to_year": 1925, "from_title": "Jacob's Room", "to_title": "Mrs Dalloway", "step": 0.1464, "level": 0.9293}, {"author": "Woolf", "reader": "jev", "from_year": 1925, "to_year": 1927, "from_title": "Mrs Dalloway", "to_title": "To the Lighthouse", "step": -0.0776, "level": 0.8517}, {"author": "Woolf", "reader": "jev", "from_year": 1927, "to_year": 1928, "from_title": "To the Lighthouse", "to_title": "Orlando", "step": -0.2512, "level": 0.6005}, {"author": "Woolf", "reader": "jev", "from_year": 1928, "to_year": 1931, "from_title": "Orlando", "to_title": "The Waves", "step": 1.5136, "level": 2.1141}, {"author": "Woolf", "reader": "jev", "from_year": 1931, "to_year": 1933, "from_title": "The Waves", "to_title": "Flush", "step": -1.6304, "level": 0.4837}, {"author": "Woolf", "reader": "jev", "from_year": 1933, "to_year": 1937, "from_title": "Flush", "to_title": "The Years", "step": 0.3852, "level": 0.8689}, {"author": "Woolf", "reader": "jev", "from_year": 1937, "to_year": 1941, "from_title": "The Years", "to_title": "Between the Acts", "step": 0.1987, "level": 1.0676}, {"author": "Joyce", "reader": "jev", "from_year": 1914, "to_year": 1916, "from_title": "Dubliners", "to_title": "A Portrait of the Artist as a Young Man", "step": 0.3235, "level": 0.6642}, {"author": "Joyce", "reader": "jev", "from_year": 1916, "to_year": 1922, "from_title": "A Portrait of the Artist as a Young Man", "to_title": "Ulysses", "step": 1.0339, "level": 1.6981}, {"author": "Sinclair", "reader": "jev", "from_year": 1897, "to_year": 1907, "from_title": "Audrey Craven", "to_title": "The Helpmate", "step": -0.0394, "level": 0.3397}, {"author": "Sinclair", "reader": "jev", "from_year": 1907, "to_year": 1913, "from_title": "The Helpmate", "to_title": "The Combined Maze", "step": 0.0538, "level": 0.3935}, {"author": "Sinclair", "reader": "jev", "from_year": 1913, "to_year": 1914, "from_title": "The Combined Maze", "to_title": "The Three Sisters", "step": 0.0782, "level": 0.4717}, {"author": "Sinclair", "reader": "jev", "from_year": 1914, "to_year": 1917, "from_title": "The Three Sisters", "to_title": "The Tree of Heaven", "step": 0.3906, "level": 0.8623}, {"author": "Sinclair", "reader": "jev", "from_year": 1917, "to_year": 1919, "from_title": "The Tree of Heaven", "to_title": "Mary Olivier: A Life", "step": 0.1103, "level": 0.9726}, {"author": "Sinclair", "reader": "jev", "from_year": 1919, "to_year": 1920, "from_title": "Mary Olivier: A Life", "to_title": "The Romantic", "step": -0.1097, "level": 0.8629}, {"author": "Sinclair", "reader": "jev", "from_year": 1920, "to_year": 1922, "from_title": "The Romantic", "to_title": "Life and Death of Harriett Frean", "step": -0.2679, "level": 0.595}, {"author": "James", "reader": "jev", "from_year": 1875, "to_year": 1881, "from_title": "Roderick Hudson", "to_title": "The Portrait of a Lady (vol. 1)", "step": -0.1132, "level": 0.4091}, {"author": "James", "reader": "jev", "from_year": 1881, "to_year": 1881, "from_title": "The Portrait of a Lady (vol. 1)", "to_title": "The Portrait of a Lady (vol. 2)", "step": 0.0481, "level": 0.4572}, {"author": "James", "reader": "jev", "from_year": 1881, "to_year": 1897, "from_title": "The Portrait of a Lady (vol. 2)", "to_title": "What Maisie Knew", "step": -0.0078, "level": 0.4494}, {"author": "James", "reader": "jev", "from_year": 1897, "to_year": 1902, "from_title": "What Maisie Knew", "to_title": "The Wings of the Dove (vol. 1)", "step": 0.2068, "level": 0.6562}, {"author": "James", "reader": "jev", "from_year": 1902, "to_year": 1902, "from_title": "The Wings of the Dove (vol. 1)", "to_title": "The Wings of the Dove (vol. 2)", "step": -0.1055, "level": 0.5507}, {"author": "James", "reader": "jev", "from_year": 1902, "to_year": 1903, "from_title": "The Wings of the Dove (vol. 2)", "to_title": "The Ambassadors", "step": 0.0421, "level": 0.5928}, {"author": "James", "reader": "jev", "from_year": 1903, "to_year": 1904, "from_title": "The Ambassadors", "to_title": "The Golden Bowl", "step": 0.1444, "level": 0.7372}, {"author": "Richardson", "reader": "jev", "from_year": 1915, "to_year": 1916, "from_title": "Pointed Roofs", "to_title": "Backwater", "step": 0.0757, "level": 0.8576}, {"author": "Richardson", "reader": "jev", "from_year": 1916, "to_year": 1917, "from_title": "Backwater", "to_title": "Honeycomb", "step": 0.0722, "level": 0.9298}, {"author": "Richardson", "reader": "jev", "from_year": 1917, "to_year": 1919, "from_title": "Honeycomb", "to_title": "Interim", "step": 0.1535, "level": 1.0833}, {"author": "Richardson", "reader": "jev", "from_year": 1919, "to_year": 1919, "from_title": "Interim", "to_title": "The Tunnel", "step": -0.0404, "level": 1.0429}, {"author": "Richardson", "reader": "jev", "from_year": 1919, "to_year": 1921, "from_title": "The Tunnel", "to_title": "Deadlock", "step": 0.0271, "level": 1.07}, {"author": "Richardson", "reader": "jev", "from_year": 1921, "to_year": 1923, "from_title": "Deadlock", "to_title": "Revolving Lights", "step": 0.0166, "level": 1.0866}, {"author": "Richardson", "reader": "jev", "from_year": 1923, "to_year": 1925, "from_title": "Revolving Lights", "to_title": "The Trap", "step": -0.1392, "level": 0.9474}, {"author": "Richardson", "reader": "jev", "from_year": 1925, "to_year": 1927, "from_title": "The Trap", "to_title": "Oberland", "step": -0.1185, "level": 0.8289}, {"author": "Richardson", "reader": "jev", "from_year": 1927, "to_year": 1931, "from_title": "Oberland", "to_title": "Dawn's Left Hand", "step": 0.0978, "level": 0.9267}, {"author": "Richardson", "reader": "jev", "from_year": 1931, "to_year": 1935, "from_title": "Dawn's Left Hand", "to_title": "Clear Horizon", "step": -0.1821, "level": 0.7446}, {"author": "Richardson", "reader": "jev", "from_year": 1935, "to_year": 1938, "from_title": "Clear Horizon", "to_title": "Dimple Hill", "step": 0.1478, "level": 0.8924}], "shapes": [{"author": "Ford", "reader": "gpt-5.4", "shape": "plateau", "max_abs_step": 0.286, "amplitude": 0.0, "baseline_volatility": 0.1374, "n_big": 0, "n_steps": 4, "n_works": 5}, {"author": "Faulkner", "reader": "gpt-5.4", "shape": "transition", "max_abs_step": 1.0141, "amplitude": 0.0, "baseline_volatility": 0.3378, "n_big": 1, "n_steps": 2, "n_works": 3}, {"author": "Woolf", "reader": "gpt-5.4", "shape": "excursion", "max_abs_step": 2.1439, "amplitude": 4.2094, "baseline_volatility": 0.2636, "n_big": 2, "n_steps": 9, "n_works": 10}, {"author": "Joyce", "reader": "gpt-5.4", "shape": "transition", "max_abs_step": 1.0926, "amplitude": 0.0, "baseline_volatility": 0.3159, "n_big": 1, "n_steps": 2, "n_works": 3}, {"author": "Sinclair", "reader": "gpt-5.4", "shape": "plateau", "max_abs_step": 0.278, "amplitude": 0.0, "baseline_volatility": 0.1563, "n_big": 0, "n_steps": 7, "n_works": 8}, {"author": "James", "reader": "gpt-5.4", "shape": "plateau", "max_abs_step": 0.1593, "amplitude": 0.0, "baseline_volatility": 0.078, "n_big": 0, "n_steps": 7, "n_works": 8}, {"author": "Richardson", "reader": "gpt-5.4", "shape": "plateau", "max_abs_step": 0.3978, "amplitude": 0.0, "baseline_volatility": 0.1504, "n_big": 0, "n_steps": 8, "n_works": 9}, {"author": "Ford", "reader": "qwen3-max", "shape": "plateau", "max_abs_step": 0.3381, "amplitude": 0.0, "baseline_volatility": 0.1832, "n_big": 0, "n_steps": 4, "n_works": 5}, {"author": "Faulkner", "reader": "qwen3-max", "shape": "transition", "max_abs_step": 1.5235, "amplitude": 0.0, "baseline_volatility": 0.3126, "n_big": 1, "n_steps": 2, "n_works": 3}, {"author": "Woolf", "reader": "qwen3-max", "shape": "excursion", "max_abs_step": 2.1055, "amplitude": 3.9851, "baseline_volatility": 0.1849, "n_big": 2, "n_steps": 9, "n_works": 10}, {"author": "Joyce", "reader": "qwen3-max", "shape": "transition", "max_abs_step": 1.0531, "amplitude": 0.0, "baseline_volatility": 0.2338, "n_big": 1, "n_steps": 2, "n_works": 3}, {"author": "Sinclair", "reader": "qwen3-max", "shape": "plateau", "max_abs_step": 0.4204, "amplitude": 0.0, "baseline_volatility": 0.2086, "n_big": 0, "n_steps": 7, "n_works": 8}, {"author": "James", "reader": "qwen3-max", "shape": "plateau", "max_abs_step": 0.2109, "amplitude": 0.0, "baseline_volatility": 0.0905, "n_big": 0, "n_steps": 7, "n_works": 8}, {"author": "Richardson", "reader": "qwen3-max", "shape": "plateau", "max_abs_step": 0.2685, "amplitude": 0.0, "baseline_volatility": 0.0831, "n_big": 0, "n_steps": 8, "n_works": 9}, {"author": "Ford", "reader": "jev", "shape": "plateau", "max_abs_step": 0.2442, "amplitude": 0.0, "baseline_volatility": 0.1294, "n_big": 0, "n_steps": 4, "n_works": 5}, {"author": "Faulkner", "reader": "jev", "shape": "excursion", "max_abs_step": 1.1922, "amplitude": 2.0869, "baseline_volatility": 0.1368, "n_big": 2, "n_steps": 7, "n_works": 8}, {"author": "Woolf", "reader": "jev", "shape": "excursion", "max_abs_step": 1.6304, "amplitude": 3.144, "baseline_volatility": 0.2098, "n_big": 2, "n_steps": 9, "n_works": 10}, {"author": "Joyce", "reader": "jev", "shape": "transition", "max_abs_step": 1.0339, "amplitude": 0.0, "baseline_volatility": 0.3235, "n_big": 1, "n_steps": 2, "n_works": 3}, {"author": "Sinclair", "reader": "jev", "shape": "plateau", "max_abs_step": 0.3906, "amplitude": 0.0, "baseline_volatility": 0.15, "n_big": 0, "n_steps": 7, "n_works": 8}, {"author": "James", "reader": "jev", "shape": "plateau", "max_abs_step": 0.2068, "amplitude": 0.0, "baseline_volatility": 0.0954, "n_big": 0, "n_steps": 7, "n_works": 8}, {"author": "Richardson", "reader": "jev", "shape": "plateau", "max_abs_step": 0.1821, "amplitude": 0.0, "baseline_volatility": 0.0974, "n_big": 0, "n_steps": 11, "n_works": 12}], "scatter": [{"a": "Faulkner", "t": "Absalom, Absalom!", "y": 1936, "r": "jev", "m": 1.01, "sd": 0.795, "n": 782}, {"a": "Faulkner", "t": "As I Lay Dying", "y": 1930, "r": "gpt-5.4", "m": 1.596, "sd": 1.326, "n": 846}, {"a": "Faulkner", "t": "As I Lay Dying", "y": 1930, "r": "qwen3-max", "m": 2.273, "sd": 1.095, "n": 634}, {"a": "Faulkner", "t": "As I Lay Dying", "y": 1930, "r": "jev", "m": 1.593, "sd": 1.201, "n": 278}, {"a": "Woolf", "t": "Between the Acts", "y": 1941, "r": "gpt-5.4", "m": 0.92, "sd": 0.877, "n": 652}, {"a": "Woolf", "t": "Between the Acts", "y": 1941, "r": "qwen3-max", "m": 1.119, "sd": 0.688, "n": 620}, {"a": "Woolf", "t": "Between the Acts", "y": 1941, "r": "jev", "m": 1.068, "sd": 0.765, "n": 207}, {"a": "Richardson", "t": "Clear Horizon", "y": 1935, "r": "jev", "m": 0.745, "sd": 0.59, "n": 278}, {"a": "Richardson", "t": "Dawn's Left Hand", "y": 1931, "r": "jev", "m": 0.927, "sd": 0.576, "n": 273}, {"a": "Richardson", "t": "Dimple Hill", "y": 1938, "r": "jev", "m": 0.892, "sd": 0.499, "n": 288}, {"a": "Woolf", "t": "Flush", "y": 1933, "r": "gpt-5.4", "m": 0.326, "sd": 0.535, "n": 454}, {"a": "Woolf", "t": "Flush", "y": 1933, "r": "qwen3-max", "m": 0.428, "sd": 0.5, "n": 388}, {"a": "Woolf", "t": "Flush", "y": 1933, "r": "jev", "m": 0.484, "sd": 0.55, "n": 153}, {"a": "Woolf", "t": "Jacob's Room", "y": 1922, "r": "gpt-5.4", "m": 0.539, "sd": 0.768, "n": 792}, {"a": "Woolf", "t": "Jacob's Room", "y": 1922, "r": "qwen3-max", "m": 0.64, "sd": 0.551, "n": 713}, {"a": "Woolf", "t": "Jacob's Room", "y": 1922, "r": "jev", "m": 0.783, "sd": 0.535, "n": 258}, {"a": "Faulkner", "t": "Light in August", "y": 1932, "r": "jev", "m": 0.843, "sd": 0.875, "n": 686}, {"a": "Faulkner", "t": "Mosquitoes", "y": 1927, "r": "jev", "m": 0.668, "sd": 0.765, "n": 346}, {"a": "Woolf", "t": "Night and Day", "y": 1919, "r": "gpt-5.4", "m": 0.247, "sd": 0.561, "n": 2507}, {"a": "Woolf", "t": "Night and Day", "y": 1919, "r": "qwen3-max", "m": 0.511, "sd": 0.581, "n": 2131}, {"a": "Woolf", "t": "Night and Day", "y": 1919, "r": "jev", "m": 0.412, "sd": 0.591, "n": 808}, {"a": "Woolf", "t": "Orlando", "y": 1928, "r": "gpt-5.4", "m": 0.404, "sd": 0.731, "n": 1182}, {"a": "Woolf", "t": "Orlando", "y": 1928, "r": "qwen3-max", "m": 0.654, "sd": 0.601, "n": 924}, {"a": "Woolf", "t": "Orlando", "y": 1928, "r": "jev", "m": 0.601, "sd": 0.641, "n": 373}, {"a": "James", "t": "Roderick Hudson", "y": 1875, "r": "gpt-5.4", "m": 0.357, "sd": 0.762, "n": 1768}, {"a": "James", "t": "Roderick Hudson", "y": 1875, "r": "qwen3-max", "m": 0.623, "sd": 0.884, "n": 1053}, {"a": "James", "t": "Roderick Hudson", "y": 1875, "r": "jev", "m": 0.522, "sd": 0.924, "n": 582}, {"a": "James", "t": "The Ambassadors", "y": 1903, "r": "gpt-5.4", "m": 0.327, "sd": 0.613, "n": 2862}, {"a": "James", "t": "The Ambassadors", "y": 1903, "r": "qwen3-max", "m": 0.694, "sd": 0.585, "n": 1958}, {"a": "James", "t": "The Ambassadors", "y": 1903, "r": "jev", "m": 0.593, "sd": 0.63, "n": 948}, {"a": "Ford", "t": "The Good Soldier", "y": 1915, "r": "gpt-5.4", "m": 0.486, "sd": 1.046, "n": 1266}, {"a": "Ford", "t": "The Good Soldier", "y": 1915, "r": "qwen3-max", "m": 1.153, "sd": 1.248, "n": 1069}, {"a": "Ford", "t": "The Good Soldier", "y": 1915, "r": "jev", "m": 0.569, "sd": 0.921, "n": 404}, {"a": "Joyce", "t": "Dubliners", "y": 1914, "r": "gpt-5.4", "m": 0.235, "sd": 0.501, "n": 794}, {"a": "Joyce", "t": "Dubliners", "y": 1914, "r": "qwen3-max", "m": 0.635, "sd": 0.671, "n": 468}, {"a": "Joyce", "t": "Dubliners", "y": 1914, "r": "jev", "m": 0.341, "sd": 0.51, "n": 226}, {"a": "James", "t": "The Portrait of a Lady (vol. 1)", "y": 1881, "r": "gpt-5.4", "m": 0.198, "sd": 0.57, "n": 1519}, {"a": "James", "t": "The Portrait of a Lady (vol. 1)", "y": 1881, "r": "qwen3-max", "m": 0.412, "sd": 0.683, "n": 796}, {"a": "James", "t": "The Portrait of a Lady (vol. 1)", "y": 1881, "r": "jev", "m": 0.409, "sd": 0.77, "n": 484}, {"a": "James", "t": "The Portrait of a Lady (vol. 2)", "y": 1881, "r": "gpt-5.4", "m": 0.238, "sd": 0.562, "n": 1684}, {"a": "James", "t": "The Portrait of a Lady (vol. 2)", "y": 1881, "r": "qwen3-max", "m": 0.464, "sd": 0.593, "n": 1087}, {"a": "James", "t": "The Portrait of a Lady (vol. 2)", "y": 1881, "r": "jev", "m": 0.457, "sd": 0.731, "n": 538}, {"a": "Richardson", "t": "Pointed Roofs", "y": 1915, "r": "gpt-5.4", "m": 0.75, "sd": 0.764, "n": 950}, {"a": "Richardson", "t": "Pointed Roofs", "y": 1915, "r": "qwen3-max", "m": 1.013, "sd": 0.566, "n": 864}, {"a": "Richardson", "t": "Pointed Roofs", "y": 1915, "r": "jev", "m": 0.782, "sd": 0.618, "n": 321}, {"a": "Joyce", "t": "A Portrait of the Artist as a Young Man", "y": 1916, "r": "gpt-5.4", "m": 0.551, "sd": 0.763, "n": 1217}, {"a": "Joyce", "t": "A Portrait of the Artist as a Young Man", "y": 1916, "r": "qwen3-max", "m": 0.868, "sd": 0.726, "n": 965}, {"a": "Joyce", "t": "A Portrait of the Artist as a Young Man", "y": 1916, "r": "jev", "m": 0.664, "sd": 0.744, "n": 411}, {"a": "James", "t": "The Golden Bowl", "y": 1904, "r": "gpt-5.4", "m": 0.294, "sd": 0.584, "n": 3682}, {"a": "James", "t": "The Golden Bowl", "y": 1904, "r": "qwen3-max", "m": 0.638, "sd": 0.554, "n": 2739}, {"a": "James", "t": "The Golden Bowl", "y": 1904, "r": "jev", "m": 0.737, "sd": 0.66, "n": 1210}, {"a": "Joyce", "t": "Ulysses", "y": 1922, "r": "gpt-5.4", "m": 1.644, "sd": 1.233, "n": 3980}, {"a": "Joyce", "t": "Ulysses", "y": 1922, "r": "qwen3-max", "m": 1.921, "sd": 1.188, "n": 2942}, {"a": "Joyce", "t": "Ulysses", "y": 1922, "r": "jev", "m": 1.698, "sd": 1.111, "n": 1136}, {"a": "James", "t": "What Maisie Knew", "y": 1897, "r": "gpt-5.4", "m": 0.17, "sd": 0.427, "n": 1692}, {"a": "James", "t": "What Maisie Knew", "y": 1897, "r": "qwen3-max", "m": 0.594, "sd": 0.532, "n": 1240}, {"a": "James", "t": "What Maisie Knew", "y": 1897, "r": "jev", "m": 0.449, "sd": 0.597, "n": 534}, {"a": "Sinclair", "t": "Life and Death of Harriett Frean", "y": 1922, "r": "gpt-5.4", "m": 0.483, "sd": 0.732, "n": 356}, {"a": "Sinclair", "t": "Life and Death of Harriett Frean", "y": 1922, "r": "qwen3-max", "m": 0.812, "sd": 0.618, "n": 314}, {"a": "Sinclair", "t": "Life and Death of Harriett Frean", "y": 1922, "r": "jev", "m": 0.595, "sd": 0.711, "n": 121}, {"a": "Sinclair", "t": "Mary Olivier: A Life", "y": 1919, "r": "gpt-5.4", "m": 0.873, "sd": 0.831, "n": 1967}, {"a": "Sinclair", "t": "Mary Olivier: A Life", "y": 1919, "r": "qwen3-max", "m": 1.138, "sd": 0.69, "n": 1741}, {"a": "Sinclair", "t": "Mary Olivier: A Life", "y": 1919, "r": "jev", "m": 0.973, "sd": 0.78, "n": 656}, {"a": "Sinclair", "t": "The Three Sisters", "y": 1914, "r": "gpt-5.4", "m": 0.325, "sd": 0.687, "n": 1423}, {"a": "Sinclair", "t": "The Three Sisters", "y": 1914, "r": "qwen3-max", "m": 0.415, "sd": 0.629, "n": 1068}, {"a": "Sinclair", "t": "The Three Sisters", "y": 1914, "r": "jev", "m": 0.472, "sd": 0.767, "n": 477}, {"a": "Sinclair", "t": "The Romantic", "y": 1920, "r": "gpt-5.4", "m": 0.645, "sd": 0.764, "n": 727}, {"a": "Sinclair", "t": "The Romantic", "y": 1920, "r": "qwen3-max", "m": 0.934, "sd": 0.583, "n": 546}, {"a": "Sinclair", "t": "The Romantic", "y": 1920, "r": "jev", "m": 0.863, "sd": 0.802, "n": 248}, {"a": "Sinclair", "t": "The Tree of Heaven", "y": 1917, "r": "gpt-5.4", "m": 0.603, "sd": 0.886, "n": 1548}, {"a": "Sinclair", "t": "The Tree of Heaven", "y": 1917, "r": "qwen3-max", "m": 0.835, "sd": 0.904, "n": 1250}, {"a": "Sinclair", "t": "The Tree of Heaven", "y": 1917, "r": "jev", "m": 0.862, "sd": 1.016, "n": 523}, {"a": "Sinclair", "t": "The Helpmate", "y": 1907, "r": "gpt-5.4", "m": 0.204, "sd": 0.537, "n": 1780}, {"a": "Sinclair", "t": "The Helpmate", "y": 1907, "r": "qwen3-max", "m": 0.263, "sd": 0.508, "n": 1306}, {"a": "Sinclair", "t": "The Helpmate", "y": 1907, "r": "jev", "m": 0.34, "sd": 0.63, "n": 580}, {"a": "Sinclair", "t": "The Combined Maze", "y": 1913, "r": "gpt-5.4", "m": 0.259, "sd": 0.548, "n": 1583}, {"a": "Sinclair", "t": "The Combined Maze", "y": 1913, "r": "qwen3-max", "m": 0.493, "sd": 0.587, "n": 1123}, {"a": "Sinclair", "t": "The Combined Maze", "y": 1913, "r": "jev", "m": 0.394, "sd": 0.638, "n": 521}, {"a": "James", "t": "The Wings of the Dove (vol. 1)", "y": 1902, "r": "gpt-5.4", "m": 0.296, "sd": 0.513, "n": 1460}, {"a": "James", "t": "The Wings of the Dove (vol. 1)", "y": 1902, "r": "qwen3-max", "m": 0.552, "sd": 0.523, "n": 1139}, {"a": "James", "t": "The Wings of the Dove (vol. 1)", "y": 1902, "r": "jev", "m": 0.656, "sd": 0.586, "n": 477}, {"a": "Sinclair", "t": "Audrey Craven", "y": 1897, "r": "gpt-5.4", "m": 0.238, "sd": 0.576, "n": 1183}, {"a": "Sinclair", "t": "Audrey Craven", "y": 1897, "r": "qwen3-max", "m": 0.366, "sd": 0.601, "n": 867}, {"a": "Sinclair", "t": "Audrey Craven", "y": 1897, "r": "jev", "m": 0.379, "sd": 0.689, "n": 393}, {"a": "James", "t": "The Wings of the Dove (vol. 2)", "y": 1902, "r": "gpt-5.4", "m": 0.252, "sd": 0.5, "n": 1868}, {"a": "James", "t": "The Wings of the Dove (vol. 2)", "y": 1902, "r": "qwen3-max", "m": 0.607, "sd": 0.51, "n": 1309}, {"a": "James", "t": "The Wings of the Dove (vol. 2)", "y": 1902, "r": "jev", "m": 0.551, "sd": 0.556, "n": 612}, {"a": "Richardson", "t": "Backwater", "y": 1916, "r": "gpt-5.4", "m": 0.801, "sd": 0.765, "n": 879}, {"a": "Richardson", "t": "Backwater", "y": 1916, "r": "qwen3-max", "m": 0.979, "sd": 0.627, "n": 772}, {"a": "Richardson", "t": "Backwater", "y": 1916, "r": "jev", "m": 0.858, "sd": 0.643, "n": 302}, {"a": "Richardson", "t": "The Tunnel", "y": 1919, "r": "gpt-5.4", "m": 1.047, "sd": 0.929, "n": 1618}, {"a": "Richardson", "t": "The Tunnel", "y": 1919, "r": "qwen3-max", "m": 1.102, "sd": 0.793, "n": 1406}, {"a": "Richardson", "t": "The Tunnel", "y": 1919, "r": "jev", "m": 1.043, "sd": 0.801, "n": 536}, {"a": "Richardson", "t": "Honeycomb", "y": 1917, "r": "gpt-5.4", "m": 0.901, "sd": 0.772, "n": 871}, {"a": "Richardson", "t": "Honeycomb", "y": 1917, "r": "qwen3-max", "m": 1.024, "sd": 0.65, "n": 782}, {"a": "Richardson", "t": "Honeycomb", "y": 1917, "r": "jev", "m": 0.93, "sd": 0.551, "n": 285}, {"a": "Richardson", "t": "Deadlock", "y": 1921, "r": "gpt-5.4", "m": 0.757, "sd": 0.791, "n": 1351}, {"a": "Richardson", "t": "Deadlock", "y": 1921, "r": "qwen3-max", "m": 0.942, "sd": 0.694, "n": 1256}, {"a": "Richardson", "t": "Deadlock", "y": 1921, "r": "jev", "m": 1.07, "sd": 0.721, "n": 457}, {"a": "Richardson", "t": "Interim", "y": 1919, "r": "gpt-5.4", "m": 0.898, "sd": 0.766, "n": 954}, {"a": "Richardson", "t": "Interim", "y": 1919, "r": "qwen3-max", "m": 1.04, "sd": 0.671, "n": 894}, {"a": "Richardson", "t": "Interim", "y": 1919, "r": "jev", "m": 1.083, "sd": 0.668, "n": 324}, {"a": "Richardson", "t": "Revolving Lights", "y": 1923, "r": "gpt-5.4", "m": 0.893, "sd": 0.853, "n": 1034}, {"a": "Richardson", "t": "Revolving Lights", "y": 1923, "r": "qwen3-max", "m": 1.013, "sd": 0.788, "n": 971}, {"a": "Richardson", "t": "Revolving Lights", "y": 1923, "r": "jev", "m": 1.087, "sd": 0.819, "n": 358}, {"a": "Ford", "t": "Some Do Not...", "y": 1924, "r": "gpt-5.4", "m": 0.547, "sd": 0.785, "n": 1536}, {"a": "Ford", "t": "Some Do Not...", "y": 1924, "r": "qwen3-max", "m": 0.814, "sd": 0.734, "n": 1137}, {"a": "Ford", "t": "Some Do Not...", "y": 1924, "r": "jev", "m": 0.707, "sd": 0.799, "n": 505}, {"a": "Richardson", "t": "The Trap", "y": 1925, "r": "gpt-5.4", "m": 0.816, "sd": 0.882, "n": 609}, {"a": "Richardson", "t": "The Trap", "y": 1925, "r": "qwen3-max", "m": 1.022, "sd": 0.719, "n": 578}, {"a": "Richardson", "t": "The Trap", "y": 1925, "r": "jev", "m": 0.947, "sd": 0.643, "n": 209}, {"a": "Ford", "t": "No More Parades", "y": 1925, "r": "gpt-5.4", "m": 0.833, "sd": 0.811, "n": 1388}, {"a": "Ford", "t": "No More Parades", "y": 1925, "r": "qwen3-max", "m": 1.045, "sd": 0.71, "n": 1072}, {"a": "Ford", "t": "No More Parades", "y": 1925, "r": "jev", "m": 0.951, "sd": 0.744, "n": 450}, {"a": "Woolf", "t": "Mrs Dalloway", "y": 1925, "r": "gpt-5.4", "m": 0.891, "sd": 0.583, "n": 1138}, {"a": "Woolf", "t": "Mrs Dalloway", "y": 1925, "r": "qwen3-max", "m": 0.881, "sd": 0.442, "n": 1086}, {"a": "Woolf", "t": "Mrs Dalloway", "y": 1925, "r": "jev", "m": 0.929, "sd": 0.33, "n": 368}, {"a": "Faulkner", "t": "The Sound and the Fury", "y": 1929, "r": "gpt-5.4", "m": 1.933, "sd": 1.279, "n": 1188}, {"a": "Faulkner", "t": "The Sound and the Fury", "y": 1929, "r": "qwen3-max", "m": 2.586, "sd": 0.909, "n": 871}, {"a": "Faulkner", "t": "The Sound and the Fury", "y": 1929, "r": "jev", "m": 1.86, "sd": 1.245, "n": 378}, {"a": "Richardson", "t": "Oberland", "y": 1927, "r": "gpt-5.4", "m": 0.418, "sd": 0.54, "n": 655}, {"a": "Richardson", "t": "Oberland", "y": 1927, "r": "qwen3-max", "m": 0.754, "sd": 0.486, "n": 626}, {"a": "Richardson", "t": "Oberland", "y": 1927, "r": "jev", "m": 0.829, "sd": 0.506, "n": 228}, {"a": "Faulkner", "t": "Pylon", "y": 1935, "r": "jev", "m": 1.015, "sd": 0.922, "n": 333}, {"a": "Faulkner", "t": "Sanctuary", "y": 1931, "r": "jev", "m": 0.699, "sd": 0.91, "n": 249}, {"a": "Ford", "t": "A Man Could Stand Up\u2014", "y": 1926, "r": "gpt-5.4", "m": 0.825, "sd": 0.581, "n": 1159}, {"a": "Ford", "t": "A Man Could Stand Up\u2014", "y": 1926, "r": "qwen3-max", "m": 0.957, "sd": 0.461, "n": 1064}, {"a": "Ford", "t": "A Man Could Stand Up\u2014", "y": 1926, "r": "jev", "m": 0.9, "sd": 0.498, "n": 379}, {"a": "Ford", "t": "The Last Post", "y": 1928, "r": "gpt-5.4", "m": 0.63, "sd": 0.585, "n": 1160}, {"a": "Ford", "t": "The Last Post", "y": 1928, "r": "qwen3-max", "m": 0.881, "sd": 0.552, "n": 1064}, {"a": "Ford", "t": "The Last Post", "y": 1928, "r": "jev", "m": 0.815, "sd": 0.584, "n": 368}, {"a": "Faulkner", "t": "Soldiers' Pay", "y": 1926, "r": "gpt-5.4", "m": 0.919, "sd": 1.023, "n": 1142}, {"a": "Faulkner", "t": "Soldiers' Pay", "y": 1926, "r": "qwen3-max", "m": 1.062, "sd": 0.906, "n": 936}, {"a": "Faulkner", "t": "Soldiers' Pay", "y": 1926, "r": "jev", "m": 0.764, "sd": 0.846, "n": 407}, {"a": "Woolf", "t": "The Voyage Out", "y": 1915, "r": "gpt-5.4", "m": 0.291, "sd": 0.627, "n": 1872}, {"a": "Woolf", "t": "The Voyage Out", "y": 1915, "r": "qwen3-max", "m": 0.517, "sd": 0.619, "n": 1438}, {"a": "Woolf", "t": "The Voyage Out", "y": 1915, "r": "jev", "m": 0.451, "sd": 0.648, "n": 639}, {"a": "Woolf", "t": "The Waves", "y": 1931, "r": "gpt-5.4", "m": 2.47, "sd": 0.764, "n": 1211}, {"a": "Woolf", "t": "The Waves", "y": 1931, "r": "qwen3-max", "m": 2.533, "sd": 0.852, "n": 1200}, {"a": "Woolf", "t": "The Waves", "y": 1931, "r": "jev", "m": 2.114, "sd": 0.997, "n": 412}, {"a": "Woolf", "t": "The Years", "y": 1937, "r": "gpt-5.4", "m": 0.958, "sd": 0.852, "n": 1931}, {"a": "Woolf", "t": "The Years", "y": 1937, "r": "qwen3-max", "m": 0.996, "sd": 0.521, "n": 1680}, {"a": "Woolf", "t": "The Years", "y": 1937, "r": "jev", "m": 0.869, "sd": 0.608, "n": 633}, {"a": "Woolf", "t": "To the Lighthouse", "y": 1927, "r": "gpt-5.4", "m": 0.69, "sd": 0.596, "n": 1847}, {"a": "Woolf", "t": "To the Lighthouse", "y": 1927, "r": "qwen3-max", "m": 0.737, "sd": 0.462, "n": 1763}, {"a": "Woolf", "t": "To the Lighthouse", "y": 1927, "r": "jev", "m": 0.852, "sd": 0.392, "n": 445}], "silhouette": {"gpt-5.4": -0.158, "qwen3-max": -0.158, "jev": -0.176}, "stepNorm": {"gpt-5.4": {"median": 0.1593, "mean": 0.313, "n": 39}, "qwen3-max": {"median": 0.1281, "mean": 0.305, "n": 39}, "jev": {"median": 0.1376, "mean": 0.2563, "n": 47}}}</script>
+<script>
+const D = JSON.parse(document.getElementById('payload').textContent);
+// Each figure runs inside guard(): an uncaught error in one block used to halt
+// the whole script, so a single typo blanked every figure below it. Now a
+// failing figure reports itself in place and the others still draw.
+function guard(name, target, fn){
+  try { fn(); }
+  catch(err){
+    console.error(`[${name}]`, err);
+    const host=document.getElementById(target);
+    if(host) host.innerHTML=
+      `<div class="warn" style="border-left-color:#e34948">Figure "${name}" failed to render: `+
+      `<code>${String(err && err.message || err)}</code></div>`;
+  }
+}
+const tip = document.getElementById('tip');
+const ACC='var(--accent)', DE='var(--deemph)';
+const READERS=['gpt-5.4','qwen3-max','jev'];
+const EMPH='Woolf';
+
+document.getElementById('t').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const dark=cur? cur==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
+};
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;moveTip(e);}
+function moveTip(e){const r=tip.getBoundingClientRect();
+  let x=e.clientX+14,y=e.clientY+14;
+  if(x+r.width>innerWidth-8)x=e.clientX-r.width-14;
+  if(y+r.height>innerHeight-8)y=e.clientY-r.height-14;
+  tip.style.left=x+'px';tip.style.top=y+'px';}
+function hideTip(){tip.style.opacity=0;}
+const SVGNS='http://www.w3.org/2000/svg';
+function el(n,a={}){const e=document.createElementNS(SVGNS,n);for(const k in a)e.setAttribute(k,a[k]);return e;}
+
+// ---------- status banner ----------
+(function(){
+  const byR={}; READERS.forEach(r=>byR[r]=new Set());
+  D.works.forEach(w=>byR[w.r].add(w.t));
+  const n=READERS.map(r=>`${r}: ${byR[r].size}/54 works`).join(' · ');
+  document.getElementById('status').innerHTML =
+    `<b>Final data.</b> ${n}. Jev covers all 54 works; gpt-5.4 and qwen3-max cover the 46 public-domain ones, since seven of the eight coauthor-supplied texts are in US copyright and were not sent to those APIs. Figures 2 and 5–8 therefore read jev throughout, so a career is never drawn from a partial set of its works. llama is excluded: it failed calibration (90.7% of judgements at level 1).`;
+})();
+
+// ---------- FIG 1 : per-author strip plot, faceted by reader ----------
+guard('FIG 1','f1',()=>{
+  const host=document.getElementById('f1');
+  const order = (()=>{
+    const s=D.spread.filter(s=>s.reader==='qwen3-max').sort((a,b)=>b.median-a.median);
+    return s.map(x=>x.author);
+  })();
+  const W=330,LEFT=86,RIGHT=14,TOP=26,ROW=30;
+  const H=TOP+order.length*ROW+30;
+  const x=v=>LEFT+(v/3)*(W-LEFT-RIGHT);
+
+  READERS.forEach(reader=>{
+    const panel=document.createElement('div'); panel.className='panel';
+    const spreadFor={}; D.spread.filter(s=>s.reader===reader).forEach(s=>spreadFor[s.author]=s);
+    const rows=D.works.filter(w=>w.r===reader);
+    const complete=new Set(rows.map(w=>w.t)).size;
+    panel.innerHTML=`<p class="ptitle"><b>${reader}</b> · ${complete}/54 works</p>`;
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+    // gridlines + x ticks at 0..3
+    for(let v=0;v<=3;v++){
+      svg.appendChild(el('line',{x1:x(v),x2:x(v),y1:TOP-8,y2:TOP+order.length*ROW-6,class:'gl'}));
+      const t=el('text',{x:x(v),y:TOP+order.length*ROW+12,class:'tick','text-anchor':'middle'});
+      t.textContent=v; svg.appendChild(t);
+    }
+    const xl=el('text',{x:(LEFT+W-RIGHT)/2,y:H-4,class:'tick','text-anchor':'middle'});
+    xl.textContent='mean mediation level'; svg.appendChild(xl);
+
+    order.forEach((author,i)=>{
+      const cy=TOP+i*ROW+ROW/2-6;
+      const acc = author===EMPH;
+      const sp=spreadFor[author];
+      const lab=el('text',{x:LEFT-10,y:cy+3,class:'rowlab','text-anchor':'end'});
+      lab.textContent=author;
+      if(acc) lab.setAttribute('font-weight','600');
+      svg.appendChild(lab);
+      const ws=rows.filter(w=>w.a===author);
+      const nl=el('text',{x:LEFT-10,y:cy+13,class:'rown','text-anchor':'end'});
+      nl.textContent=`n=${ws.length}`; svg.appendChild(nl);
+      if(sp){
+        svg.appendChild(el('rect',{x:x(sp.min+(sp.median-sp.min)*0),y:cy-9,
+          width:Math.max(2,x(sp.max)-x(sp.min)),height:18,rx:3,
+          class:'iqr'+(acc?' acc':''),}));
+      }
+      ws.forEach(w=>{
+        const c=el('circle',{cx:x(w.m),cy:cy,r:acc?5:4,class:'dot',
+          fill:acc?ACC:DE, 'fill-opacity':acc?1:.72});
+        c.addEventListener('mousemove',e=>showTip(e,
+          `<b>${w.t}</b><i>${w.a} · ${w.y}</i><i>mediation ${w.m.toFixed(2)} · ${w.n} passages</i><i>reader ${reader}</i>`));
+        c.addEventListener('mouseleave',hideTip);
+        svg.appendChild(c);
+      });
+      // direct-label the three Woolf works that make the claim
+      if(acc && ws.length){
+        // Label only the two works that define the span. Labelling a third
+        // (The Years, at 1.00) overprinted Night and Day at 0.51 — the x
+        // positions are close enough that two labels on the same side collide.
+        const lo=ws.reduce((a,b)=>b.m<a.m?b:a), hi=ws.reduce((a,b)=>b.m>a.m?b:a);
+        [[hi,-13,'middle'],[lo,17,'start']].forEach(([w,dy,anchor])=>{
+          const t=el('text',{x:x(w.m)+(anchor==='start'?-6:0),y:cy+dy,
+            class:'dlab','text-anchor':anchor});
+          t.textContent=w.t; svg.appendChild(t);
+        });
+      }
+    });
+    panel.appendChild(svg); host.appendChild(panel);
+  });
+
+  const wr=D.spread.filter(s=>s.author===EMPH);
+  // Name each reader: the spread array is alphabetical (gpt/jev/qwen) but the
+  // panels run gpt/qwen/jev, so bare numbers in array order mislead.
+  const wrTxt=READERS.map(r=>{const w=wr.find(z=>z.reader===r);
+    return w?`${r} ${w.range.toFixed(2)}`:null;}).filter(Boolean).join(', ');
+  document.getElementById('cap1').innerHTML=
+    `Woolf ranks first by range under all three readers (${wrTxt}),
+     but her interquartile range is only ${wr.find(w=>w.reader==='qwen3-max').iqr.toFixed(2)} — eight novels
+     cluster and <em>The Waves</em> departs. Every work is plotted rather than a spread statistic because
+     the choice of statistic changes the answer: by range Woolf leads under all three readers, but by
+     standard deviation the widest author is Woolf under gpt-5.4, Faulkner under qwen3-max and Joyce
+     under jev. Range is the stable measure, and the marks show why — Woolf's is a tight body with one
+     departure, not an even scatter. Ordinal scale; not calibrated across readers.`;
+
+  // table view
+  const t=['<table><thead><tr><th>Author</th><th class="num">n</th>'+
+    READERS.map(r=>`<th class="num">${r} median</th><th class="num">range</th>`).join('')+'</tr></thead><tbody>'];
+  order.forEach(a=>{
+    const cells=READERS.map(r=>{const s=D.spread.find(s=>s.author===a&&s.reader===r);
+      return s?`<td class="num">${s.median.toFixed(2)}</td><td class="num">${s.range.toFixed(2)}</td>`:'<td class="num">—</td><td class="num">—</td>';}).join('');
+    const n=D.spread.find(s=>s.author===a&&s.reader==='qwen3-max');
+    t.push(`<tr><td>${a}</td><td class="num">${n?n.n_works:'—'}</td>${cells}</tr>`);
+  });
+  t.push('</tbody></table>');
+  document.getElementById('tbl1').innerHTML=t.join('');
+});
+
+// ---------- FIG 2 : trajectories, small multiples ----------
+guard('FIG 2','f2',()=>{
+  const host=document.getElementById('f2');
+  const R='jev';   // only reader covering all 54 works
+  const rows=D.works.filter(w=>w.r===R);
+  const authors=[...new Set(rows.map(w=>w.a))]
+    .sort((a,b)=>Math.min(...rows.filter(w=>w.a===a).map(w=>w.y))-Math.min(...rows.filter(w=>w.a===b).map(w=>w.y)));
+  const yrs=rows.map(w=>w.y), Y0=Math.min(...yrs), Y1=Math.max(...yrs);
+  const W=260,H=140,L=34,Rt=10,T=14,B=26;
+  authors.forEach(a=>{
+    const ws=rows.filter(w=>w.a===a).sort((p,q)=>p.y-q.y);
+    const acc=a===EMPH;
+    const panel=document.createElement('div'); panel.className='panel';
+    panel.innerHTML=`<p class="ptitle"><b>${a}</b> · ${ws.length} works · ${Math.min(...ws.map(w=>w.y))}–${Math.max(...ws.map(w=>w.y))}${a==='Joyce'?' <span style="color:var(--text-muted)">(truncated: Finnegans Wake in copyright)</span>':''}</p>`;
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+    const x=y=>L+((y-Y0)/(Y1-Y0))*(W-L-Rt);
+    const yy=v=>T+(1-v/3)*(H-T-B);
+    for(let v=0;v<=3;v++){
+      svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:yy(v),y2:yy(v),class:'gl'}));
+      const t=el('text',{x:L-6,y:yy(v)+3,class:'tick','text-anchor':'end'}); t.textContent=v; svg.appendChild(t);
+    }
+    [1880,1900,1920,1940].forEach(g=>{ if(g<Y0||g>Y1) return;
+      const t=el('text',{x:x(g),y:H-8,class:'tick','text-anchor':'middle'}); t.textContent=g; svg.appendChild(t);});
+    const pts=ws.map(w=>`${x(w.y)},${yy(w.m)}`).join(' ');
+    svg.appendChild(el('polyline',{points:pts,fill:'none',stroke:acc?ACC:DE,
+      'stroke-width':2,'stroke-opacity':acc?1:.6,'stroke-linejoin':'round'}));
+    ws.forEach(w=>{
+      const c=el('circle',{cx:x(w.y),cy:yy(w.m),r:4,class:'dot',fill:acc?ACC:DE});
+      c.addEventListener('mousemove',e=>showTip(e,`<b>${w.t}</b><i>${w.y} · mediation ${w.m.toFixed(2)}</i>`));
+      c.addEventListener('mouseleave',hideTip);
+      svg.appendChild(c);
+    });
+    panel.appendChild(svg); host.appendChild(panel);
+  });
+  document.getElementById('cap2').innerHTML=
+    `Shared y-axis across panels: independent axes would make every author look equally variable,
+     which inverts the finding. Richardson holds a flat line across twenty-three years and twelve volumes
+     of one continuing project; Woolf is flat, spikes, and returns; Faulkner does the same at lower
+     amplitude; Joyce climbs and stays. Joyce's arc ends at 1922 for copyright reasons, not stylistic ones.`;
+});
+
+
+// ---------- FIG 5 : signed novel-to-novel steps over time ----------
+guard('FIG 5','f5',()=>{
+  const host=document.getElementById('f5');
+  const R='jev', BIG=0.8;   // only reader covering all 54 works
+  const NORM=D.stepNorm[R].median;   // corpus median |step|, the 'norm'
+  const steps=D.steps.filter(s=>s.reader===R);
+  const shapes={}; D.shapes.filter(s=>s.reader===R).forEach(s=>shapes[s.author]=s);
+  const authors=[...new Set(steps.map(s=>s.author))]
+    .sort((a,b)=>shapes[b].max_abs_step-shapes[a].max_abs_step);
+  const yrs=steps.map(s=>s.to_year), Y0=Math.min(...yrs)-2, Y1=Math.max(...yrs)+2;
+  const MX=Math.max(...steps.map(s=>Math.abs(s.step)))*1.12;
+  const W=330,H=168,L=12,Rt=12,T=28,B=26;
+  const SHAPE_NOTE={excursion:'departs and returns',transition:'steps up and stays',plateau:'never departs'};
+
+  authors.forEach(a=>{
+    const ss=steps.filter(s=>s.author===a).sort((x,y)=>x.to_year-y.to_year);
+    const acc=a===EMPH, sh=shapes[a];
+    const panel=document.createElement('div'); panel.className='panel';
+    panel.innerHTML=`<p class="ptitle"><b>${a}</b> · <span style="text-transform:uppercase;letter-spacing:.04em;font-size:.72rem">${sh.shape}</span>
+      <span style="color:var(--text-muted)">— ${SHAPE_NOTE[sh.shape]} · max step ${sh.max_abs_step.toFixed(2)}</span><br>
+      <span style="color:var(--text-muted)">${(()=>{const o=ss.filter(z=>Math.abs(z.step)>NORM).length;
+        return `${o}/${ss.length} steps above the corpus norm (${Math.round(100*o/ss.length)}%)`;})()}</span></p>`;
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+    const x=y=>L+((y-Y0)/(Y1-Y0))*(W-L-Rt);
+    const zero=T+(H-T-B)/2;
+    const yv=v=>zero-(v/MX)*((H-T-B)/2);
+    // +/-0.8 threshold guides
+    [BIG,-BIG].forEach(v=>svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:yv(v),y2:yv(v),
+      stroke:'var(--baseline)','stroke-width':1,'stroke-dasharray':'3 3'})));
+    // corpus-wide norm: median |step| across every author, mirrored
+    [NORM,-NORM].forEach(v=>svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:yv(v),y2:yv(v),
+      stroke:'var(--text-muted)','stroke-width':1,'stroke-dasharray':'1 3','stroke-opacity':.9})));
+    // zero baseline
+    svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:zero,y2:zero,class:'bl'}));
+    // y labels
+    [[BIG,'+0.8'],[-BIG,'−0.8']].forEach(([v,t])=>{
+      const e=el('text',{x:L+2,y:yv(v)-3,class:'tick'}); e.textContent=t; svg.appendChild(e);});
+    // x ticks
+    [1880,1900,1920,1940].forEach(g=>{ if(g<Y0||g>Y1) return;
+      const t=el('text',{x:x(g),y:H-8,class:'tick','text-anchor':'middle'}); t.textContent=g; svg.appendChild(t);});
+    // Rolling-mean envelope: a 3-step centred mean of |step|, mirrored above and
+    // below the baseline. Same units as the bars (change in mediation level), so
+    // this is not a second y-scale — it is the author's local norm for how far a
+    // novel moves, whichever direction. The dashed pair at +/-corpus median is
+    // the whole-corpus norm, which is what "departs from the norm" is measured
+    // against. Authors with fewer than 4 steps get no envelope: a 3-point
+    // rolling mean over 2 points is not a trend.
+    if(ss.length>=4){
+      const mag=ss.map(z=>Math.abs(z.step));
+      const roll=mag.map((_,i)=>{
+        const w=mag.slice(Math.max(0,i-1), i+2);
+        return w.reduce((a,b)=>a+b,0)/w.length;
+      });
+      const up=ss.map((z,i)=>`${x(z.to_year)},${yv(roll[i])}`);
+      const dn=ss.map((z,i)=>`${x(z.to_year)},${yv(-roll[i])}`).reverse();
+      svg.appendChild(el('polygon',{points:[...up,...dn].join(' '),
+        fill:acc?ACC:DE,'fill-opacity':acc?.17:.12}));
+      [1,-1].forEach(sign=>svg.appendChild(el('polyline',{
+        points:ss.map((z,i)=>`${x(z.to_year)},${yv(sign*roll[i])}`).join(' '),
+        fill:'none',stroke:acc?ACC:DE,'stroke-width':1.5,
+        'stroke-opacity':acc?.85:.6,'stroke-linejoin':'round'})));
+    }
+    const bw=Math.max(5,Math.min(16,(W-L-Rt)/((Y1-Y0)/2.2)));
+    ss.forEach(s=>{
+      const big=Math.abs(s.step)>=BIG;
+      const h=Math.abs(yv(s.step)-zero);
+      const r=el('rect',{x:x(s.to_year)-bw/2,y:s.step>0?yv(s.step):zero,
+        width:bw,height:Math.max(1.5,h),rx:3,
+        fill:acc?ACC:DE,'fill-opacity':big?1:(acc?.55:.42),
+        stroke:'var(--surface-1)','stroke-width':1});
+      r.addEventListener('mousemove',e=>showTip(e,
+        `<b>${s.to_title}</b><i>${s.to_year} · step ${s.step>0?'+':''}${s.step.toFixed(2)}</i>`+
+        `<i>from ${s.from_title} (${s.from_year})</i><i>new level ${s.level.toFixed(2)}</i>`));
+      r.addEventListener('mouseleave',hideTip);
+      svg.appendChild(r);
+      if(big){
+        const t=el('text',{x:x(s.to_year),y:s.step>0?yv(s.step)-5:zero+h+11,
+          class:'dlab','text-anchor':'middle'});
+        t.textContent=s.to_title.length>18?s.to_title.slice(0,17)+'…':s.to_title;
+        svg.appendChild(t);
+      }
+    });
+    panel.appendChild(svg); host.appendChild(panel);
+  });
+
+  document.getElementById('cap5').innerHTML=
+    `Three career shapes fall out, and two authors share the largest. <b>Woolf and Faulkner both depart
+     and return</b> — Woolf +1.51 into <em>The Waves</em> then −1.63 back out into <em>Flush</em>; Faulkner
+     +1.19 into <em>The Sound and the Fury</em> then −0.89 out into <em>Sanctuary</em>. Joyce steps up once
+     and holds. The shaded envelope is a three-step rolling mean of step size, mirrored — the author's
+     own running norm for how far a novel moves. Read against the dotted corpus norm (median |step| =
+     ${NORM.toFixed(3)} across all 47 transitions), it is <b>Woolf whose envelope sits above the norm
+     for most of her career</b>: 7 of her 9 transitions exceed it, against 4 of 11 for Richardson, 2 of 7
+     for James and 1 of 4 for Ford. That is the sense in which her works consistently depart — not one
+     or two outliers, but a baseline that runs high and then widens dramatically at <em>The Waves</em>.
+     Joyce gets no envelope: two steps cannot carry a rolling mean. Within-novel spread is not plotted
+     because it does not discriminate — every author sits between 0.58 and 0.97. What separates Woolf
+     from Faulkner is the baseline underneath the leap: see Figure 8.`;
+
+  // robustness strip: max|step| per author per reader
+  const RW=640, RROW=22, RL=96, RH=authors.length*RROW+26;
+  const svg=el('svg',{viewBox:`0 0 ${RW} ${RH}`,role:'img'});
+  const mx=Math.max(...D.shapes.map(s=>s.max_abs_step));
+  const rx=v=>RL+(v/mx)*(RW-RL-70);
+  const MARK={'gpt-5.4':'circle','qwen3-max':'square','jev':'triangle'};
+  authors.forEach((a,i)=>{
+    const y=14+i*RROW, acc=a===EMPH;
+    const t=el('text',{x:RL-10,y:y+4,class:'rowlab','text-anchor':'end'}); t.textContent=a;
+    if(acc)t.setAttribute('font-weight','600'); svg.appendChild(t);
+    svg.appendChild(el('line',{x1:RL,x2:RW-70,y1:y,y2:y,class:'gl'}));
+    const vals=D.shapes.filter(s=>s.author===a);
+    vals.forEach(v=>{
+      const cx=rx(v.max_abs_step);
+      let m;
+      if(MARK[v.reader]==='circle') m=el('circle',{cx:cx,cy:y,r:4});
+      else if(MARK[v.reader]==='square') m=el('rect',{x:cx-3.5,y:y-3.5,width:7,height:7,rx:1});
+      else m=el('polygon',{points:`${cx},${y-4.5} ${cx+4},${y+3} ${cx-4},${y+3}`});
+      m.setAttribute('fill',acc?ACC:DE); m.setAttribute('stroke','var(--surface-1)');
+      m.setAttribute('stroke-width','1.5'); m.setAttribute('class','dot');
+      m.addEventListener('mousemove',e=>showTip(e,`<b>${a}</b><i>${v.reader} · max step ${v.max_abs_step.toFixed(2)}</i><i>shape: ${v.shape}</i>`));
+      m.addEventListener('mouseleave',hideTip);
+      svg.appendChild(m);
+    });
+    const sp=vals.map(v=>v.max_abs_step);
+    const lab=el('text',{x:RW-62,y:y+4,class:'rown'});
+    lab.textContent=`${Math.min(...sp).toFixed(2)}–${Math.max(...sp).toFixed(2)}`;
+    svg.appendChild(lab);
+  });
+  const leg=el('text',{x:RL,y:RH-4,class:'tick'});
+  leg.textContent='● gpt-5.4   ■ qwen3-max   ▲ jev        max |step| →';
+  svg.appendChild(leg);
+  document.getElementById('f5rob').appendChild(svg);
+});
+
+
+// ---------- FIG 6 : scatter, mean vs within-novel spread ----------
+guard('FIG 6','f6',()=>{
+  const R='jev';   // only reader covering all 54 works
+  const pts=D.scatter.filter(p=>p.r===R);
+  const W=760,H=400,L=56,Rt=112,T=18,B=46;
+  const xs=pts.map(p=>p.m), ys=pts.map(p=>p.sd);
+  const X0=0, X1=Math.ceil(Math.max(...xs)*10)/10+0.1;
+  const Y0=Math.floor(Math.min(...ys)*10)/10-0.05, Y1=Math.ceil(Math.max(...ys)*10)/10+0.05;
+  const x=v=>L+((v-X0)/(X1-X0))*(W-L-Rt);
+  const y=v=>T+(1-(v-Y0)/(Y1-Y0))*(H-T-B);
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  for(let v=0;v<=Math.floor(X1);v++){
+    svg.appendChild(el('line',{x1:x(v),x2:x(v),y1:T,y2:y(Y0),class:'gl'}));
+    const t=el('text',{x:x(v),y:H-26,class:'tick','text-anchor':'middle'}); t.textContent=v; svg.appendChild(t);
+  }
+  for(let v=Math.ceil(Y0*10)/10; v<=Y1; v+=0.2){
+    const yv=y(v); if(yv<T||yv>y(Y0)) continue;
+    svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:yv,y2:yv,class:'gl'}));
+    const t=el('text',{x:L-8,y:yv+3,class:'tick','text-anchor':'end'}); t.textContent=v.toFixed(1); svg.appendChild(t);
+  }
+  const xl=el('text',{x:(L+W-Rt)/2,y:H-8,class:'tick','text-anchor':'middle'});
+  xl.textContent='mean mediation level (more mediated →)'; svg.appendChild(xl);
+  const yl=el('text',{x:14,y:(T+y(Y0))/2,class:'tick','text-anchor':'middle',
+    transform:`rotate(-90 14 ${(T+y(Y0))/2})`});
+  yl.textContent='within-novel variation (sd)'; svg.appendChild(yl);
+
+  pts.forEach(p=>{
+    const acc=p.a===EMPH;
+    const c=el('circle',{cx:x(p.m),cy:y(p.sd),r:acc?6:5,class:'dot',
+      fill:acc?ACC:DE,'fill-opacity':acc?1:.6});
+    c.addEventListener('mousemove',e=>showTip(e,
+      `<b>${p.t}</b><i>${p.a} · ${p.y}</i><i>mean ${p.m.toFixed(2)} · sd ${p.sd.toFixed(2)}</i><i>${p.n} passages</i>`));
+    c.addEventListener('mouseleave',hideTip);
+    svg.appendChild(c);
+  });
+  // label only the works that sit outside the cloud
+  ['The Sound and the Fury','The Waves','As I Lay Dying','Ulysses','The Good Soldier'].forEach(t=>{
+    const p=pts.find(z=>z.t===t); if(!p) return;
+    const e=el('text',{x:x(p.m)+9,y:y(p.sd)+3,class:'dlab'}); e.textContent=t; svg.appendChild(e);
+  });
+  document.getElementById('f6').appendChild(svg);
+
+  const sil=D.silhouette;
+  document.getElementById('cap6').innerHTML=
+    `<b>Works do not cluster by author.</b> With author as the cluster label the mean silhouette is
+     ${sil['qwen3-max']} (gpt-5.4 ${sil['gpt-5.4']}, jev ${sil['jev']}) — negative under all three readers,
+     meaning a typical work sits closer to some other author's novel than to its own author's others.
+     No cluster hulls or ellipses are drawn, because drawing them would assert a structure the statistic
+     denies. What the plot does show is a single continuous cloud with five works pulling away from it, and
+     mean and spread correlated at +0.62: the works that reach unframed interior voice also swing most
+     within themselves. This is the figure that keeps the chapter honest — the authorial signal in this
+     corpus is not <em>where</em> an author sits but <em>how far they move</em>, which is Figures 1 and 5.`;
+
+  // facet: one panel per author, same cloud behind
+  const host=document.getElementById('f6facet');
+  const authors=[...new Set(pts.map(p=>p.a))].sort();
+  const w=210,h=150,l=30,rt=8,t0=8,b0=24;
+  authors.forEach(a=>{
+    const panel=document.createElement('div'); panel.className='panel';
+    panel.innerHTML=`<p class="ptitle"><b>${a}</b></p>`;
+    const sv=el('svg',{viewBox:`0 0 ${w} ${h}`,role:'img'});
+    const fx=v=>l+((v-X0)/(X1-X0))*(w-l-rt);
+    const fy=v=>t0+(1-(v-Y0)/(Y1-Y0))*(h-t0-b0);
+    [0,1,2].forEach(v=>sv.appendChild(el('line',{x1:fx(v),x2:fx(v),y1:t0,y2:fy(Y0),class:'gl'})));
+    pts.forEach(p=>sv.appendChild(el('circle',{cx:fx(p.m),cy:fy(p.sd),r:2.6,
+      fill:'var(--deemph)','fill-opacity':.22})));
+    pts.filter(p=>p.a===a).forEach(p=>sv.appendChild(el('circle',{cx:fx(p.m),cy:fy(p.sd),r:4,
+      fill:a===EMPH?ACC:'var(--text-primary)','fill-opacity':.85,
+      stroke:'var(--surface-1)','stroke-width':1.5})));
+    [0,1,2].forEach(v=>{const e=el('text',{x:fx(v),y:h-8,class:'tick','text-anchor':'middle'});
+      e.textContent=v; sv.appendChild(e);});
+    panel.appendChild(sv); host.appendChild(panel);
+  });
+});
+
+
+// ---------- FIG 7a : rotatable 3D scatter ----------
+guard('FIG 7a','f7',()=>{
+  const R='jev';
+  const pts=D.scatter.filter(p=>p.r===R);
+  const W=760,H=460,CX=W/2,CY=H/2+10;
+  const xs=pts.map(p=>p.m), ys=pts.map(p=>p.sd), zs=pts.map(p=>p.y);
+  const X0=0,X1=Math.max(...xs)+.15, Y0=Math.min(...ys)-.05,Y1=Math.max(...ys)+.05;
+  const Z0=Math.min(...zs)-2,Z1=Math.max(...zs)+2;
+  const S=150; // half-extent of the unit cube in px
+  const nx=v=>((v-X0)/(X1-X0)-0.5)*2, ny=v=>((v-Y0)/(Y1-Y0)-0.5)*2, nz=v=>((v-Z0)/(Z1-Z0)-0.5)*2;
+  let az=-0.62, elev=0.42;          // radians ('elev', not 'el' — 'el' is the SVG helper)
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  document.getElementById('f7').appendChild(svg);
+
+  function proj(X,Y,Z){
+    // rotate about vertical axis, then tilt
+    const ca=Math.cos(az),sa=Math.sin(az), ce=Math.cos(elev),se=Math.sin(elev);
+    let x1= X*ca + Z*sa;
+    let z1=-X*sa + Z*ca;
+    let y1= Y*ce - z1*se;
+    let z2= Y*se + z1*ce;
+    const persp = 1/(1 + z2*0.16);           // mild perspective
+    return [CX + x1*S*persp, CY - y1*S*persp, z2, persp];
+  }
+  const CUBE=[[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
+  const EDGES=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+
+  function draw(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const P=CUBE.map(c=>proj(c[0],c[1],c[2]));
+    EDGES.forEach(([a,b])=>svg.appendChild(el('line',{x1:P[a][0],y1:P[a][1],x2:P[b][0],y2:P[b][1],
+      stroke:'var(--grid)','stroke-width':1})));
+    // axis labels at the midpoint of three representative edges
+    const mid=(a,b)=>[(P[a][0]+P[b][0])/2,(P[a][1]+P[b][1])/2];
+    const labels=[[mid(0,1),'mediation →'],[mid(0,3),'internal sd →'],[mid(0,4),'year →']];
+    labels.forEach(([[mx,my],t])=>{const e=el('text',{x:mx,y:my,class:'tick','text-anchor':'middle'});
+      e.textContent=t; svg.appendChild(e);});
+    // sort far-to-near so nearer marks draw on top
+    const drawn=pts.map(p=>{const [sx,sy,depth,k]=proj(nx(p.m),ny(p.sd),nz(p.y));return {p,sx,sy,depth,k};})
+                   .sort((a,b)=>b.depth-a.depth);
+    drawn.forEach(d=>{
+      const acc=d.p.a===EMPH;
+      const r=Math.max(2.2,(acc?5.5:4.6)*d.k);
+      const op=Math.max(.22, Math.min(1,(acc?1:.62)*d.k*1.05));
+      const c=el('circle',{cx:d.sx,cy:d.sy,r:r,class:'dot',
+        fill:acc?ACC:DE,'fill-opacity':op});
+      c.addEventListener('mousemove',e=>showTip(e,
+        `<b>${d.p.t}</b><i>${d.p.a} · ${d.p.y}</i><i>mean ${d.p.m.toFixed(2)} · sd ${d.p.sd.toFixed(2)}</i>`));
+      c.addEventListener('mouseleave',hideTip);
+      svg.appendChild(c);
+    });
+    document.getElementById('f7ang').textContent=
+      `azimuth ${Math.round(az*180/Math.PI)}° · elevation ${Math.round(elev*180/Math.PI)}°`;
+  }
+  draw();
+  let drag=null;
+  const host=document.getElementById('f7');
+  host.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,az,elev};host.style.cursor='grabbing';
+    host.setPointerCapture(e.pointerId);});
+  host.addEventListener('pointermove',e=>{if(!drag)return;
+    az=drag.az+(e.clientX-drag.x)*0.009;
+    elev=Math.max(-1.3,Math.min(1.3,drag.elev+(e.clientY-drag.y)*0.009));
+    draw();});
+  host.addEventListener('pointerup',()=>{drag=null;host.style.cursor='grab';});
+  document.getElementById('f7reset').onclick=()=>{az=-0.62;elev=0.42;draw();};
+
+  document.getElementById('cap7').innerHTML=
+    `Rotate it and the trouble shows: at most angles the cloud reads as structure that is not there, and at
+     every angle some works sit behind others. Depth is cued by size and opacity, which are the only cues
+     available, and both are weak. Position along a third axis also cannot be read off a flat page — for a
+     printed chapter this becomes one fixed projection chosen by whoever exported it. Worth testing; hard
+     to defend in print, and hardest for a figure whose job is to show that no clustering exists.`;
+});
+
+// ---------- FIG 7b : connected scatter (time as path) ----------
+guard('FIG 7b','f7b',()=>{
+  const R='jev';
+  const pts=D.scatter.filter(p=>p.r===R);
+  const authors=[...new Set(pts.map(p=>p.a))]
+    .sort((a,b)=>Math.min(...pts.filter(p=>p.a===a).map(p=>p.y))-Math.min(...pts.filter(p=>p.a===b).map(p=>p.y)));
+  const xs=pts.map(p=>p.m), ys=pts.map(p=>p.sd);
+  const X0=0,X1=Math.max(...xs)+.15,Y0=Math.min(...ys)-.05,Y1=Math.max(...ys)+.05;
+  const w=250,h=190,l=34,rt=10,t0=10,b0=28;
+  const host=document.getElementById('f7b');
+  authors.forEach(a=>{
+    const ws=pts.filter(p=>p.a===a).sort((p,q)=>p.y-q.y);
+    const acc=a===EMPH;
+    const panel=document.createElement('div'); panel.className='panel';
+    panel.innerHTML=`<p class="ptitle"><b>${a}</b> <span style="color:var(--text-muted)">${ws[0].y}–${ws[ws.length-1].y}</span></p>`;
+    const sv=el('svg',{viewBox:`0 0 ${w} ${h}`,role:'img'});
+    const fx=v=>l+((v-X0)/(X1-X0))*(w-l-rt);
+    const fy=v=>t0+(1-(v-Y0)/(Y1-Y0))*(h-t0-b0);
+    [0,1,2].forEach(v=>{sv.appendChild(el('line',{x1:fx(v),x2:fx(v),y1:t0,y2:fy(Y0),class:'gl'}));
+      const e=el('text',{x:fx(v),y:h-14,class:'tick','text-anchor':'middle'});e.textContent=v;sv.appendChild(e);});
+    [0.6,0.9,1.2].forEach(v=>{const yv=fy(v); if(yv<t0||yv>fy(Y0))return;
+      sv.appendChild(el('line',{x1:l,x2:w-rt,y1:yv,y2:yv,class:'gl'}));
+      const e=el('text',{x:l-5,y:yv+3,class:'tick','text-anchor':'end'});e.textContent=v.toFixed(1);sv.appendChild(e);});
+    // faint full cloud for context
+    pts.forEach(p=>sv.appendChild(el('circle',{cx:fx(p.m),cy:fy(p.sd),r:2,fill:'var(--deemph)','fill-opacity':.16})));
+    sv.appendChild(el('polyline',{points:ws.map(p=>`${fx(p.m)},${fy(p.sd)}`).join(' '),
+      fill:'none',stroke:acc?ACC:'var(--text-primary)','stroke-width':2,
+      'stroke-opacity':acc?.95:.5,'stroke-linejoin':'round'}));
+    ws.forEach((p,i)=>{
+      const last=i===ws.length-1, first=i===0;
+      const c=el('circle',{cx:fx(p.m),cy:fy(p.sd),r:first||last?5:3.4,class:'dot',
+        fill:first?'var(--surface-1)':(acc?ACC:'var(--text-primary)'),
+        stroke:acc?ACC:'var(--text-primary)','stroke-width':first?2:1.4,
+        'fill-opacity':first?1:(last?1:.72)});
+      c.addEventListener('mousemove',e=>showTip(e,
+        `<b>${p.t}</b><i>${p.y}</i><i>mean ${p.m.toFixed(2)} · sd ${p.sd.toFixed(2)}</i>`));
+      c.addEventListener('mouseleave',hideTip);
+      sv.appendChild(c);
+    });
+    const xl=el('text',{x:(l+w-rt)/2,y:h-2,class:'tick','text-anchor':'middle'});
+    xl.textContent='mediation →'; sv.appendChild(xl);
+    panel.appendChild(sv); host.appendChild(panel);
+  });
+  document.getElementById('cap7b').innerHTML=
+    `The same three variables, all readable on a flat page. Woolf's path is the one that leaves the cloud and
+     comes back — the excursion of Figure 5 seen as a loop. Richardson's twelve volumes make a knot barely
+     larger than a single mark. Joyce and Faulkner travel outward and stop there. Nothing is occluded, no
+     angle has to be chosen, and the reader can still see each author against the full 54-work cloud.`;
+});
+
+
+// ---------- FIG 8 : amplitude x baseline volatility ----------
+guard('FIG 8','f8',()=>{
+  const R='jev';
+  const rows=D.shapes.filter(s=>s.reader===R);
+  const W=760,H=470,L=70,Rt=140,T=22,B=86;
+  const X1=Math.max(...rows.map(r=>r.baseline_volatility))*1.18;
+  const Y1=Math.max(...rows.map(r=>r.amplitude))*1.15;
+  const x=v=>L+(v/X1)*(W-L-Rt), y=v=>T+(1-v/Y1)*(H-T-B);
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  // quadrant guides at the midpoints of each axis
+  const mx=X1/2, my=Y1/2;
+  svg.appendChild(el('line',{x1:x(mx),x2:x(mx),y1:T,y2:y(0),class:'gl','stroke-dasharray':'4 4'}));
+  svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:y(my),y2:y(my),class:'gl','stroke-dasharray':'4 4'}));
+  [0,0.1,0.2,0.3].forEach(v=>{ if(v>X1) return;
+    const t=el('text',{x:x(v),y:H-30,class:'tick','text-anchor':'middle'}); t.textContent=v.toFixed(2); svg.appendChild(t);});
+  [0,1,2,3].forEach(v=>{ if(v>Y1) return;
+    svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:y(v),y2:y(v),class:'gl'}));
+    const t=el('text',{x:L-9,y:y(v)+3,class:'tick','text-anchor':'end'}); t.textContent=v; svg.appendChild(t);});
+  const xl=el('text',{x:(L+W-Rt)/2,y:H-12,class:'tick','text-anchor':'middle'});
+  xl.textContent='baseline volatility — mean step with big leaps removed →'; svg.appendChild(xl);
+  const yl=el('text',{x:18,y:(T+y(0))/2,class:'tick','text-anchor':'middle',
+    transform:`rotate(-90 18 ${(T+y(0))/2})`});
+  yl.textContent='excursion amplitude (out and back) →'; svg.appendChild(yl);
+  // quadrant labels, recessive
+  const q=(xx,yy,txt)=>{const t=el('text',{x:xx,y:yy,class:'dlab','fill-opacity':.65});t.textContent=txt;svg.appendChild(t);};
+  q(x(mx)+8,T+12,'departs AND restless');
+  q(L+6,T+12,'departs, calm otherwise');
+  q(L+6,y(0)-8,'never departs, calm');
+
+  rows.forEach(r=>{
+    const acc=r.author==='Woolf', thin=r.n_works<5;
+    // stroke goes in `style`, not as an attribute: the .dot CSS rule sets
+    // stroke:var(--surface-1) and a class rule beats a presentation attribute,
+    // which silently rendered the hollow (n<5) marks white-on-white.
+    const c=el('circle',{cx:x(r.baseline_volatility),cy:y(r.amplitude),r:acc?8:7,class:'dot',
+      fill:thin?'var(--surface-1)':(acc?ACC:DE),'fill-opacity':1,
+      style:`stroke:${thin?'var(--text-primary)':(acc?ACC:DE)};stroke-width:${thin?2.5:2};`
+            +(thin?'stroke-dasharray:3 2;':'')});
+    c.addEventListener('mousemove',e=>showTip(e,
+      `<b>${r.author}</b><i>${r.n_works} works · ${r.shape}</i>`+
+      `<i>amplitude ${r.amplitude.toFixed(2)} · baseline ${r.baseline_volatility.toFixed(3)}</i>`+
+      (thin?'<i>fewer than 5 works — baseline unreliable</i>':'')));
+    c.addEventListener('mouseleave',hideTip);
+    svg.appendChild(c);
+  });
+  // Label placement: the four plateau authors all sit at amplitude 0 and within
+  // 0.06 of each other on x, so a fixed offset overprinted them into mush
+  // ("JamRichardson(12)inclair"). Stack any crowded group downward with a short
+  // leader line instead of nudging the marks, which would falsify their position.
+  const placed=[];
+  rows.slice().sort((a,b)=>a.baseline_volatility-b.baseline_volatility).forEach(r=>{
+    const px=x(r.baseline_volatility), py=y(r.amplitude);
+    let lx=px+13, ly=py+4, anchor='start';
+    let guard=0;
+    while(placed.some(q=>Math.abs(q.lx-lx)<104 && Math.abs(q.ly-ly)<13) && guard<8){
+      ly+=15; guard++;
+    }
+    if(lx>W-Rt-6){ lx=px-13; anchor='end'; }
+    placed.push({lx,ly});
+    if(Math.abs(ly-(py+4))>6 || anchor==='end'){
+      svg.appendChild(el('line',{x1:px,y1:py,x2:anchor==='end'?lx+4:lx-4,y2:ly-4,
+        stroke:'var(--baseline)','stroke-width':1}));
+    }
+    const t=el('text',{x:lx,y:ly,class:'rowlab','text-anchor':anchor});
+    t.textContent=`${r.author} (${r.n_works})`;
+    if(r.author==='Woolf') t.setAttribute('font-weight','600');
+    svg.appendChild(t);
+  });
+  document.getElementById('f8').appendChild(svg);
+  const w=rows.find(r=>r.author==='Woolf'), f=rows.find(r=>r.author==='Faulkner'),
+        ri=rows.find(r=>r.author==='Richardson'), ja=rows.find(r=>r.author==='James');
+  document.getElementById('cap8').innerHTML=
+    `Separating the two measurements is what survives the Faulkner result. He shares the excursion
+     shape — amplitude ${f.amplitude.toFixed(2)} against Woolf's ${w.amplitude.toFixed(2)} — but his baseline is
+     ${f.baseline_volatility.toFixed(3)} where hers is ${w.baseline_volatility.toFixed(3)}: he leaps once and is otherwise
+     calmer than Sinclair. <b>Woolf is the only author high on both.</b> At the other corner Richardson,
+     across twelve volumes and twenty-three years, sits at ${ri.baseline_volatility.toFixed(3)} — statistically beside
+     James at ${ja.baseline_volatility.toFixed(3)}, who is in the corpus precisely as the narrator-mediated control.
+     Joyce is drawn hollow: three works give two steps, which is not a baseline. The claim is not that
+     Woolf departs furthest, but that she departs furthest <em>and</em> keeps moving in between.`;
+});
+
+// ---------- FIG 3 : reliability ----------
+guard('FIG 3','f3bars',()=>{
+  const r=D.rel;
+  document.getElementById('f3tiles').innerHTML=`
+    <div class="tile"><div class="lab">Humphrey categorical</div>
+      <p class="val">κ ${r.categorical.kappa.toFixed(3)}</p>
+      <div class="note">${r.categorical.observed}% observed vs ${r.categorical.chance}% chance · "fair"</div></div>
+    <div class="tile"><div class="lab">Cohn ordinal <span class="arrow">↑</span></div>
+      <p class="val">κ ${r.ordinal.kappa.toFixed(3)}</p>
+      <div class="note">${r.ordinal.observed}% observed vs ${r.ordinal.chance}% chance · "moderate"</div></div>
+    <div class="tile"><div class="lab">Disagreements 1 level apart</div>
+      <p class="val">${r.within_one_level}%</p>
+      <div class="note">only ${r.two_plus_apart}% are 2+ levels apart</div></div>
+    <div class="tile"><div class="lab">Passages compared</div>
+      <p class="val">${r.n_passages.toLocaleString()}</p>
+      <div class="note">gpt-5.4 × qwen3-max, mode of k runs</div></div>`;
+  const bars=r.disagreements;
+  const W=760,BH=24,GAP=7,L=270,H=bars.length*(BH+GAP)+26;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  const mx=Math.max(...bars.map(b=>b.pct));
+  const x=v=>(v/mx)*(W-L-56);
+  bars.forEach((b,i)=>{
+    const y=i*(BH+GAP);
+    const nm=b.pair.replace(/_/g,' ').replace(' vs ',' ⟷ ');
+    const t=el('text',{x:L-10,y:y+BH/2+4,class:'rowlab','text-anchor':'end'});
+    t.textContent=nm.length>42?nm.slice(0,41)+'…':nm; svg.appendChild(t);
+    const rect=el('rect',{x:L,y:y,width:Math.max(2,x(b.pct)),height:BH,rx:4,
+      fill:i===0?ACC:DE,'fill-opacity':i===0?1:.55});
+    rect.addEventListener('mousemove',e=>showTip(e,`<b>${nm}</b><i>${b.pct}% of compared passages</i><i>${b.n.toLocaleString()} passages</i>`));
+    rect.addEventListener('mouseleave',hideTip);
+    svg.appendChild(rect);
+    const v=el('text',{x:L+x(b.pct)+8,y:y+BH/2+4,class:'rowlab'}); v.textContent=b.pct+'%'; svg.appendChild(v);
+  });
+  document.getElementById('f3bars').appendChild(svg);
+  document.getElementById('cap3').innerHTML=
+    `The typology does not fail for want of signal — κ ${r.categorical.kappa.toFixed(3)} is above chance.
+     It fails at one seam: <b>${bars[0].pct}%</b> of passages sit on the free-indirect / psycho-narration
+     line, against ${bars[1].pct}% for the next-largest pair. That seam is exactly Cohn's L0/L1 transition,
+     which is the argument for the ordinal target. Model readers only; no claim about human annotators.`;
+});
+
+// ---------- FIG 4 : ambiguity histogram ----------
+guard('FIG 4','f4',()=>{
+  const h=D.ambHist, W=760,H=200,L=44,Rt=12,T=12,B=34;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  const mx=Math.max(...h);
+  const bw=(W-L-Rt)/h.length;
+  const y=v=>T+(1-v/mx)*(H-T-B);
+  [0,.25,.5,.75,1].forEach(f=>{
+    const yv=y(mx*f);
+    svg.appendChild(el('line',{x1:L,x2:W-Rt,y1:yv,y2:yv,class:'gl'}));
+    const t=el('text',{x:L-7,y:yv+3,class:'tick','text-anchor':'end'});
+    t.textContent=Math.round(mx*f).toLocaleString(); svg.appendChild(t);
+  });
+  h.forEach((v,i)=>{
+    const under = (i/h.length)<0.10;
+    const r=el('rect',{x:L+i*bw+1,y:y(v),width:bw-2,height:Math.max(1,y(0)-y(v)),rx:3,
+      fill:under?ACC:DE,'fill-opacity':under?1:.5});
+    r.addEventListener('mousemove',e=>showTip(e,
+      `<b>gap ${(i/h.length).toFixed(2)}–${((i+1)/h.length).toFixed(2)}</b><i>${v.toLocaleString()} passages</i>`));
+    r.addEventListener('mouseleave',hideTip);
+    svg.appendChild(r);
+  });
+  const xt=el('line',{x1:L+0.10*(W-L-Rt),x2:L+0.10*(W-L-Rt),y1:T,y2:y(0),stroke:'var(--text-primary)',
+    'stroke-width':1,'stroke-dasharray':'3 3'});
+  svg.appendChild(xt);
+  const lb=el('text',{x:L+0.10*(W-L-Rt)+6,y:T+11,class:'dlab'});
+  lb.textContent='0.10 — undecidable below here'; svg.appendChild(lb);
+  [0,.25,.5,.75,1].forEach(f=>{
+    const t=el('text',{x:L+f*(W-L-Rt),y:H-14,class:'tick','text-anchor':'middle'});
+    t.textContent=f.toFixed(2); svg.appendChild(t);});
+  const xl=el('text',{x:(L+W-Rt)/2,y:H-2,class:'tick','text-anchor':'middle'});
+  xl.textContent='gap between top two mediation-level probabilities'; svg.appendChild(xl);
+  document.getElementById('f4').appendChild(svg);
+  document.getElementById('cap4').innerHTML=
+    `${D.ambUnder10}% of ${D.ambTotal.toLocaleString()} passages have their top two levels within 0.10 —
+     genuinely undecidable, measured per passage rather than inferred from two readers disagreeing.
+     This is the only panel here that measures ambiguity directly.`;
+});
+</script>
+</body></html>

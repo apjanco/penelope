@@ -1,0 +1,36 @@
+
+== pooled (gpt+qwen+local): 44 titles, 1875-1941
+  all titles                         n=44 | mean rho=+0.62 p=0.000 | L0 rho=-0.64 p=0.000 | L23 rho=+0.33 p=0.028 | within-author rho=+0.48 p=0.001 (authors>=3 titles: 7)
+  without The Waves                  n=43 | mean rho=+0.61 p=0.000 | L0 rho=-0.62 p=0.000 | L23 rho=+0.30 p=0.056 | within-author rho=+0.45 p=0.002 (authors>=3 titles: 7)
+  without James and Ford             n=33 | mean rho=+0.55 p=0.001 | L0 rho=-0.51 p=0.002 | L23 rho=+0.38 p=0.029 | within-author rho=+0.55 p=0.001 (authors>=3 titles: 5)
+  1910 onward                        n=36 | mean rho=+0.41 p=0.015 | L0 rho=-0.42 p=0.011 | L23 rho=+0.19 p=0.276 | within-author rho=+0.46 p=0.008 (authors>=3 titles: 6)
+  between-author (descriptive, n=7): rho=+0.68   James 1894/0.40, Sinclair 1914/0.54, Joyce 1917/0.95, Richardson 1920/0.89, Ford 1924/0.80, Woolf 1928/0.84, Faulkner 1928/1.69
+
+== gpt-5.4: 44 titles, 1875-1941
+  all titles                         n=44 | mean rho=+0.66 p=0.000 | L0 rho=-0.65 p=0.000 | L23 rho=+0.43 p=0.004 | within-author rho=+0.44 p=0.003 (authors>=3 titles: 7)
+  without The Waves                  n=43 | mean rho=+0.65 p=0.000 | L0 rho=-0.64 p=0.000 | L23 rho=+0.39 p=0.010 | within-author rho=+0.41 p=0.005 (authors>=3 titles: 7)
+  without James and Ford             n=33 | mean rho=+0.58 p=0.001 | L0 rho=-0.49 p=0.004 | L23 rho=+0.46 p=0.008 | within-author rho=+0.51 p=0.003 (authors>=3 titles: 5)
+  1910 onward                        n=36 | mean rho=+0.46 p=0.005 | L0 rho=-0.41 p=0.014 | L23 rho=+0.26 p=0.120 | within-author rho=+0.47 p=0.009 (authors>=3 titles: 6)
+  between-author (descriptive, n=7): rho=+0.68   James 1894/0.27, Sinclair 1914/0.45, Joyce 1917/0.81, Richardson 1920/0.81, Ford 1924/0.66, Woolf 1928/0.78, Faulkner 1928/1.48
+
+== qwen3-max: 44 titles, 1875-1941
+  all titles                         n=44 | mean rho=+0.53 p=0.000 | L0 rho=-0.60 p=0.000 | L23 rho=+0.23 p=0.143 | within-author rho=+0.48 p=0.000 (authors>=3 titles: 7)
+  without The Waves                  n=43 | mean rho=+0.51 p=0.001 | L0 rho=-0.58 p=0.000 | L23 rho=+0.18 p=0.248 | within-author rho=+0.42 p=0.004 (authors>=3 titles: 7)
+  without James and Ford             n=33 | mean rho=+0.48 p=0.005 | L0 rho=-0.48 p=0.005 | L23 rho=+0.28 p=0.119 | within-author rho=+0.59 p=0.001 (authors>=3 titles: 5)
+  1910 onward                        n=36 | mean rho=+0.28 p=0.096 | L0 rho=-0.41 p=0.015 | L23 rho=+0.11 p=0.522 | within-author rho=+0.43 p=0.011 (authors>=3 titles: 6)
+  between-author (descriptive, n=7): rho=+0.64   James 1894/0.60, Sinclair 1914/0.66, Joyce 1917/1.14, Richardson 1920/0.99, Ford 1924/0.97, Woolf 1928/0.91, Faulkner 1928/1.97
+
+== jev (all 54 works): 52 titles, 1875-1941
+  all titles                         n=52 | mean rho=+0.55 p=0.000 | L0 rho=-0.53 p=0.000 | L23 rho=+0.18 p=0.194 | within-author rho=+0.40 p=0.002 (authors>=3 titles: 7)
+  without The Waves                  n=51 | mean rho=+0.54 p=0.000 | L0 rho=-0.51 p=0.000 | L23 rho=+0.15 p=0.278 | within-author rho=+0.38 p=0.003 (authors>=3 titles: 7)
+  without James and Ford             n=41 | mean rho=+0.43 p=0.005 | L0 rho=-0.41 p=0.007 | L23 rho=+0.21 p=0.189 | within-author rho=+0.35 p=0.018 (authors>=3 titles: 5)
+  1910 onward                        n=44 | mean rho=+0.35 p=0.022 | L0 rho=-0.34 p=0.022 | L23 rho=+0.13 p=0.408 | within-author rho=+0.32 p=0.031 (authors>=3 titles: 6)
+  between-author (descriptive, n=7): rho=+0.82   James 1894/0.56, Sinclair 1914/0.61, Joyce 1917/0.90, Ford 1924/0.79, Richardson 1924/0.93, Woolf 1928/0.86, Faulkner 1931/1.06
+  per-author Spearman(year, mean) on jev:
+    Faulkner    k= 8 rho=+0.26
+    Ford        k= 5 rho=+0.60
+    James       k= 6 rho=+0.77
+    Joyce       k= 3 rho=+1.00
+    Richardson  k=12 rho=-0.14
+    Sinclair    k= 8 rho=+0.81
+    Woolf       k=10 rho=+0.60

@@ -1,0 +1,15 @@
+id,kind,gold_is_soc,gold_primary,gold_alt_types,pred_is_soc_v3_grpo,pred_is_soc_v3_sft,pred_type_v3_grpo,pred_type_v3_sft,pred_secondary_v3_grpo,pred_secondary_v3_sft,pred_confidence_v3_grpo,pred_confidence_v3_sft,pred_confidence_num_v3_grpo,pred_confidence_num_v3_sft,multi_type_signal_v3_grpo,multi_type_signal_v3_sft
+ambig_hybrid_1,ambiguous,True,hybrid,"free_association, imagery, simulation_state_of_mind",False,True,none,imagery,,"simulation_state_of_mind, orthographic_marker",,high,0.65,0.9,False,True
+ambig_indirect_omniscient_1,ambiguous,True,indirect_interior_monologue,omniscient_description,False,False,none,none,,,,,0.65,0.65,False,False
+ambig_reverie_1,ambiguous,True,reverie_fantasy,"simulation_state_of_mind, imagery",True,False,indirect_interior_monologue,none,"imagery, simulation_state_of_mind",,high,,0.9,0.65,True,False
+non_soc_1,clear_non_soc,False,none,,False,False,none,none,,,,,0.65,0.65,False,False
+non_soc_2,clear_non_soc,False,none,,False,False,none,none,,,,,0.65,0.65,False,False
+real_00,real_soc,True,unknown,,False,True,none,direct_interior_monologue,,simulation_state_of_mind,,high,0.65,0.9,False,True
+real_01,real_soc,True,unknown,,True,True,indirect_interior_monologue,indirect_interior_monologue,"direct_interior_monologue, free_association, simulation_state_of_mind","direct_interior_monologue, orthographic_marker",high,high,0.9,0.9,True,True
+real_02,real_soc,True,unknown,,False,False,none,none,,,,,0.65,0.65,False,False
+real_03,real_non_soc,False,unknown,,False,False,none,none,,,,,0.65,0.65,False,False
+real_04,real_non_soc,False,unknown,,False,False,none,none,,,,,0.65,0.65,False,False
+real_05,real_non_soc,False,unknown,,False,False,none,none,,,,,0.65,0.65,False,False
+soc_direct_1,clear_soc,True,direct_interior_monologue,free_association,True,True,direct_interior_monologue,direct_interior_monologue,"simulation_state_of_mind, free_association","orthographic_marker, simulation_state_of_mind",high,high,0.9,0.9,True,True
+soc_indirect_1,clear_soc,True,indirect_interior_monologue,omniscient_description,False,False,none,none,,,,,0.65,0.65,False,False
+soc_orthographic_1,clear_soc,True,orthographic_marker,direct_interior_monologue,False,True,none,direct_interior_monologue,,orthographic_marker,,high,0.65,0.9,False,True

@@ -1,0 +1,225 @@
+works 44 passages 25157 rows 151390
+{'gpt-5.4': 75691, 'qwen3-max': 75660, 'qwen3.6-local': 39}
+local-substitute passages 13 {'The Ambassadors': 2, 'The Last Post': 1, 'The Sound and the Fury': 1, 'Ulysses': 8, 'What Maisie Knew': 1}
+
+== Exp A pooled (gpt+qwen+local), per judgment, by author
+                  n  mean   sd    L0    L1    L2    L3
+author                                                
+Faulkner    5617.00  1.67 1.26 28.25 16.45 15.28 40.02
+Ford       11918.00  0.80 0.81 39.02 48.04  6.86  6.07
+James      27865.00  0.41 0.61 65.66 28.59  5.27  0.48
+Joyce      10387.00  1.37 1.22 31.08 32.08  5.40 31.44
+Richardson 17070.00  0.91 0.77 27.11 61.30  4.63  6.96
+Sinclair   18782.00  0.55 0.75 59.19 28.95  9.91  1.95
+Woolf      24957.00  0.82 0.88 42.73 39.89 10.31  7.08
+
+== Exp A gpt-5.4 only, by author
+                  n  mean   sd    L0    L1    L2    L3
+author                                                
+Faulkner    3176.00  1.48 1.28 36.81 11.71 18.26 33.22
+Ford        6509.00  0.66 0.80 50.59 36.93  8.33  4.15
+James      16535.00  0.27 0.58 79.12 14.66  5.86  0.36
+Joyce       5991.00  1.24 1.22 38.47 27.06  6.93 27.54
+Richardson  8921.00  0.84 0.82 36.15 51.04  5.75  7.06
+Sinclair   10567.00  0.46 0.75 68.52 18.89 11.12  1.47
+Woolf      13288.00  0.74 0.92 53.06 26.05 14.97  5.92
+
+== Exp A qwen3-max only, by author
+                  n  mean   sd    L0    L1    L2    L3
+author                                                
+Faulkner    2441.00  1.92 1.18 17.12 22.61 11.39 48.87
+Ford        5406.00  0.97 0.80 25.10 61.39  5.11  8.40
+James      11321.00  0.60 0.61 46.03 48.91  4.42  0.64
+Joyce       4375.00  1.55 1.18 21.10 39.11  3.34 36.46
+Richardson  8149.00  1.00 0.69 17.20 72.54  3.41  6.85
+Sinclair    8215.00  0.66 0.74 47.18 41.89  8.35  2.58
+Woolf      11669.00  0.91 0.83 30.96 55.64  5.00  8.40
+
+== by title pooled
+    author                                   title  year       n  mean   sd    L0    L1    L2    L3
+  Faulkner                           Soldiers' Pay  1926 2078.00  0.98 0.97 40.86 27.38 24.30  7.46
+  Faulkner                  The Sound and the Fury  1929 2059.00  2.21 1.18 18.07  7.38 10.10 64.45
+  Faulkner                          As I Lay Dying  1930 1480.00  1.89 1.28 24.73 13.72  9.80 51.76
+      Ford                        The Good Soldier  1915 2335.00  0.79 1.19 63.77 13.02  3.55 19.66
+      Ford                          Some Do Not...  1924 2673.00  0.66 0.78 49.91 36.96 10.29  2.84
+      Ford                         No More Parades  1925 2460.00  0.93 0.78 30.20 50.98 14.92  3.90
+      Ford                   A Man Could Stand Up—  1926 2223.00  0.89 0.53 18.58 75.80  3.87  1.75
+      Ford                           The Last Post  1928 2227.00  0.75 0.58 30.13 67.13  0.31  2.42
+     James                         Roderick Hudson  1875 2821.00  0.46 0.82 74.05  7.73 16.73  1.49
+     James                  The Portrait of a Lady  1881 5086.00  0.30 0.60 76.82 16.77  5.84  0.57
+     James                        What Maisie Knew  1897 2935.00  0.35 0.52 67.09 30.83  2.08  0.00
+     James                   The Wings of the Dove  1902 5776.00  0.40 0.53 61.93 35.87  2.20  0.00
+     James                         The Ambassadors  1903 4826.00  0.48 0.63 58.43 36.74  3.63  1.20
+     James                         The Golden Bowl  1904 6421.00  0.44 0.60 61.27 33.42  5.25  0.06
+     Joyce                               Dubliners  1914 1262.00  0.38 0.60 66.64 29.64  2.46  1.27
+     Joyce A Portrait of the Artist as a Young Man  1916 2182.00  0.69 0.76 44.55 46.52  4.17  4.77
+     Joyce                                 Ulysses  1922 6943.00  1.77 1.22 20.38 27.99  6.32 45.31
+Richardson                           Pointed Roofs  1915 1814.00  0.87 0.69 26.46 63.95  5.24  4.36
+Richardson                               Backwater  1916 1651.00  0.88 0.71 28.47 57.78 10.60  3.15
+Richardson                               Honeycomb  1917 1653.00  0.96 0.72 23.23 62.37  9.62  4.78
+Richardson                                 Interim  1919 1848.00  0.97 0.73 20.45 69.91  2.11  7.52
+Richardson                              The Tunnel  1919 3024.00  1.07 0.87 21.20 63.56  2.05 13.19
+Richardson                                Deadlock  1921 2607.00  0.85 0.75 31.45 58.15  4.72  5.68
+Richardson                        Revolving Lights  1923 2005.00  0.95 0.82 27.43 59.15  4.29  9.13
+Richardson                                The Trap  1925 1187.00  0.92 0.81 28.90 59.22  3.20  8.68
+Richardson                                Oberland  1927 1281.00  0.58 0.54 43.79 54.64  1.09  0.47
+  Sinclair                           Audrey Craven  1897 2050.00  0.29 0.59 77.07 17.41  4.73  0.78
+  Sinclair                            The Helpmate  1907 3086.00  0.23 0.53 82.05 13.03  4.89  0.03
+  Sinclair                       The Combined Maze  1913 2706.00  0.36 0.58 69.48 25.46  5.03  0.04
+  Sinclair                       The Three Sisters  1914 2491.00  0.36 0.66 74.15 15.34 10.52  0.00
+  Sinclair                      The Tree of Heaven  1917 2798.00  0.71 0.90 55.43 22.62 17.76  4.18
+  Sinclair                    Mary Olivier: A Life  1919 3708.00  1.00 0.78 24.43 57.39 12.14  6.04
+  Sinclair                            The Romantic  1920 1273.00  0.77 0.71 38.81 45.88 14.93  0.39
+  Sinclair        Life and Death of Harriett Frean  1922  670.00  0.64 0.70 48.81 39.10 11.64  0.45
+     Woolf                          The Voyage Out  1915 3310.00  0.39 0.63 68.73 24.17  6.56  0.54
+     Woolf                           Night and Day  1919 4638.00  0.37 0.59 68.41 26.54  4.83  0.22
+     Woolf                            Jacob's Room  1922 1505.00  0.59 0.68 51.36 39.27  8.70  0.66
+     Woolf                            Mrs Dalloway  1925 2224.00  0.89 0.52 19.20 73.56  6.65  0.58
+     Woolf                       To the Lighthouse  1927 3038.00  0.76 0.52 28.41 67.45  4.15  0.00
+     Woolf                                 Orlando  1928 2106.00  0.51 0.69 59.26 30.63  9.59  0.52
+     Woolf                               The Waves  1931 2411.00  2.50 0.81  3.61  9.46 20.12 66.82
+     Woolf                                   Flush  1933  842.00  0.37 0.52 64.61 33.49  1.90  0.00
+     Woolf                               The Years  1937 3611.00  0.98 0.72 26.86 48.80 24.23  0.11
+     Woolf                        Between the Acts  1941 1272.00  1.02 0.80 23.90 57.47 11.64  7.00
+
+== Woolf by title gpt-5.4
+            title  year       n  mean   sd    L0    L1    L2    L3
+   The Voyage Out  1915 1872.00  0.29 0.63 79.86 11.54  8.23  0.37
+    Night and Day  1919 2507.00  0.25 0.56 81.69 11.97  6.30  0.04
+     Jacob's Room  1922  792.00  0.54 0.77 62.25 22.47 14.39  0.88
+     Mrs Dalloway  1925 1138.00  0.89 0.58 22.58 66.17 10.81  0.44
+To the Lighthouse  1927 1549.00  0.73 0.58 34.34 58.62  7.04  0.00
+          Orlando  1928 1182.00  0.40 0.73 73.86 12.18 13.62  0.34
+        The Waves  1931 1211.00  2.47 0.76  4.46  3.39 32.87 59.29
+            Flush  1933  454.00  0.33 0.54 70.70 25.99  3.30  0.00
+        The Years  1937 1931.00  0.96 0.85 38.27 27.86 33.66  0.21
+ Between the Acts  1941  652.00  0.92 0.88 36.66 40.80 16.41  6.13
+
+== Woolf by title qwen3-max
+            title  year       n  mean   sd    L0    L1    L2    L3
+   The Voyage Out  1915 1438.00  0.52 0.62 54.24 40.61  4.38  0.76
+    Night and Day  1919 2131.00  0.51 0.58 52.79 43.69  3.10  0.42
+     Jacob's Room  1922  713.00  0.64 0.55 39.27 57.92  2.38  0.42
+     Mrs Dalloway  1925 1086.00  0.88 0.44 15.65 81.31  2.30  0.74
+To the Lighthouse  1927 1489.00  0.79 0.44 22.23 76.63  1.14  0.00
+          Orlando  1928  924.00  0.65 0.60 40.58 54.22  4.44  0.76
+        The Waves  1931 1200.00  2.53 0.85  2.75 15.58  7.25 74.42
+            Flush  1933  388.00  0.43 0.50 57.47 42.27  0.26  0.00
+        The Years  1937 1680.00  1.00 0.52 13.75 72.86 13.39  0.00
+ Between the Acts  1941  620.00  1.12 0.69 10.48 75.00  6.61  7.90
+
+== ICC (pooled per-passage mean, gpt+qwen(+local))
+Faulkner    titles= 3 ICC=0.219 [0.173,0.269] w/o The Sound and the Fury: 0.205
+    LOO: {"Soldiers' Pay": np.float64(0.037), 'The Sound and the Fury': np.float64(0.205), 'As I Lay Dying': np.float64(0.346)}
+Ford        titles= 5 ICC=0.025 [0.014,0.044] w/o No More Parades: 0.019
+    LOO: {'Some Do Not...': np.float64(0.011), 'No More Parades': np.float64(0.019), 'A Man Could Stand Up—': np.float64(0.024), 'The Last Post': np.float64(0.029), 'The Good Soldier': np.float64(0.042)}
+James       titles= 6 ICC=0.012 [0.007,0.020] w/o The Ambassadors: 0.011
+    LOO: {'The Portrait of a Lady': np.float64(0.006), 'The Ambassadors': np.float64(0.011), 'What Maisie Knew': np.float64(0.011), 'The Golden Bowl': np.float64(0.014), 'Roderick Hudson': np.float64(0.014), 'The Wings of the Dove': np.float64(0.014)}
+Joyce       titles= 3 ICC=0.358 [0.323,0.394] w/o Ulysses: 0.117
+    LOO: {'Ulysses': np.float64(0.117), 'Dubliners': np.float64(0.297), 'A Portrait of the Artist as a Young Man': np.float64(0.426)}
+Richardson  titles= 9 ICC=0.029 [0.021,0.043] w/o The Tunnel: 0.025
+    LOO: {'Oberland': np.float64(0.009), 'The Tunnel': np.float64(0.025), 'Backwater': np.float64(0.032), 'Pointed Roofs': np.float64(0.032), 'Interim': np.float64(0.032), 'Honeycomb': np.float64(0.032), 'The Trap': np.float64(0.032), 'Revolving Lights': np.float64(0.033), 'Deadlock': np.float64(0.034)}
+Sinclair    titles= 8 ICC=0.185 [0.163,0.211] w/o Mary Olivier: A Life: 0.104
+    LOO: {'Mary Olivier: A Life': np.float64(0.104), 'The Helpmate': np.float64(0.165), 'Audrey Craven': np.float64(0.188), 'Life and Death of Harriett Frean': np.float64(0.191), 'The Combined Maze': np.float64(0.191), 'The Romantic': np.float64(0.195), 'The Three Sisters': np.float64(0.2), 'The Tree of Heaven': np.float64(0.231)}
+Woolf       titles=10 ICC=0.561 [0.533,0.588] w/o The Waves: 0.199
+    LOO: {'The Waves': np.float64(0.199), 'Flush': np.float64(0.563), 'Night and Day': np.float64(0.57), 'Mrs Dalloway': np.float64(0.578), 'The Voyage Out': np.float64(0.579), "Jacob's Room": np.float64(0.579), 'To the Lighthouse': np.float64(0.58), 'Between the Acts': np.float64(0.582), 'Orlando': np.float64(0.583), 'The Years': np.float64(0.612)}
+Woolf w/o Flush+Orlando: 0.586
+
+== ICC (gpt-5.4)
+Faulkner    titles= 3 ICC=0.161 [0.118,0.212] w/o The Sound and the Fury: 0.135
+    LOO: {"Soldiers' Pay": np.float64(0.033), 'The Sound and the Fury': np.float64(0.135), 'As I Lay Dying': np.float64(0.267)}
+Ford        titles= 5 ICC=0.041 [0.025,0.066] w/o No More Parades: 0.033
+    LOO: {'No More Parades': np.float64(0.033), 'A Man Could Stand Up—': np.float64(0.035), 'The Good Soldier': np.float64(0.042), 'Some Do Not...': np.float64(0.046), 'The Last Post': np.float64(0.048)}
+James       titles= 6 ICC=0.010 [0.006,0.017] w/o Roderick Hudson: 0.009
+    LOO: {'What Maisie Knew': np.float64(0.006), 'Roderick Hudson': np.float64(0.009), 'The Portrait of a Lady': np.float64(0.01), 'The Ambassadors': np.float64(0.011), 'The Wings of the Dove': np.float64(0.012), 'The Golden Bowl': np.float64(0.013)}
+Joyce       titles= 3 ICC=0.373 [0.339,0.409] w/o Ulysses: 0.102
+    LOO: {'Ulysses': np.float64(0.102), 'Dubliners': np.float64(0.317), 'A Portrait of the Artist as a Young Man': np.float64(0.438)}
+Richardson  titles= 9 ICC=0.039 [0.029,0.056] w/o The Tunnel: 0.031
+    LOO: {'Oberland': np.float64(0.016), 'The Tunnel': np.float64(0.031), 'Pointed Roofs': np.float64(0.042), 'Honeycomb': np.float64(0.043), 'Backwater': np.float64(0.043), 'Interim': np.float64(0.043), 'The Trap': np.float64(0.043), 'Deadlock': np.float64(0.044), 'Revolving Lights': np.float64(0.045)}
+Sinclair    titles= 8 ICC=0.132 [0.113,0.158] w/o Mary Olivier: A Life: 0.069
+    LOO: {'Mary Olivier: A Life': np.float64(0.069), 'The Helpmate': np.float64(0.121), 'The Combined Maze': np.float64(0.133), 'Audrey Craven': np.float64(0.134), 'Life and Death of Harriett Frean': np.float64(0.138), 'The Romantic': np.float64(0.14), 'The Three Sisters': np.float64(0.147), 'The Tree of Heaven': np.float64(0.162)}
+Woolf       titles=10 ICC=0.498 [0.473,0.525] w/o The Waves: 0.184
+    LOO: {'The Waves': np.float64(0.184), 'Night and Day': np.float64(0.494), 'Flush': np.float64(0.501), 'The Voyage Out': np.float64(0.51), 'Mrs Dalloway': np.float64(0.516), 'To the Lighthouse': np.float64(0.519), "Jacob's Room": np.float64(0.519), 'Between the Acts': np.float64(0.521), 'Orlando': np.float64(0.522), 'The Years': np.float64(0.561)}
+Woolf w/o Flush+Orlando: 0.526
+
+== ICC (qwen3-max)
+Faulkner    titles= 3 ICC=0.440 [0.377,0.507] w/o The Sound and the Fury: 0.440
+    LOO: {"Soldiers' Pay": np.float64(0.044), 'The Sound and the Fury': np.float64(0.44), 'As I Lay Dying': np.float64(0.579)}
+Ford        titles= 5 ICC=0.026 [0.011,0.051] w/o The Good Soldier: 0.025
+    LOO: {'Some Do Not...': np.float64(0.018), 'The Good Soldier': np.float64(0.025), 'The Last Post': np.float64(0.026), 'No More Parades': np.float64(0.029), 'A Man Could Stand Up—': np.float64(0.029)}
+James       titles= 6 ICC=0.020 [0.012,0.033] w/o The Ambassadors: 0.017
+    LOO: {'The Portrait of a Lady': np.float64(0.005), 'The Ambassadors': np.float64(0.017), 'What Maisie Knew': np.float64(0.023), 'The Golden Bowl': np.float64(0.024), 'The Wings of the Dove': np.float64(0.025), 'Roderick Hudson': np.float64(0.026)}
+Joyce       titles= 3 ICC=0.353 [0.309,0.396] w/o Ulysses: 0.052
+    LOO: {'Ulysses': np.float64(0.052), 'Dubliners': np.float64(0.325), 'A Portrait of the Artist as a Young Man': np.float64(0.402)}
+Richardson  titles= 9 ICC=0.014 [0.008,0.027] w/o The Tunnel: 0.013
+    LOO: {'Oberland': np.float64(0.002), 'The Tunnel': np.float64(0.013), 'Backwater': np.float64(0.016), 'Pointed Roofs': np.float64(0.016), 'Honeycomb': np.float64(0.016), 'The Trap': np.float64(0.016), 'Interim': np.float64(0.016), 'Deadlock': np.float64(0.016), 'Revolving Lights': np.float64(0.018)}
+Sinclair    titles= 8 ICC=0.226 [0.201,0.255] w/o Mary Olivier: A Life: 0.135
+    LOO: {'Mary Olivier: A Life': np.float64(0.135), 'The Helpmate': np.float64(0.193), 'Audrey Craven': np.float64(0.228), 'The Romantic': np.float64(0.23), 'Life and Death of Harriett Frean': np.float64(0.232), 'The Three Sisters': np.float64(0.235), 'The Combined Maze': np.float64(0.243), 'The Tree of Heaven': np.float64(0.288)}
+Woolf       titles=10 ICC=0.544 [0.512,0.576] w/o The Waves: 0.153
+    LOO: {'The Waves': np.float64(0.153), 'Flush': np.float64(0.546), "Jacob's Room": np.float64(0.557), 'Mrs Dalloway': np.float64(0.562), 'To the Lighthouse': np.float64(0.562), 'Between the Acts': np.float64(0.565), 'Orlando': np.float64(0.565), 'Night and Day': np.float64(0.567), 'The Voyage Out': np.float64(0.569), 'The Years': np.float64(0.577)}
+Woolf w/o Flush+Orlando: 0.567
+
+== per-passage title distributions + lag-1 autocorr (pooled per-passage mean, rounded for dist)
+    author                                   title  year    n  mean    L0    L1    L2    L3   ac1
+  Faulkner                           Soldiers' Pay  1926  411  0.90 48.66 20.44 27.01  3.89  0.19
+  Faulkner                  The Sound and the Fury  1929  421  1.97 21.14 10.21 19.24 49.41  0.42
+  Faulkner                          As I Lay Dying  1930  307  1.64 29.64 11.73 26.06 32.57  0.33
+      Ford                        The Good Soldier  1915  429  0.74 65.03  9.79 15.62  9.56  0.33
+      Ford                          Some Do Not...  1924  537  0.61 59.78 27.56 10.99  1.68  0.36
+      Ford                         No More Parades  1925  478  0.89 38.49 42.05 16.95  2.51  0.22
+      Ford                   A Man Could Stand Up—  1926  394  0.85 26.65 67.26  5.58  0.51  0.25
+      Ford                           The Last Post  1928  396  0.72 38.64 57.83  2.27  1.26  0.40
+     James                         Roderick Hudson  1875  636  0.43 75.31  9.43 14.47  0.79  0.26
+     James                  The Portrait of a Lady  1881 1135  0.29 82.56 11.54  5.64  0.26  0.09
+     James                        What Maisie Knew  1897  574  0.32 82.75 15.33  1.92  0.00  0.07
+     James                   The Wings of the Dove  1902 1126  0.37 73.62 24.33  2.04  0.00  0.00
+     James                         The Ambassadors  1903  981  0.44 71.87 23.24  3.87  1.02  0.15
+     James                         The Golden Bowl  1904 1254  0.41 72.73 22.17  5.10  0.00  0.14
+     Joyce                               Dubliners  1914  273  0.32 75.82 20.51  3.30  0.37  0.16
+     Joyce A Portrait of the Artist as a Young Man  1916  417  0.65 56.35 34.53  5.52  3.60  0.46
+     Joyce                                 Ulysses  1922 1387  1.63 25.16 22.86 17.66 34.32  0.57
+Richardson                           Pointed Roofs  1915  320  0.85 37.81 50.94  7.81  3.44  0.26
+Richardson                               Backwater  1916  301  0.85 36.54 47.84 14.62  1.00  0.24
+Richardson                               Honeycomb  1917  291  0.92 29.90 51.89 16.15  2.06  0.15
+Richardson                                 Interim  1919  323  0.95 25.08 62.85  8.05  4.02  0.17
+Richardson                              The Tunnel  1919  547  1.04 27.97 53.93  8.04 10.05  0.31
+Richardson                                Deadlock  1921  454  0.85 41.85 46.26  7.93  3.96  0.28
+Richardson                        Revolving Lights  1923  352  0.95 32.39 51.42 10.23  5.97  0.36
+Richardson                                The Trap  1925  206  0.91 37.86 47.57  8.25  6.31  0.34
+Richardson                                Oberland  1927  228  0.57 57.46 39.91  2.19  0.44  0.08
+  Sinclair                           Audrey Craven  1897  410  0.28 81.46 13.17  4.63  0.73  0.05
+  Sinclair                            The Helpmate  1907  614  0.22 86.81  7.98  5.21  0.00  0.07
+  Sinclair                       The Combined Maze  1913  536  0.33 77.99 18.28  3.73  0.00  0.13
+  Sinclair                       The Three Sisters  1914  488  0.34 79.92 10.45  9.63  0.00  0.13
+  Sinclair                      The Tree of Heaven  1917  533  0.69 61.35 17.07 19.32  2.25  0.47
+  Sinclair                    Mary Olivier: A Life  1919  674  0.97 33.23 46.59 16.91  3.26  0.19
+  Sinclair                            The Romantic  1920  253  0.73 50.20 33.20 16.60  0.00  0.12
+  Sinclair        Life and Death of Harriett Frean  1922  124  0.62 60.48 26.61 12.90  0.00 -0.05
+     Woolf                          The Voyage Out  1915  659  0.36 78.45 15.02  6.37  0.15  0.08
+     Woolf                           Night and Day  1919  850  0.35 79.88 15.29  4.71  0.12  0.11
+     Woolf                            Jacob's Room  1922  277  0.56 59.93 27.80 12.27  0.00  0.05
+     Woolf                            Mrs Dalloway  1925  380  0.87 22.37 70.26  7.11  0.26  0.18
+     Woolf                       To the Lighthouse  1927  453  0.79 28.48 67.55  3.97  0.00  0.32
+     Woolf                                 Orlando  1928  401  0.46 73.57 15.71 10.22  0.50  0.32
+     Woolf                               The Waves  1931  405  2.49  3.95  5.19 31.85 59.01  0.24
+     Woolf                                   Flush  1933  152  0.36 72.37 25.66  1.97  0.00  0.05
+     Woolf                               The Years  1937  655  0.91 35.57 35.88 28.55  0.00  0.16
+     Woolf                        Between the Acts  1941  230  1.00 30.00 47.83 16.96  5.22  0.37
+
+== Exp C: year vs no_type_fits / antimimetic rate by title (gpt+qwen rows w/ fit_category)
+                                  title  year  ntf  anti    n
+                                Ulysses  1922 0.02  0.02 7048
+                                Orlando  1928 0.01  0.01 2271
+                              The Waves  1931 0.01  0.01 2415
+                           Jacob's Room  1922 0.01  0.00 1523
+                          Soldiers' Pay  1926 0.01  0.00 2112
+                 The Sound and the Fury  1929 0.01  0.00 2069
+                       Between the Acts  1941 0.01  0.00 1277
+A Portrait of the Artist as a Young Man  1916 0.01  0.00 2199
+                      To the Lighthouse  1927 0.00  0.00 3088
+                       The Good Soldier  1915 0.01  0.00 2395
+                         As I Lay Dying  1930 0.00  0.00 1485
+                        The Ambassadors  1903 0.00  0.00 4907
+spearman year~no_type_fits SignificanceResult(statistic=np.float64(0.017083760701060335), pvalue=np.float64(0.9123566597086754)) n titles 44
+spearman year~antimimetic SignificanceResult(statistic=np.float64(0.33948791165183817), pvalue=np.float64(0.02416472630474742))
+antimimetic total rows 236 of 118617

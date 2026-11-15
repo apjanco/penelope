@@ -1,0 +1,147 @@
+author,title,year,role,source_file,reader,n_passages,mean_mediation,sd_mediation,pct_L0,pct_L1,pct_L2,pct_L3
+Faulkner,"Absalom, Absalom!",1936,core,absalom_absalom_cleaned,jev,782,1.0102,0.7947,21.61,65.22,3.71,9.46
+Faulkner,As I Lay Dying,1930,core,as_I_lay_dying,gpt-5.4,846,1.5957,1.3261,34.87,11.7,12.41,41.02
+Faulkner,As I Lay Dying,1930,core,as_I_lay_dying,qwen3-max,634,2.2729,1.0947,11.2,16.4,6.31,66.09
+Faulkner,As I Lay Dying,1930,core,as_I_lay_dying,jev,278,1.5935,1.2011,20.86,38.13,1.8,39.21
+Woolf,Between the Acts,1941,core,between_the_acts,gpt-5.4,652,0.9202,0.8773,36.66,40.8,16.41,6.13
+Woolf,Between the Acts,1941,core,between_the_acts,qwen3-max,620,1.1194,0.6876,10.48,75.0,6.61,7.9
+Woolf,Between the Acts,1941,core,between_the_acts,jev,207,1.0676,0.7647,16.43,70.05,3.86,9.66
+Richardson,Clear Horizon,1935,core,clear_horizon_cleaned,jev,278,0.7446,0.5903,30.94,66.19,0.36,2.52
+Richardson,Dawn's Left Hand,1931,core,dawns_left_hand_cleaned,jev,273,0.9267,0.5759,17.58,75.09,4.4,2.93
+Richardson,Dimple Hill,1938,core,dimple_hill_cleaned,jev,288,0.8924,0.4988,16.67,79.17,2.43,1.74
+Woolf,Flush,1933,core,flush,gpt-5.4,454,0.326,0.5346,70.7,25.99,3.3,0.0
+Woolf,Flush,1933,core,flush,qwen3-max,388,0.4278,0.4999,57.47,42.27,0.26,0.0
+Woolf,Flush,1933,core,flush,jev,153,0.4837,0.5496,54.25,43.14,2.61,0.0
+Woolf,Jacob's Room,1922,core,jacobs_room,gpt-5.4,792,0.5391,0.7677,62.25,22.47,14.39,0.88
+Woolf,Jacob's Room,1922,core,jacobs_room,qwen3-max,713,0.6396,0.5509,39.27,57.92,2.38,0.42
+Woolf,Jacob's Room,1922,core,jacobs_room,jev,258,0.7829,0.535,27.13,67.83,4.65,0.39
+Faulkner,Light in August,1932,core,light_in_august_cleaned,jev,686,0.8426,0.8748,43.0,34.11,18.51,4.37
+Faulkner,Mosquitoes,1927,core,mosquitoes_cleaned,jev,346,0.6676,0.7655,48.55,39.02,9.54,2.89
+Woolf,Night and Day,1919,core,night_and_day_cleaned,gpt-5.4,2507,0.2469,0.5607,81.69,11.97,6.3,0.04
+Woolf,Night and Day,1919,core,night_and_day_cleaned,qwen3-max,2131,0.5115,0.5806,52.79,43.69,3.1,0.42
+Woolf,Night and Day,1919,core,night_and_day_cleaned,jev,808,0.4121,0.5905,63.99,30.94,4.95,0.12
+Woolf,Orlando,1928,core,orlando_cleaned,gpt-5.4,1182,0.4044,0.7305,73.86,12.18,13.62,0.34
+Woolf,Orlando,1928,core,orlando_cleaned,qwen3-max,924,0.6537,0.6005,40.58,54.22,4.44,0.76
+Woolf,Orlando,1928,core,orlando_cleaned,jev,373,0.6005,0.6415,47.99,44.5,6.97,0.54
+James,Roderick Hudson,1875,control,pg00176_roderick_hudson,gpt-5.4,1768,0.3575,0.7618,80.66,4.07,14.14,1.13
+James,Roderick Hudson,1875,control,pg00176_roderick_hudson,qwen3-max,1053,0.623,0.8842,62.96,13.87,21.08,2.09
+James,Roderick Hudson,1875,control,pg00176_roderick_hudson,jev,582,0.5223,0.9243,72.34,8.76,13.23,5.67
+James,The Ambassadors,1903,control,pg00432_the_ambassadors,gpt-5.4,2862,0.3267,0.6125,74.11,20.09,4.82,0.98
+James,The Ambassadors,1903,control,pg00432_the_ambassadors,qwen3-max,1958,0.6941,0.5849,35.55,61.03,1.89,1.53
+James,The Ambassadors,1903,control,pg00432_the_ambassadors,jev,948,0.5928,0.6305,47.68,46.2,5.27,0.84
+Ford,The Good Soldier,1915,control,pg02775_the_good_soldier,gpt-5.4,1266,0.4858,1.0457,81.12,1.66,4.74,12.48
+Ford,The Good Soldier,1915,control,pg02775_the_good_soldier,qwen3-max,1069,1.1525,1.2477,43.22,26.47,2.15,28.16
+Ford,The Good Soldier,1915,control,pg02775_the_good_soldier,jev,404,0.5693,0.9215,63.61,25.5,1.24,9.65
+Joyce,Dubliners,1914,core,pg02814_dubliners,gpt-5.4,794,0.2355,0.5006,79.85,16.88,3.15,0.13
+Joyce,Dubliners,1914,core,pg02814_dubliners,qwen3-max,468,0.6346,0.6707,44.23,51.28,1.28,3.21
+Joyce,Dubliners,1914,core,pg02814_dubliners,jev,226,0.3407,0.5099,67.7,30.53,1.77,0.0
+James,The Portrait of a Lady (vol. 1),1881,control,pg02833_the_portrait_of_a_lady_vol_1,gpt-5.4,1519,0.1982,0.5699,88.15,4.21,7.31,0.33
+James,The Portrait of a Lady (vol. 1),1881,control,pg02833_the_portrait_of_a_lady_vol_1,qwen3-max,796,0.4121,0.6826,67.96,24.87,5.15,2.01
+James,The Portrait of a Lady (vol. 1),1881,control,pg02833_the_portrait_of_a_lady_vol_1,jev,484,0.4091,0.77,72.52,18.18,5.17,4.13
+James,The Portrait of a Lady (vol. 2),1881,control,pg02834_the_portrait_of_a_lady_vol_2,gpt-5.4,1684,0.2381,0.5618,82.72,10.93,6.18,0.18
+James,The Portrait of a Lady (vol. 2),1881,control,pg02834_the_portrait_of_a_lady_vol_2,qwen3-max,1087,0.4637,0.5931,58.33,37.44,3.77,0.46
+James,The Portrait of a Lady (vol. 2),1881,control,pg02834_the_portrait_of_a_lady_vol_2,jev,538,0.4572,0.731,65.43,26.58,4.83,3.16
+Richardson,Pointed Roofs,1915,core,pg03019_pointed_roofs,gpt-5.4,950,0.7495,0.7639,40.42,48.63,6.53,4.42
+Richardson,Pointed Roofs,1915,core,pg03019_pointed_roofs,qwen3-max,864,1.0127,0.5661,11.11,80.79,3.82,4.28
+Richardson,Pointed Roofs,1915,core,pg03019_pointed_roofs,jev,321,0.7819,0.6183,29.91,64.49,3.12,2.49
+Joyce,A Portrait of the Artist as a Young Man,1916,core,pg04217_a_portrait_of_the_artist_as_a_young_man,gpt-5.4,1217,0.5514,0.7633,57.68,33.44,4.93,3.94
+Joyce,A Portrait of the Artist as a Young Man,1916,core,pg04217_a_portrait_of_the_artist_as_a_young_man,qwen3-max,965,0.8684,0.7258,27.98,63.01,3.21,5.8
+Joyce,A Portrait of the Artist as a Young Man,1916,core,pg04217_a_portrait_of_the_artist_as_a_young_man,jev,411,0.6642,0.7443,45.74,46.47,3.41,4.38
+James,The Golden Bowl,1904,control,pg04264_the_golden_bowl,gpt-5.4,3682,0.2944,0.5838,77.1,16.46,6.33,0.11
+James,The Golden Bowl,1904,control,pg04264_the_golden_bowl,qwen3-max,2739,0.6382,0.5539,39.98,56.22,3.8,0.0
+James,The Golden Bowl,1904,control,pg04264_the_golden_bowl,jev,1210,0.7372,0.6596,37.02,53.55,8.1,1.32
+Joyce,Ulysses,1922,core,pg04300_ulysses,gpt-5.4,3980,1.644,1.2332,24.35,27.14,8.29,40.23
+Joyce,Ulysses,1922,core,pg04300_ulysses,qwen3-max,2942,1.9215,1.1881,15.16,29.33,3.7,51.8
+Joyce,Ulysses,1922,core,pg04300_ulysses,jev,1136,1.6981,1.1115,11.36,47.36,1.41,39.88
+James,What Maisie Knew,1897,control,pg07118_what_maisie_knew,gpt-5.4,1692,0.1696,0.4269,85.11,12.83,2.07,0.0
+James,What Maisie Knew,1897,control,pg07118_what_maisie_knew,qwen3-max,1240,0.5944,0.532,42.66,55.24,2.1,0.0
+James,What Maisie Knew,1897,control,pg07118_what_maisie_knew,jev,534,0.4494,0.5967,59.18,38.01,1.5,1.31
+Sinclair,Life and Death of Harriett Frean,1922,core,pg09298_life_and_death_of_harriett_frean,gpt-5.4,356,0.4831,0.7323,66.01,19.66,14.33,0.0
+Sinclair,Life and Death of Harriett Frean,1922,core,pg09298_life_and_death_of_harriett_frean,qwen3-max,314,0.8121,0.618,29.3,61.15,8.6,0.96
+Sinclair,Life and Death of Harriett Frean,1922,core,pg09298_life_and_death_of_harriett_frean,jev,121,0.595,0.7109,52.07,38.02,8.26,1.65
+Sinclair,Mary Olivier: A Life,1919,core,pg09366_mary_olivier_a_life,gpt-5.4,1967,0.8734,0.8307,36.55,44.64,13.73,5.08
+Sinclair,Mary Olivier: A Life,1919,core,pg09366_mary_olivier_a_life,qwen3-max,1741,1.1384,0.6903,10.74,71.8,10.34,7.12
+Sinclair,Mary Olivier: A Life,1919,core,pg09366_mary_olivier_a_life,jev,656,0.9726,0.7804,26.22,55.95,12.2,5.64
+Sinclair,The Three Sisters,1914,core,pg11876_the_three_sisters,gpt-5.4,1423,0.3254,0.6874,80.11,7.24,12.65,0.0
+Sinclair,The Three Sisters,1914,core,pg11876_the_three_sisters,qwen3-max,1068,0.4148,0.6295,66.2,26.12,7.68,0.0
+Sinclair,The Three Sisters,1914,core,pg11876_the_three_sisters,jev,477,0.4717,0.7673,67.92,18.87,11.32,1.89
+Sinclair,The Romantic,1920,core,pg13292_the_romantic,gpt-5.4,727,0.6451,0.7641,52.54,31.09,15.68,0.69
+Sinclair,The Romantic,1920,core,pg13292_the_romantic,qwen3-max,546,0.9341,0.5831,20.51,65.57,13.92,0.0
+Sinclair,The Romantic,1920,core,pg13292_the_romantic,jev,248,0.8629,0.8016,35.08,48.39,11.69,4.84
+Sinclair,The Tree of Heaven,1917,core,pg13883_the_tree_of_heaven,gpt-5.4,1548,0.6034,0.8865,64.47,13.24,19.77,2.52
+Sinclair,The Tree of Heaven,1917,core,pg13883_the_tree_of_heaven,qwen3-max,1250,0.8352,0.9042,44.24,34.24,15.28,6.24
+Sinclair,The Tree of Heaven,1917,core,pg13883_the_tree_of_heaven,jev,523,0.8623,1.0162,48.95,26.39,14.15,10.52
+Sinclair,The Helpmate,1907,core,pg17867_the_helpmate,gpt-5.4,1780,0.2039,0.5368,85.84,7.98,6.12,0.06
+Sinclair,The Helpmate,1907,core,pg17867_the_helpmate,qwen3-max,1306,0.2634,0.5083,76.88,19.91,3.22,0.0
+Sinclair,The Helpmate,1907,core,pg17867_the_helpmate,jev,580,0.3397,0.6298,73.97,18.79,6.55,0.69
+Sinclair,The Combined Maze,1913,core,pg28461_the_combined_maze,gpt-5.4,1583,0.259,0.5482,79.53,15.03,5.43,0.0
+Sinclair,The Combined Maze,1913,core,pg28461_the_combined_maze,qwen3-max,1123,0.4933,0.5868,55.3,40.16,4.45,0.09
+Sinclair,The Combined Maze,1913,core,pg28461_the_combined_maze,jev,521,0.3935,0.6384,67.56,27.06,3.84,1.54
+James,The Wings of the Dove (vol. 1),1902,control,pg29452_the_wings_of_the_dove_volume_1,gpt-5.4,1460,0.2959,0.513,73.15,24.11,2.74,0.0
+James,The Wings of the Dove (vol. 1),1902,control,pg29452_the_wings_of_the_dove_volume_1,qwen3-max,1139,0.5522,0.5231,46.09,52.59,1.32,0.0
+James,The Wings of the Dove (vol. 1),1902,control,pg29452_the_wings_of_the_dove_volume_1,jev,477,0.6562,0.5857,39.41,56.39,3.35,0.84
+Sinclair,Audrey Craven,1897,core,pg29766_audrey_craven,gpt-5.4,1183,0.2384,0.5762,82.84,11.33,4.99,0.85
+Sinclair,Audrey Craven,1897,core,pg29766_audrey_craven,qwen3-max,867,0.3656,0.6009,69.2,25.72,4.38,0.69
+Sinclair,Audrey Craven,1897,core,pg29766_audrey_craven,jev,393,0.3791,0.6889,71.5,21.63,4.33,2.54
+James,The Wings of the Dove (vol. 2),1902,control,pg30059_the_wings_of_the_dove_volume_2,gpt-5.4,1868,0.2516,0.5004,77.94,18.95,3.1,0.0
+James,The Wings of the Dove (vol. 2),1902,control,pg30059_the_wings_of_the_dove_volume_2,qwen3-max,1309,0.6073,0.5098,40.34,58.59,1.07,0.0
+James,The Wings of the Dove (vol. 2),1902,control,pg30059_the_wings_of_the_dove_volume_2,jev,612,0.5507,0.5564,47.88,49.35,2.61,0.16
+Richardson,Backwater,1916,core,pg56221_backwater,gpt-5.4,879,0.8009,0.7648,38.57,45.39,13.42,2.62
+Richardson,Backwater,1916,core,pg56221_backwater,qwen3-max,772,0.9793,0.6272,16.97,71.89,7.38,3.76
+Richardson,Backwater,1916,core,pg56221_backwater,jev,302,0.8576,0.643,25.5,66.56,4.64,3.31
+Richardson,The Tunnel,1919,core,pg56447_the_tunnel,gpt-5.4,1618,1.047,0.929,26.7,56.12,2.97,14.22
+Richardson,The Tunnel,1919,core,pg56447_the_tunnel,qwen3-max,1406,1.1017,0.7931,14.86,72.12,1.0,12.02
+Richardson,The Tunnel,1919,core,pg56447_the_tunnel,jev,536,1.0429,0.8011,19.22,68.1,1.87,10.82
+Richardson,Honeycomb,1917,core,pg56664_honeycomb,gpt-5.4,871,0.9013,0.7723,30.65,53.16,11.6,4.59
+Richardson,Honeycomb,1917,core,pg56664_honeycomb,qwen3-max,782,1.0243,0.6501,14.96,72.63,7.42,4.99
+Richardson,Honeycomb,1917,core,pg56664_honeycomb,jev,285,0.9298,0.5512,16.84,75.44,5.61,2.11
+Richardson,Deadlock,1921,core,pg56925_deadlock,gpt-5.4,1351,0.7572,0.7915,40.78,48.33,5.26,5.63
+Richardson,Deadlock,1921,core,pg56925_deadlock,qwen3-max,1256,0.9419,0.6939,21.42,68.71,4.14,5.73
+Richardson,Deadlock,1921,core,pg56925_deadlock,jev,457,1.07,0.7213,13.79,74.4,2.84,8.97
+Richardson,Interim,1919,core,pg57395_interim,gpt-5.4,954,0.8983,0.7656,27.36,63.0,2.1,7.55
+Richardson,Interim,1919,core,pg57395_interim,qwen3-max,894,1.0403,0.671,13.09,77.29,2.13,7.49
+Richardson,Interim,1919,core,pg57395_interim,jev,324,1.0833,0.6684,9.88,80.56,0.93,8.64
+Richardson,Revolving Lights,1923,core,pg62967_revolving_lights,gpt-5.4,1034,0.8926,0.8534,33.56,52.42,5.22,8.8
+Richardson,Revolving Lights,1923,core,pg62967_revolving_lights,qwen3-max,971,1.0134,0.7879,20.91,66.32,3.3,9.47
+Richardson,Revolving Lights,1923,core,pg62967_revolving_lights,jev,358,1.0866,0.8193,17.6,68.16,2.23,12.01
+Ford,Some Do Not...,1924,control,pg64248_some_do_not,gpt-5.4,1536,0.5469,0.785,61.46,24.67,11.59,2.28
+Ford,Some Do Not...,1924,control,pg64248_some_do_not,qwen3-max,1137,0.8144,0.7336,34.3,53.56,8.53,3.61
+Ford,Some Do Not...,1924,control,pg64248_some_do_not,jev,505,0.7069,0.7993,47.72,37.03,12.08,3.17
+Richardson,The Trap,1925,core,pg64585_the_trap,gpt-5.4,609,0.8161,0.8817,40.72,45.98,4.27,9.03
+Richardson,The Trap,1925,core,pg64585_the_trap,qwen3-max,578,1.0225,0.7189,16.44,73.18,2.08,8.3
+Richardson,The Trap,1925,core,pg64585_the_trap,jev,209,0.9474,0.643,18.18,74.16,2.39,5.26
+Ford,No More Parades,1925,control,pg67622_no_more_parades,gpt-5.4,1388,0.8329,0.8111,39.77,40.06,17.29,2.88
+Ford,No More Parades,1925,control,pg67622_no_more_parades,qwen3-max,1072,1.0448,0.7096,17.82,65.11,11.85,5.22
+Ford,No More Parades,1925,control,pg67622_no_more_parades,jev,450,0.9511,0.7438,26.67,55.11,14.67,3.56
+Woolf,Mrs Dalloway,1925,core,pg71865_mrs_dalloway,gpt-5.4,1138,0.891,0.5828,22.58,66.17,10.81,0.44
+Woolf,Mrs Dalloway,1925,core,pg71865_mrs_dalloway,qwen3-max,1086,0.8812,0.4415,15.65,81.31,2.3,0.74
+Woolf,Mrs Dalloway,1925,core,pg71865_mrs_dalloway,jev,368,0.9293,0.3304,9.24,88.59,2.17,0.0
+Faulkner,The Sound and the Fury,1929,core,pg75170_sound_and_fury,gpt-5.4,1188,1.9335,1.2791,25.84,7.83,13.47,52.86
+Faulkner,The Sound and the Fury,1929,core,pg75170_sound_and_fury,qwen3-max,871,2.5855,0.9088,7.46,6.77,5.51,80.25
+Faulkner,The Sound and the Fury,1929,core,pg75170_sound_and_fury,jev,378,1.8598,1.2446,20.37,24.34,4.23,51.06
+Richardson,Oberland,1927,core,pg77646_oberland,gpt-5.4,655,0.4183,0.5405,60.46,37.4,1.98,0.15
+Richardson,Oberland,1927,core,pg77646_oberland,qwen3-max,626,0.754,0.4864,26.36,72.68,0.16,0.8
+Richardson,Oberland,1927,core,pg77646_oberland,jev,228,0.8289,0.5058,21.05,76.75,0.44,1.75
+Faulkner,Pylon,1935,core,pylon_cleaned,jev,333,1.015,0.9218,32.73,42.04,16.22,9.01
+Faulkner,Sanctuary,1931,core,sanctuary_cleaned,jev,249,0.6988,0.9105,54.22,28.51,10.44,6.83
+Ford,A Man Could Stand Up—,1926,control,se_ford_madox_ford_a_man_could_stand_up,gpt-5.4,1159,0.8248,0.5812,25.63,67.82,5.0,1.55
+Ford,A Man Could Stand Up—,1926,control,se_ford_madox_ford_a_man_could_stand_up,qwen3-max,1064,0.9568,0.4609,10.9,84.49,2.63,1.97
+Ford,A Man Could Stand Up—,1926,control,se_ford_madox_ford_a_man_could_stand_up,jev,379,0.8997,0.4985,16.36,78.89,3.17,1.58
+Ford,The Last Post,1928,control,se_ford_madox_ford_the_last_post,gpt-5.4,1160,0.6302,0.5845,40.78,57.07,0.52,1.64
+Ford,The Last Post,1928,control,se_ford_madox_ford_the_last_post,qwen3-max,1064,0.8806,0.5517,18.61,78.01,0.09,3.29
+Ford,The Last Post,1928,control,se_ford_madox_ford_the_last_post,jev,368,0.8152,0.5838,25.0,71.47,0.54,2.99
+Faulkner,Soldiers' Pay,1926,core,se_william_faulkner_soldiers_pay,gpt-5.4,1142,0.9194,1.0228,49.65,15.76,27.58,7.01
+Faulkner,Soldiers' Pay,1926,core,se_william_faulkner_soldiers_pay,qwen3-max,936,1.062,0.9061,30.13,41.56,20.3,8.01
+Faulkner,Soldiers' Pay,1926,core,se_william_faulkner_soldiers_pay,jev,407,0.7641,0.8461,44.72,39.8,9.83,5.65
+Woolf,The Voyage Out,1915,core,the_voyage_out,gpt-5.4,1872,0.2911,0.6272,79.86,11.54,8.23,0.37
+Woolf,The Voyage Out,1915,core,the_voyage_out,qwen3-max,1438,0.5167,0.6191,54.24,40.61,4.38,0.76
+Woolf,The Voyage Out,1915,core,the_voyage_out,jev,639,0.4507,0.6479,62.44,31.14,5.32,1.1
+Woolf,The Waves,1931,core,the_waves_cleaned,gpt-5.4,1211,2.4699,0.7644,4.46,3.39,32.87,59.29
+Woolf,The Waves,1931,core,the_waves_cleaned,qwen3-max,1200,2.5333,0.8518,2.75,15.58,7.25,74.42
+Woolf,The Waves,1931,core,the_waves_cleaned,jev,412,2.1141,0.9971,5.34,28.64,15.29,50.73
+Woolf,The Years,1937,core,the_years,gpt-5.4,1931,0.9581,0.852,38.27,27.86,33.66,0.21
+Woolf,The Years,1937,core,the_years,qwen3-max,1680,0.9964,0.521,13.75,72.86,13.39,0.0
+Woolf,The Years,1937,core,the_years,jev,633,0.8689,0.6082,25.91,61.3,12.8,0.0
+Woolf,To the Lighthouse,1927,core,to_the_lighthouse_cleaned,gpt-5.4,1847,0.6903,0.5964,38.06,54.85,7.09,0.0
+Woolf,To the Lighthouse,1927,core,to_the_lighthouse_cleaned,qwen3-max,1763,0.7368,0.4617,27.28,71.75,0.96,0.0
+Woolf,To the Lighthouse,1927,core,to_the_lighthouse_cleaned,jev,445,0.8517,0.3915,16.18,82.47,1.35,0.0
