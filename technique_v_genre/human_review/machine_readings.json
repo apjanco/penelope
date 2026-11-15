@@ -1,0 +1,6113 @@
+{
+ "P01": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "simulation_state_of_mind",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.1,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.9,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.791,
+   0.185,
+   0.011,
+   0.012
+  ]
+ },
+ "P02": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.2,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.8,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.565,
+   0.411,
+   0.01,
+   0.015
+  ]
+ },
+ "P03": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "simulation_state_of_mind",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.2,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.2,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "simulation_state_of_mind",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 1.0,
+  "n_scoring_readers": 3,
+  "jev_mediation_probs": [
+   0.818,
+   0.143,
+   0.0,
+   0.039
+  ]
+ },
+ "P04": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.8,
+     0.2,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.8,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.3,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.3,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.7,
+   0.3,
+   0.0,
+   0.0
+  ],
+  "contention": 0.42,
+  "entropy": 0.441,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.7,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.317,
+   0.609,
+   0.01,
+   0.064
+  ]
+ },
+ "P05": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.9,
+     0.1,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.9,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.364,
+     0.636,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.636,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.816,
+   0.184,
+   0.0,
+   0.0
+  ],
+  "contention": 0.3003,
+  "entropy": 0.344,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.476,
+   0.511,
+   0.0,
+   0.013
+  ]
+ },
+ "P06": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.2,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.8,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.785,
+   0.204,
+   0.0,
+   0.011
+  ]
+ },
+ "P07": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 0.1,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 0.545,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.545,
+  "n_scoring_readers": 2,
+  "jev_mediation_probs": [
+   0.576,
+   0.297,
+   0.01,
+   0.116
+  ]
+ },
+ "P08": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 0.8,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.9,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.7,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.3,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.756,
+   0.201,
+   0.018,
+   0.024
+  ]
+ },
+ "P09": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.182,
+     0.818,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.818,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.3,
+     0.7,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.7,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.621,
+   0.379,
+   0.0,
+   0.0
+  ],
+  "contention": 0.471,
+  "entropy": 0.479,
+  "spread": 1,
+  "reader_split": 0.5,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.471,
+   0.528,
+   0.0,
+   0.001
+  ]
+ },
+ "P10": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.8,
+     0.2,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.8,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.7,
+   0.3,
+   0.0,
+   0.0
+  ],
+  "contention": 0.42,
+  "entropy": 0.441,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.295,
+   0.582,
+   0.113,
+   0.011
+  ]
+ },
+ "P11": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.755,
+   0.163,
+   0.064,
+   0.019
+  ]
+ },
+ "P12": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.64,
+   0.34,
+   0.009,
+   0.011
+  ]
+ },
+ "P13": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.783,
+   0.213,
+   0.0,
+   0.005
+  ]
+ },
+ "P14": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 0.1,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 1.0,
+  "n_scoring_readers": 2,
+  "jev_mediation_probs": [
+   0.699,
+   0.268,
+   0.009,
+   0.024
+  ]
+ },
+ "P15": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.626,
+   0.362,
+   0.001,
+   0.011
+  ]
+ },
+ "P16": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.4,
+     0.6,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.6,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.1,
+   0.9,
+   0.0,
+   0.0
+  ],
+  "contention": 0.18,
+  "entropy": 0.234,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.245,
+   0.725,
+   0.007,
+   0.023
+  ]
+ },
+ "P17": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 16,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.06,
+   0.915,
+   0.01,
+   0.015
+  ]
+ },
+ "P18": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.1,
+     0.9,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.9,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.025,
+   0.975,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0488,
+  "entropy": 0.084,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.028,
+   0.919,
+   0.0,
+   0.053
+  ]
+ },
+ "P19": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.021,
+   0.905,
+   0.013,
+   0.062
+  ]
+ },
+ "P20": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.079,
+   0.859,
+   0.045,
+   0.016
+  ]
+ },
+ "P21": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.046,
+   0.908,
+   0.001,
+   0.045
+  ]
+ },
+ "P22": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 1.0,
+  "n_scoring_readers": 1,
+  "jev_mediation_probs": [
+   0.609,
+   0.34,
+   0.005,
+   0.046
+  ]
+ },
+ "P23": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.9,
+     0.1,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.9,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.9,
+     0.1,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.9,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.7,
+   0.3,
+   0.0,
+   0.0
+  ],
+  "contention": 0.42,
+  "entropy": 0.441,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.191,
+   0.779,
+   0.018,
+   0.012
+  ]
+ },
+ "P24": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.909,
+     0.091,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.909,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.6,
+    "dist": [
+     0.333,
+     0.667,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.667,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.81,
+   0.19,
+   0.0,
+   0.0
+  ],
+  "contention": 0.3072,
+  "entropy": 0.35,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.4,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.568,
+   0.388,
+   0.006,
+   0.037
+  ]
+ },
+ "P25": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.1,
+     0.9,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.9,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.4,
+     0.6,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.6,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.2,
+     0.8,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.8,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.175,
+   0.825,
+   0.0,
+   0.0
+  ],
+  "contention": 0.2888,
+  "entropy": 0.335,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.175,
+   0.752,
+   0.06,
+   0.013
+  ]
+ },
+ "P26": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.2,
+     0.0,
+     0.8,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 0.8,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 0.273,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "imagery",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.6,
+   0.0,
+   0.4,
+   0.0
+  ],
+  "contention": 0.48,
+  "entropy": 0.485,
+  "spread": 2,
+  "reader_split": 0.5,
+  "soc_split": 1.0,
+  "n_scoring_readers": 2,
+  "jev_mediation_probs": [
+   0.674,
+   0.29,
+   0.025,
+   0.011
+  ]
+ },
+ "P27": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.361,
+   0.638,
+   0.0,
+   0.001
+  ]
+ },
+ "P28": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.4,
+     0.6,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.6,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.1,
+   0.9,
+   0.0,
+   0.0
+  ],
+  "contention": 0.18,
+  "entropy": 0.234,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.198,
+   0.775,
+   0.011,
+   0.016
+  ]
+ },
+ "P29": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.8,
+     0.2,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.8,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.2,
+   0.8,
+   0.0,
+   0.0
+  ],
+  "contention": 0.32,
+  "entropy": 0.361,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.065,
+   0.873,
+   0.049,
+   0.014
+  ]
+ },
+ "P30": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.1,
+     0.9,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.9,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.025,
+   0.975,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0488,
+  "entropy": 0.084,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.317,
+   0.667,
+   0.001,
+   0.015
+  ]
+ },
+ "P31": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.4,
+     0.6,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.6,
+    "modal_type": "hybrid",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.35,
+   0.65,
+   0.0,
+   0.0
+  ],
+  "contention": 0.455,
+  "entropy": 0.467,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.106,
+   0.87,
+   0.005,
+   0.018
+  ]
+ },
+ "P32": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.5,
+     0.1,
+     0.4,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.5,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.455,
+     0.545,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.545,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.4,
+     0.6,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.6,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.339,
+   0.561,
+   0.1,
+   0.0
+  ],
+  "contention": 0.5602,
+  "entropy": 0.664,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.469,
+   0.511,
+   0.01,
+   0.01
+  ]
+ },
+ "P33": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 20,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 11,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 10,
+    "soc_share": 1.0,
+    "dist": [
+     0.2,
+     0.3,
+     0.5,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 0.5,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   }
+  },
+  "avg_dist": [
+   0.05,
+   0.575,
+   0.375,
+   0.0
+  ],
+  "contention": 0.5263,
+  "entropy": 0.603,
+  "spread": 1,
+  "reader_split": 0.5,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.097,
+   0.743,
+   0.147,
+   0.013
+  ]
+ },
+ "P34": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "reverie_fantasy",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.333,
+   0.0,
+   0.667,
+   0.0
+  ],
+  "contention": 0.4444,
+  "entropy": 0.459,
+  "spread": 2,
+  "reader_split": 0.333,
+  "soc_split": 1.0,
+  "n_scoring_readers": 3,
+  "jev_mediation_probs": [
+   0.465,
+   0.208,
+   0.217,
+   0.11
+  ]
+ },
+ "P35": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.5,
+     0.25,
+     0.25,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.5,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 0.333,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "soliloquy",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.125,
+   0.062,
+   0.812,
+   0.0
+  ],
+  "contention": 0.3203,
+  "entropy": 0.434,
+  "spread": 2,
+  "reader_split": 0.25,
+  "soc_split": 0.667,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.307,
+   0.28,
+   0.323,
+   0.09
+  ]
+ },
+ "P36": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.667,
+     0.333,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.667,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.917,
+   0.083,
+   0.0,
+   0.0
+  ],
+  "contention": 0.1526,
+  "entropy": 0.207,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.76,
+   0.24,
+   0.0,
+   0.0
+  ]
+ },
+ "P37": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.768,
+   0.168,
+   0.055,
+   0.01
+  ]
+ },
+ "P38": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 1.0,
+  "n_scoring_readers": 3,
+  "jev_mediation_probs": [
+   0.877,
+   0.12,
+   0.0,
+   0.003
+  ]
+ },
+ "P39": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": "collapsed onto one category"
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "simulation_state_of_mind",
+    "failed_gate": null
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 1.0,
+  "n_scoring_readers": 2,
+  "jev_mediation_probs": [
+   0.837,
+   0.083,
+   0.05,
+   0.03
+  ]
+ },
+ "P40": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.5,
+     0.5,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.5,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.667,
+     0.333,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.667,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.542,
+   0.458,
+   0.0,
+   0.0
+  ],
+  "contention": 0.4965,
+  "entropy": 0.497,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.485,
+   0.468,
+   0.037,
+   0.01
+  ]
+ },
+ "P41": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 0.5,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 0.333,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.333,
+   0.667,
+   0.0,
+   0.0
+  ],
+  "contention": 0.4444,
+  "entropy": 0.459,
+  "spread": 1,
+  "reader_split": 0.333,
+  "soc_split": 1.0,
+  "n_scoring_readers": 3,
+  "jev_mediation_probs": [
+   0.485,
+   0.443,
+   0.053,
+   0.02
+  ]
+ },
+ "P42": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.235,
+   0.755,
+   0.0,
+   0.01
+  ]
+ },
+ "P43": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.113,
+   0.877,
+   0.0,
+   0.01
+  ]
+ },
+ "P44": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   1.0,
+   0.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.033,
+   0.877,
+   0.0,
+   0.09
+  ]
+ },
+ "P45": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.667,
+     0.0,
+     0.333
+    ],
+    "modal": 1,
+    "k_consistency": 0.667,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.917,
+   0.0,
+   0.083
+  ],
+  "contention": 0.1526,
+  "entropy": 0.207,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.013,
+   0.738,
+   0.035,
+   0.215
+  ]
+ },
+ "P46": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.25,
+   0.75,
+   0.0,
+   0.0
+  ],
+  "contention": 0.375,
+  "entropy": 0.406,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.37,
+   0.593,
+   0.028,
+   0.01
+  ]
+ },
+ "P47": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "simulation_state_of_mind",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.333,
+     0.667,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.667,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.333,
+   0.667,
+   0.0,
+   0.0
+  ],
+  "contention": 0.4444,
+  "entropy": 0.459,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.175,
+   0.818,
+   0.0,
+   0.007
+  ]
+ },
+ "P48": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.25,
+   0.75,
+   0.0,
+   0.0
+  ],
+  "contention": 0.375,
+  "entropy": 0.406,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.185,
+   0.728,
+   0.085,
+   0.003
+  ]
+ },
+ "P49": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.333,
+     0.667,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 0.667,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.333,
+   0.667,
+   0.0,
+   0.0
+  ],
+  "contention": 0.4444,
+  "entropy": 0.459,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.128,
+   0.873,
+   0.0,
+   0.0
+  ]
+ },
+ "P50": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.25,
+   0.75,
+   0.0
+  ],
+  "contention": 0.375,
+  "entropy": 0.406,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.09,
+   0.69,
+   0.21,
+   0.01
+  ]
+ },
+ "P51": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   1.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.022,
+   0.07,
+   0.897,
+   0.01
+  ]
+ },
+ "P52": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   1.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.022,
+   0.35,
+   0.623,
+   0.005
+  ]
+ },
+ "P53": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.75,
+     0.0,
+     0.25,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 0.75,
+    "modal_type": "omniscient_description",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.188,
+   0.0,
+   0.812,
+   0.0
+  ],
+  "contention": 0.3047,
+  "entropy": 0.348,
+  "spread": 2,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.172,
+   0.21,
+   0.613,
+   0.005
+  ]
+ },
+ "P54": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.5,
+   0.5,
+   0.0
+  ],
+  "contention": 0.5,
+  "entropy": 0.5,
+  "spread": 1,
+  "reader_split": 0.5,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.068,
+   0.733,
+   0.2,
+   0.0
+  ]
+ },
+ "P55": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "modal": 0,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.25,
+   0.0,
+   0.75,
+   0.0
+  ],
+  "contention": 0.375,
+  "entropy": 0.406,
+  "spread": 2,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.438,
+   0.233,
+   0.263,
+   0.068
+  ]
+ },
+ "P56": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "hybrid",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   1.0,
+   0.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.04,
+   0.043,
+   0.907,
+   0.01
+  ]
+ },
+ "P57": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "free_association",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   0.0,
+   1.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.01,
+   0.34,
+   0.007,
+   0.643
+  ]
+ },
+ "P58": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   0.25,
+   0.75
+  ],
+  "contention": 0.375,
+  "entropy": 0.406,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.01,
+   0.17,
+   0.58,
+   0.24
+  ]
+ },
+ "P59": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   0.0,
+   1.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.003,
+   0.107,
+   0.01,
+   0.88
+  ]
+ },
+ "P60": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   0.0,
+   1.0
+  ],
+  "contention": 0.0,
+  "entropy": -0.0,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.01,
+   0.295,
+   0.055,
+   0.64
+  ]
+ },
+ "P61": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "hybrid",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "hybrid",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.25,
+   0.0,
+   0.75
+  ],
+  "contention": 0.375,
+  "entropy": 0.406,
+  "spread": 2,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.085,
+   0.79,
+   0.01,
+   0.115
+  ]
+ },
+ "P62": {
+  "readers": {
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.667,
+     0.333
+    ],
+    "modal": 2,
+    "k_consistency": 0.667,
+    "modal_type": "quoted_monologue",
+    "failed_gate": null
+   },
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ],
+    "modal": 2,
+    "k_consistency": 1.0,
+    "modal_type": "soliloquy",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    "modal": 2,
+    "k_consistency": 0.5,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.0,
+   0.0,
+   0.542,
+   0.458
+  ],
+  "contention": 0.4965,
+  "entropy": 0.497,
+  "spread": 1,
+  "reader_split": 0.25,
+  "soc_split": 0.0,
+  "n_scoring_readers": 4,
+  "jev_mediation_probs": [
+   0.02,
+   0.098,
+   0.242,
+   0.64
+  ]
+ },
+ "P63": {
+  "readers": {
+   "qwen3-max": {
+    "k": 3,
+    "soc_share": 0.0,
+    "dist": null,
+    "modal": null,
+    "k_consistency": null,
+    "modal_type": null,
+    "failed_gate": null
+   },
+   "gpt-5.4": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.333,
+     0.0,
+     0.0,
+     0.667
+    ],
+    "modal": 3,
+    "k_consistency": 0.667,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "llama": {
+    "k": 3,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "indirect_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   },
+   "jev": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "qwen3.6-local": {
+    "k": 4,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "modal": 3,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": null
+   },
+   "gliclass": {
+    "k": 1,
+    "soc_share": 1.0,
+    "dist": [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    "modal": 1,
+    "k_consistency": 1.0,
+    "modal_type": "direct_interior_monologue",
+    "failed_gate": "collapsed onto one category"
+   }
+  },
+  "avg_dist": [
+   0.111,
+   0.0,
+   0.0,
+   0.889
+  ],
+  "contention": 0.1974,
+  "entropy": 0.251,
+  "spread": 0,
+  "reader_split": 0.0,
+  "soc_split": 1.0,
+  "n_scoring_readers": 3,
+  "jev_mediation_probs": [
+   0.065,
+   0.325,
+   0.013,
+   0.597
+  ]
+ }
+}

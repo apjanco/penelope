@@ -2,7 +2,7 @@
 % Built from the official ACH LaTeX template (anthology-ch.cls, downloaded
 % from https://anthology.ach.org/resources/ach-latex-template.zip).
 % DO NOT change the documentclass. Add the 'final' option only for the
-% camera-ready version -- the submission version renders "Anonymous
+% camera-ready version, the submission version renders "Anonymous
 % Submission" automatically regardless of the \author fields below, per
 % CHR's double-blind review policy.
 %\documentclass[final]{anthology-ch} % for the final version
@@ -12,8 +12,7 @@
 \usepackage{graphicx}
 
 % TITLE OF THE SUBMISSION
-\title{Training a Model to Disagree: Stream-of-Consciousness Typology as a
-Site of Productive Ambiguity}
+\title{Was Woolf Ever ``Quiet''? A Computational Test of a Century-Old Reputation}
 
 % AUTHOR AND AFFILIATION INFORMATION
 % TODO: fill in real author name(s), ORCID(s), and affiliation(s) for the
@@ -26,10 +25,10 @@ Site of Productive Ambiguity}
 \affiliation{1}{TODO: Department, University, City, Country}
 
 % KEYWORDS
-\keywords[eng]{stream of consciousness, literary typology, large language
-models, interpretive ambiguity, Virginia Woolf}
+\keywords[eng]{stream of consciousness, mediation cline, interpretive ambiguity,
+Virginia Woolf, computational literary studies}
 
-% METADATA FOR THE PUBLICATION -- leave defaults for submission
+% METADATA FOR THE PUBLICATION, leave defaults for submission
 \pubyear{2027}
 \pubvolume{1}
 \pagestart{1}
@@ -47,93 +46,106 @@ models, interpretive ambiguity, Virginia Woolf}
 \maketitle
 
 \begin{abstract}
-Stream-of-consciousness (SoC) narration is a canonical case of a literary
-technique that resists stable typology. We present preliminary results from
-a pipeline that fine-tunes a local language model to detect and classify SoC
-in Virginia Woolf's fiction against a taxonomy synthesizing Robert Humphrey
-and Erwin Steinberg, and argue -- from a corpus-wide analysis of cross-model
-disagreement -- that the persistent failure of frontier LLMs to agree on SoC
-type is not noise to be filtered out, but a signal that tracks genuine,
-scholarly-recognized ambiguity in the text. We describe a shift from
-training on consensus to training a model that reports competing readings
-directly, and situate this as a case study in modelling interpretive
-ambiguity computationally.
+Stream-of-consciousness (SoC) narration remains notoriously difficult to
+classify. We built a pipeline that scores passages from 21
+modernist novels against Dorrit Cohn's psychic-distance cline using
+multiple frontier language models resampled at temperature. Our central test
+case is Virginia Woolf's reception as a ``quiet'' practitioner of SoC. The
+corpus confirms the aggregate prediction, but Woolf's title-by-title profile
+reveals nine novels in a narrow, mutually indistinguishable band and one,
+\textit{The Waves}, far beyond it. We argue that computing the cline lets us
+ask whether a century of calling Woolf ``quiet'' was ever a description of
+her technique, or only a way of measuring her against Joyce.
 \end{abstract}
 
 \section{Motivation}
 
-Stream-of-consciousness narration is a canonical test case for the limits of
-literary typology: as Hoyt Long and Richard Jean So put it, ``no one can
-agree on what it is, yet everyone seems to know it when they see it''
-\cite{longso2016patternrecognition}. Decades of scholarship -- from Robert
-Humphrey's foundational 1954 taxonomy onward -- have proposed competing
-schemes for classifying SoC's techniques (interior monologue, free indirect
-discourse, free association, orthographic markers, and more) without
-settling where one shades into another \cite{humphrey1954stream}. We argue
-that this persistent disagreement is not a defect to be engineered away, but
-the most useful signal a computational method can capture about the form.
+``Stream of consciousness'' (SoC) narration is a ubiquitous term in modernist
+studies and in fiction generally, yet it has been notoriously difficult to
+characterize. As Hoyt Long and Richard Jean So put it, ``no one can agree on
+what [SoC] is, yet everyone seems to know it when they see it''
+\cite{longso2016turbulentflow}, not a failure of criticism so much as a
+structural feature of the object itself. Decades of narratological
+scholarship, from Robert Humphrey's 1954 taxonomy onward,
+have proposed competing schemes for classifying SoC's techniques without
+settling where one shades into another \cite{humphrey1954stream}. Others argue
+that SoC is more an irreducible literary genre defined by thematic concerns
+rather than a formalized set of techniques. Monika
+Fludernik's natural narratology argues that SoC resists discrete sorting
+altogether, shading continuously into ordinary narration
+\cite{fludernik1996towards}. Dorrit Cohn's psychic-distance model asks not
+which technique a passage belongs to, but how much mediation stands between
+narrator and character consciousness: an ordinal scale from psycho-narration,
+through narrated and quoted monologue, to autonomous monologue
+\cite{cohn1978transparent}. We build on Cohn's scale precisely because it lets
+us ask empirically what close reading alone cannot settle.
 
 \section{Method}
 
-This talk presents preliminary results from Penelope, a pipeline that
-fine-tunes a local language model (Qwen3-4B) to detect and classify SoC
-passages in literary prose against a ten-class taxonomy synthesizing
-Humphrey and Erwin Steinberg \cite{humphrey1954stream, steinberg1973stream}.
-Our corpus centers on Virginia Woolf's \textit{Mrs Dalloway} and \textit{To
-the Lighthouse}, alongside a comparative set spanning Dorothy Richardson,
-James Joyce, William Faulkner, and May Sinclair. Training labels come from
-multiple frontier LLMs prompted independently on the same passages; a
-consensus pipeline originally treated cross-model disagreement as noise to
-be filtered out, keeping only passages where models converged on a single
-type.
+We built a pipeline that scores passages from 21
+modernist novels (by Virginia Woolf, Dorothy Richardson, James Joyce, William
+Faulkner, Henry James, and Ford Madox Ford) against Cohn's cline. Each
+passage is read by multiple frontier language models (GPT-5.4,
+Qwen3-Max), resampled at temperature, with fields for boundary
+tension between categories and what Richardson and Alber call antimimetic
+markers, passages that resist realist consciousness-representation
+altogether \cite{alberrichardson2015unnatural}. Our corpus totals 11,952
+passages across 21 files; eleven passages rejected by a commercial content
+filter were read by a local open-weight model instead.
 
 \section{Findings}
 
-Corpus-level analysis of that discarded disagreement produced the finding
-that reframed the project. Measuring cross-model agreement across fifteen
-works, we found it never exceeds 27\%, and falls as low as 8\% for
-Richardson's \textit{Pilgrimage} volumes. The overwhelming majority of
-multi-model passage groups are \textit{disagreements}, not exceptions. When
-we distinguish systematic disagreement (each model stably, repeatedly
-assigning a different type across resamples) from random noise (a single
-model flip-flopping between labels), a clear pattern emerges: the most
-contested boundary across every author in the corpus is between
-\textit{indirect interior monologue} and \textit{omniscient description} --
-precisely the boundary literary critics identify as Woolf's most distinctive
-and most contested technique, the point where free indirect discourse makes
-it genuinely undecidable whether we are hearing the narrator or the
-character \cite{zhang2019woolf}.
+Woolf is our pivotal case, frequently cited as a foremost pioneer of
+SoC narration, yet, as Dora Zhang notes, her innovations have not been
+recognized: compared to Joyce's, her technique ``announces itself more
+quietly'' \cite{zhang2021streamofconsciousness}.
+We chalk this up to three explanations: her adherence to grammatical structure,
+which reads as more constructed than organic; her traditional second billing
+to Joyce; and her predominant use of free indirect discourse, what Cohn
+calls ``narrated monologue,'' a technique that ``needed no Joycean
+revolution'' and formed ``a stylistic bridge'' from nineteenth- to
+twentieth-century fiction \cite{cohn1978transparent}. We aim not to overturn
+this reception history but to test it: is Woolf's ``quietness'' a fixed style,
+or deployed differently novel to novel?
 
-\section{Reframing the Model}
+The corpus answers, not quite as we expected. In aggregate,
+Woolf's profile is exactly as quiet as predicted, and the rest of the panel
+falls into place: Faulkner's spread confirms a genre-pole prediction, James
+sits at the floor, and Joyce's arc marches rightward from
+\textit{Dubliners} through \textit{Portrait} to \textit{Ulysses}. But
+Woolf's aggregate hides something: nine of her ten novels sit in a narrow,
+mutually indistinguishable band, and \textit{The Waves} is not on that curve
+at all: more radically unmediated than either of Faulkner's novels
+(Figure~\ref{fig:cline-by-novel}). Set
+\textit{The Waves} aside and Woolf's between-book variance falls by nearly
+two-thirds; set \textit{Ulysses} aside and Joyce's falls by the same
+proportion. Even so, those nine novels are not uniform: their book-to-book
+means spread slightly more than Joyce's, Richardson's, or James's, so Woolf's
+restraint is a tendency, not a fixed setting. What is load-bearing is not a
+percentage but the shape:
+nine flat novels, then one deliberate departure. Woolf's ``quiet'' reputation
+is not a style. It is nine similar deployments of restraint and one departure,
+closer in spirit to what Cohn was already finding when she described a sentence
+in \textit{To the Lighthouse} as ``ambiguously suspended between narration and
+narrated monologue'' than to any fixed authorial voice.
 
-We treat this as evidence that model disagreement is tracking something real
-about the text, not merely about model weakness. We are now training a
-successor model (v3) to represent this directly: instead of collapsing a
-passage to one label, the model learns to report \textit{both} defensible
-readings, the textual evidence for each, and an explicit statement of where
-and why the typology's boundary breaks down at that point in the passage.
-This inverts the usual goal of a text classifier. Success is not measured by
-whether the model converges with a single ground truth, but by whether its
-stated uncertainty tracks the same passages where literary critics, and our
-panel of frontier models, already disagree.
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/cline_by_novel.png}
+  \caption{Each novel's mean position on Cohn's mediation cline (0 = most
+  mediated, 3 = least), one point per title, one line per author. Woolf's nine
+  quiet novels cluster tightly at the low end while \textit{The Waves} sits
+  beyond both Faulkner novels; Joyce's line runs from \textit{Dubliners} to
+  \textit{Ulysses}.}
+  \label{fig:cline-by-novel}
+\end{figure*}
 
-\section{Discussion}
-
-We situate this as a case study in modelling interpretive ambiguity
-computationally: rather than treating annotator or model disagreement as a
-data-quality problem to be resolved by better prompting or larger consensus
-panels, we ask what a classifier looks like when disagreement itself is the
-object of study. We discuss the practical mechanics -- resampling frontier
-models at temperature to distinguish stable from unstable disagreement,
-representing dual readings in a training target, and reward-shaping a
-reinforcement-learning stage to favor ``skeptical,'' evidence-grounded
-reasoning over confident misclassification -- as well as the limits of this
-approach, including the risk of a model that hedges indiscriminately rather
-than locating ambiguity precisely. We close by asking what this suggests for
-computational literary typology more broadly: if applying a systematic
-typology to a whole text reliably produces ambiguity rather than resolution,
-perhaps that instability is itself the most faithful thing a model can
-report back.
+Pooled across the corpus, the mediation distribution shows a real valley at
+quoted monologue, closer to Humphrey's discrete types than to Fludernik's
+gradient, though a four-bin count is not yet a formal dip-test. And the
+typology's breakdown rate shows no diachronic trend across 1902--1941,
+leaving open whether the antimimetic remainder shrinks as SoC becomes
+conventional, or stays put.
 
 \printbibliography
 

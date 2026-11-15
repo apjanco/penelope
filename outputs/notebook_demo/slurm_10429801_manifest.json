@@ -1,0 +1,27 @@
+{
+  "run_tag": "slurm_10429801",
+  "base_model": "/scratch/gpfs/MM4/apjanco/.cache/huggingface/hub/models--Qwen--Qwen3-4B/snapshots/1cfa9a7208912126459214e8b04321603b3df60c",
+  "models": [
+    "v3_sft",
+    "v3_grpo"
+  ],
+  "runtime_config": {
+    "device_map": "auto",
+    "torch_dtype": "torch.bfloat16",
+    "attn_implementation": "sdpa",
+    "runtime_note": "Using CUDA on NVIDIA A100 80GB PCIe (cc 8.0).",
+    "cuda_usable": true
+  },
+  "n_rows": 28,
+  "n_cases": 14,
+  "output_files": {
+    "predictions_csv": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_predictions.csv",
+    "predictions_json": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_predictions.json",
+    "summary_csv": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_summary.csv",
+    "summary_json": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_summary.json",
+    "ambiguity_csv": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_ambiguity.csv",
+    "compare_csv": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_compare.csv",
+    "risk_curves_csv": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_risk_curves.csv",
+    "manifest_json": "/scratch/gpfs/MM4/apjanco/penelope/outputs/notebook_demo/slurm_10429801_manifest.json"
+  }
+}

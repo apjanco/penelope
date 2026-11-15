@@ -1,0 +1,15 @@
+dawns_left_hand_cleaned
+clear_horizon_cleaned
+dimple_hill_cleaned
+pg03019_pointed_roofs
+pg56221_backwater
+pg56664_honeycomb
+pg56447_the_tunnel
+pg57395_interim
+pg56925_deadlock
+pg62967_revolving_lights
+pg64585_the_trap
+pg77646_oberland
+se_william_faulkner_soldiers_pay
+as_I_lay_dying
+absalom_absalom_cleaned

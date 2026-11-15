@@ -75,7 +75,7 @@ one user. Key levers to reduce wait time:
 ### 3. Use `gputest` for iteration
 
 ```bash
-#SBATCH --partition=gputest
+#SBATCH --qos=gpu-test          # NOT --partition=gputest: sbatch rejects that (verified 2026-10-02)
 #SBATCH --time=00:30:00
 #SBATCH --constraint=gpu80
 ```
@@ -134,9 +134,33 @@ that a 4h job never fits.
 
 | Nodes | CPUs | GPU | VRAM | Constraint |
 |-------|------|-----|------|-----------|
-| della-i14g1–20 | AMD Rome | 2× A100 PCIe | 40GB | `a100,gpu40` |
-| della-l01g* | Intel Icelake | 8× A100 MIG slices | 40GB | `a100,gpu40` |
+| della-i14g1–20 | AMD Rome | 2× A100 PCIe | 40GB | `a100,gpu40,nomig` |
+| della-l01g3–12 | Intel Icelake | 8× A100 **MIG slices** | 40GB | `a100,gpu40` (no `nomig`) |
 | della-l02g* | Intel Icelake | 4× A100 PCIe | 80GB | `a100,gpu80` |
+
+### `gpu40` alone will put you on MIG — use `gpu40&nomig`
+
+The `gpu40` feature is carried by two different node types: della-i14g1–20 with
+real 2× A100 40GB cards, and della-l01g3–12 with `3g.40gb` MIG slices. A bare
+`--constraint=gpu40` can land on either.
+
+vLLM cannot run on a MIG slice here. SLURM sets
+`CUDA_VISIBLE_DEVICES=MIG-<uuid>`, vLLM's config parser calls `int()` on it and
+raises a pydantic `ValidationError`, and the job then sits out its full
+readiness timeout before reporting only "vLLM failed to start" (job 14868449,
+2026-10-02: 30 minutes on 2 GPUs for nothing). Tensor parallelism across MIG
+slices is a dead end regardless — NCCL peer-to-peer is unsupported between
+instances, so TP>1 cannot work even if the device id parsed.
+
+```bash
+# real 40GB cards only
+sbatch --gres=gpu:2 --constraint="gpu40&nomig" ...
+# or whole 80GB cards
+sbatch --gres=gpu:1 --constraint=gpu80 ...
+```
+
+`technique_v_genre/score_qwen_local.slurm` now aborts in seconds if
+`CUDA_VISIBLE_DEVICES` contains `MIG-`, rather than waiting out the timeout.
 
 ## SLURM script template
 

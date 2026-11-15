@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mediation Coding</title>
+<!-- Built from annotation_set.json + machine_readings.json by build_page.py.
+     Self-contained: open it straight from disk, no server and no network. The
+     webfont link below is the only external reference and the page is designed
+     to work without it. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one passage at a time in a reading column; judgement rail beneath it;
+   progress and order controls pinned to the top; the machine readings held
+   back until the passage has been coded. Nothing competes with the prose. */
+:root{
+  --bg:#e7ecef; --surface:#f8fafb; --surface-2:#eef2f4;
+  --fg:#18242e; --muted:#5a6b78; --faint:#8798a4;
+  --accent:#20635f; --accent-soft:#cfe0dd; --accent-fg:#f6fbfa;
+  --line:#c6d1d8; --line-soft:#d9e2e7;
+  --warn:#8a5a20; --warn-bg:#f4ead9;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e141a; --surface:#172029; --surface-2:#1e2831;
+  --fg:#dce5eb; --muted:#8fa2b0; --faint:#6d8090;
+  --accent:#63b3aa; --accent-soft:#223b3a; --accent-fg:#0b1416;
+  --line:#2a3741; --line-soft:#222e37;
+  --warn:#d9a263; --warn-bg:#2c2416;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0e141a; --surface:#172029; --surface-2:#1e2831;
+  --fg:#dce5eb; --muted:#8fa2b0; --faint:#6d8090;
+  --accent:#63b3aa; --accent-soft:#223b3a; --accent-fg:#0b1416;
+  --line:#2a3741; --line-soft:#222e37;
+  --warn:#d9a263; --warn-bg:#2c2416;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.5}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:62rem;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 3rem}
+
+/* ---- top rail ---- */
+header{position:sticky;top:0;z-index:9;background:var(--surface);
+  border-bottom:1px solid var(--line);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  padding-inline:max(16px,env(safe-area-inset-left,0px));padding-block:.7rem .55rem}
+.railtop{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;min-width:0}
+h1{font-family:var(--serif);font-size:1.05rem;font-weight:500;margin:0;letter-spacing:.01em}
+.who{font-size:.72rem;color:var(--faint);font-family:var(--mono);margin-left:auto}
+.counts{font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.counts b{color:var(--fg);font-weight:600}
+.railbot{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;margin-top:.5rem}
+.seg{display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.seg button{font:inherit;font-size:.74rem;background:var(--surface-2);color:var(--muted);border:0;
+  border-right:1px solid var(--line);padding:.3rem .65rem;cursor:pointer;white-space:nowrap}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);font-weight:500}
+label.sw{display:flex;align-items:center;gap:.38rem;font-size:.74rem;color:var(--muted);cursor:pointer}
+label.sw input{accent-color:var(--accent);margin:0}
+.bar{display:flex;gap:2px;margin-top:.5rem;height:5px}
+.bar i{flex:1;background:var(--line-soft);border-radius:1px}
+.bar i.done{background:var(--accent)}
+.bar i.here{background:var(--fg)}
+.bar i.sep{flex:0 0 2px;background:transparent;border-left:1px solid var(--faint)}
+
+/* ---- passage ---- */
+main{padding-top:1.5rem}
+.banner{background:var(--warn-bg);border-left:2px solid var(--warn);color:var(--fg);
+  font-size:.79rem;padding:.55rem .75rem;margin-bottom:1.2rem;max-width:44em}
+.meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap}
+.code{font-family:var(--mono);font-size:.74rem;color:var(--muted);letter-spacing:.04em}
+.chip{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;padding:.18rem .45rem;
+  border:1px solid var(--line);border-radius:2px;color:var(--muted);background:var(--surface-2)}
+.passage{font-family:var(--serif);font-size:1.21rem;line-height:1.66;max-width:34em;
+  white-space:pre-wrap;hyphens:none;margin:0 0 1.9rem}
+
+/* ---- judgement rail ---- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:1.05rem 1.1rem 1.15rem}
+.q{margin-bottom:1.15rem;min-width:0}
+.q:last-child{margin-bottom:0}
+.qlab{display:flex;align-items:baseline;gap:.5rem;margin-bottom:.45rem}
+.qlab span{font-size:.73rem;font-weight:600;text-transform:uppercase;letter-spacing:.085em;color:var(--muted)}
+.qlab em{font-style:normal;font-size:.72rem;color:var(--faint);font-family:var(--mono)}
+.opts{display:flex;gap:.4rem;flex-wrap:wrap}
+button.opt{font:inherit;font-size:.84rem;background:var(--surface-2);color:var(--fg);
+  border:1px solid var(--line);border-radius:2px;padding:.42rem .72rem;cursor:pointer;
+  text-align:left;min-width:0;transition:background .12s,border-color .12s}
+button.opt:hover{border-color:var(--accent)}
+button.opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+button.opt b{font-weight:600}
+button.opt small{display:block;font-size:.69rem;color:var(--muted);margin-top:.1rem;font-family:var(--sans)}
+button.opt[aria-pressed="true"] small{color:var(--accent-fg);opacity:.82}
+.lv{flex:1 1 11rem}
+.types{display:grid;grid-template-columns:repeat(auto-fill,minmax(13.5rem,1fr));gap:.4rem}
+textarea{width:100%;min-height:3.4rem;font:inherit;font-size:.86rem;background:var(--surface-2);
+  color:var(--fg);border:1px solid var(--line);border-radius:2px;padding:.5rem .6rem;resize:vertical}
+textarea::placeholder{color:var(--faint)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* ---- machine readings ---- */
+.machine{margin-top:1.3rem;border:1px solid var(--line);border-radius:3px;background:var(--surface);
+  padding:.9rem 1.1rem 1rem}
+.machine h3{font-size:.73rem;font-weight:600;text-transform:uppercase;letter-spacing:.085em;
+  color:var(--muted);margin:0 0 .15rem}
+.machine .sub{font-size:.75rem;color:var(--faint);margin:0 0 .85rem}
+.mrow{display:grid;grid-template-columns:minmax(6.5rem,auto) 11rem minmax(0,1fr);gap:.55rem .8rem;
+  align-items:center;padding:.3rem 0;border-top:1px solid var(--line-soft);font-size:.79rem}
+.mrow:first-of-type{border-top:0}
+.mname{font-family:var(--mono);font-size:.74rem;color:var(--fg);min-width:0;overflow-wrap:anywhere}
+.mname u{display:block;text-decoration:none;font-family:var(--sans);font-size:.67rem;color:var(--faint)}
+.mdist{display:flex;gap:2px;height:1.35rem;align-items:flex-end}
+.mdist span{flex:1;background:var(--line-soft);border-radius:1px 1px 0 0;position:relative;min-height:2px}
+.mdist span.on{background:var(--accent)}
+.mdist span u{position:absolute;inset:auto 0 -1.05rem;text-align:center;font-size:.6rem;
+  color:var(--faint);text-decoration:none;font-family:var(--mono)}
+.mtype{color:var(--muted);font-size:.74rem;min-width:0;overflow-wrap:anywhere}
+.mrow.failed .mname,.mrow.failed .mtype{color:var(--faint)}
+.mrow.failed .mdist span.on{background:var(--faint)}
+.mfoot{margin-top:1.3rem;font-size:.75rem;color:var(--muted);display:flex;gap:1.1rem;flex-wrap:wrap;
+  font-variant-numeric:tabular-nums;border-top:1px solid var(--line-soft);padding-top:.6rem}
+.mfoot b{color:var(--fg);font-weight:600}
+.locked{font-size:.78rem;color:var(--faint);font-style:italic}
+
+/* ---- nav ---- */
+nav{display:flex;align-items:center;gap:.6rem;margin-top:1.1rem;flex-wrap:wrap}
+button.nav{font:inherit;font-size:.84rem;padding:.48rem 1rem;border-radius:2px;cursor:pointer;
+  background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+button.nav:hover:not(:disabled){border-color:var(--accent)}
+button.nav:disabled{opacity:.4;cursor:default}
+button.nav.go{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);font-weight:500}
+.status{font-size:.74rem;color:var(--faint);margin-left:auto;font-family:var(--mono)}
+.status.dirty{color:var(--warn);font-weight:500}
+
+/* ---- footer: export ---- */
+footer{margin-top:2rem;border-top:1px solid var(--line-soft);padding-top:1rem;
+  display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+footer .spacer{margin-left:auto}
+footer .stamp{font-family:var(--mono);font-size:.68rem;color:var(--faint);width:100%;margin-top:.2rem}
+
+/* ---- rubric ---- */
+details.rubric{margin-top:1.6rem;border-top:1px solid var(--line-soft);padding-top:.9rem}
+details.rubric summary{cursor:pointer;font-size:.76rem;font-weight:600;letter-spacing:.075em;
+  text-transform:uppercase;color:var(--muted)}
+details.rubric summary:hover{color:var(--accent)}
+.rubric-body{margin-top:.9rem;font-size:.87rem;max-width:44em}
+.rubric-body dl{margin:0 0 1.1rem}
+.rubric-body dt{font-weight:600;margin-top:.7rem;font-family:var(--mono);font-size:.8rem}
+.rubric-body dd{margin:.15rem 0 0;color:var(--muted)}
+.rubric-body dd q{font-family:var(--serif);font-style:italic;color:var(--fg)}
+.rubric-body p{color:var(--muted);margin:.5rem 0}
+.note{border-left:2px solid var(--accent);padding-left:.75rem;color:var(--muted);font-size:.84rem}
+
+/* ---- start / done ---- */
+.gate{margin:3rem auto 0;max-width:34em}
+.gate h2{font-family:var(--serif);font-weight:500;font-size:1.5rem;margin:0 0 .6rem}
+.gate p{color:var(--muted);font-size:.92rem}
+.gate input[type=text]{font:inherit;font-size:1rem;padding:.5rem .65rem;width:100%;
+  background:var(--surface-2);color:var(--fg);border:1px solid var(--line);border-radius:2px;margin:.4rem 0 .9rem}
+@media (max-width:620px){
+  .passage{font-size:1.12rem} .types{grid-template-columns:1fr}
+  .mrow{grid-template-columns:1fr;gap:.3rem} .mdist{height:1.1rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- Shown only when the browser refuses localStorage, which Chrome and Safari
+     do for pages opened straight from disk. Without it a reload loses the
+     session, so the warning has to be loud and the fix has to be in it. -->
+<div class="banner" id="nostore" hidden>
+  <strong>This browser will not remember your work between reloads.</strong>
+  Pages opened directly from a file are denied local storage in Chrome and
+  Safari. Either export often, or serve this folder instead — run
+  <code>python -m http.server 8000</code> in <code>human_review/</code> and
+  open <code>http://localhost:8000/annotate.html</code>. Firefox allows it
+  from a file.
+</div>
+
+<!-- start screen: names the annotator so exports are self-identifying -->
+<section class="gate" id="start">
+  <h2>Mediation coding</h2>
+  <p>63 passages under Cohn's four-level cline. Your work is kept in this
+  browser as you go; export it to a file when you finish, or at any point
+  along the way.</p>
+  <p><strong>Who is annotating?</strong> Initials or a short name — it labels
+  the export and nothing else.</p>
+  <input type="text" id="label" placeholder="e.g. APJ" autocomplete="off" maxlength="40">
+  <button class="nav go" id="begin">Begin</button>
+  <button class="nav" id="restore">Restore from a file…</button>
+  <p class="stamp" id="stamp0"></p>
+</section>
+
+<header id="head" hidden>
+  <div class="railtop">
+    <h1>Mediation Coding</h1>
+    <div class="counts" id="counts">&nbsp;</div>
+    <div class="who" id="who"></div>
+  </div>
+  <div class="railbot">
+    <div class="seg" id="modes">
+      <button type="button" data-mode="narrative" aria-pressed="true">Reading order</button>
+      <button type="button" data-mode="contested" aria-pressed="false">Most contested</button>
+      <button type="button" data-mode="shuffled" aria-pressed="false">Shuffled</button>
+    </div>
+    <label class="sw"><input type="checkbox" id="reveal" checked> Show machine readings once coded</label>
+  </div>
+  <div class="bar" id="bar"></div>
+</header>
+
+<main id="main" hidden>
+  <div class="banner" id="banner" hidden></div>
+  <div class="meta">
+    <span class="code" id="code">P01</span>
+    <span class="chip" id="block">&nbsp;</span>
+    <span class="chip" id="words">&nbsp;</span>
+  </div>
+  <p class="passage" id="passage">Loading the passage set…</p>
+
+  <div class="panel">
+    <div class="q">
+      <div class="qlab"><span>Does this passage render consciousness?</span><em>y / n</em></div>
+      <div class="opts" id="soc"></div>
+    </div>
+    <div class="q" id="q-level">
+      <div class="qlab"><span>Mediation level</span><em>0 – 3</em></div>
+      <div class="opts" id="level"></div>
+    </div>
+    <div class="q" id="q-type">
+      <div class="qlab"><span>Technique</span><em>Humphrey / Steinberg</em></div>
+      <div class="types" id="type"></div>
+    </div>
+    <div class="q" id="q-conf">
+      <div class="qlab"><span>Confidence</span><em>1 / 2 / 3</em></div>
+      <div class="opts" id="conf"></div>
+    </div>
+    <div class="q">
+      <div class="qlab"><span>Note</span><em>optional</em></div>
+      <textarea id="note" placeholder="What decided it — or what made it hard."></textarea>
+    </div>
+  </div>
+
+  <section class="machine" id="machine"></section>
+
+  <nav>
+    <button class="nav" id="prev">&larr; Back</button>
+    <button class="nav go" id="next">Next &rarr;</button>
+    <button class="nav" id="skip">Unsure, revisit</button>
+    <span class="status" id="status"></span>
+  </nav>
+
+  <footer>
+    <button class="nav go" id="export">Export annotations</button>
+    <button class="nav" id="import">Restore from a file…</button>
+    <span class="spacer"></span>
+    <button class="nav" id="wipe">Clear this browser's copy</button>
+    <span class="stamp" id="stamp"></span>
+  </footer>
+
+  <details class="rubric">
+    <summary>Rubric — the same definitions the machine readers were given</summary>
+    <div class="rubric-body">
+      <p class="note">Rate how directly the passage renders consciousness against how much
+      the narrator mediates it. This is an ordinal cline, not a set of categories: a passage
+      sitting between two levels takes the one it leans toward, and your confidence should
+      reflect how near the boundary it falls.</p>
+      <dl>
+        <dt>0 · psycho-narration</dt>
+        <dd>The narrator <em>reports</em> the mind from outside. <q>She felt uneasy.</q>
+        <q>He resented the intrusion.</q> Analytic distance; the inner state is a fact the
+        narrator states, not something rendered from within.</dd>
+        <dt>1 · narrated monologue</dt>
+        <dd>Free indirect discourse: the character's thought bends the narrator's own
+        sentence, without quotation. Third person, past tense, but the idiom, rhythm and
+        evaluative language belong to the character. <q>Wasn't it odd that he never wrote?</q></dd>
+        <dt>2 · quoted monologue</dt>
+        <dd>Direct interior speech, explicitly framed. <q>I am uneasy, she thought.</q>
+        Quotation marks or an equivalent tag mark the boundary between narration and thought,
+        even though the thought is unmediated once inside the frame.</dd>
+        <dt>3 · autonomous monologue</dt>
+        <dd>Unframed, raw interior voice with no narratorial frame at all, sustained across
+        the passage. Molly Bloom's soliloquy is the canonical case.</dd>
+      </dl>
+      <p>Two readers one level apart are in <strong>near-agreement</strong> — ordinary boundary
+      tension, expected and informative. Two readers at 0 against 3 disagree about the basic
+      nature of the passage.</p>
+      <p>Answer <strong>no</strong> to the first question only when the passage renders no
+      consciousness at all — pure external description or action. A passage that is clearly
+      interior but fits none of the named techniques is still consciousness: say yes, and
+      choose <span class="code">Other</span>.</p>
+    </div>
+  </details>
+</main>
+</div>
+
+<input type="file" id="file" accept="application/json" hidden>
+
+<script>
+"use strict";
+const PASSAGES = /*__PASSAGES__*/null;
+const MACHINE  = /*__MACHINE__*/null;
+const BUILD    = /*__BUILD__*/null;
+
+const TYPES = [
+  ["direct_interior_monologue","Direct interior monologue","First-person present-tense unmediated thought"],
+  ["indirect_interior_monologue","Indirect interior monologue","Third-person syntax, interior focalization (FID)"],
+  ["omniscient_description","Omniscient description","Narrator states psychology with authority, from outside"],
+  ["soliloquy","Soliloquy","Spoken aloud alone; theatrical, rhetorical address"],
+  ["free_association","Free association","Chained by association rather than logic or sequence"],
+  ["imagery","Imagery","The image is the thought; no expository gloss"],
+  ["simulation_state_of_mind","State of mind","Affect or sensation rather than propositional thought"],
+  ["reverie_fantasy","Reverie / fantasy","Daydream, memory or wish diverging from present action"],
+  ["hybrid","Hybrid","Two or more types inseparably fused"],
+  ["other_soc","Other","Clearly interior but resists every category"],
+];
+const LEVELS = [
+  [0,"0 · psycho-narration","Narrator reports the mind from outside"],
+  [1,"1 · narrated monologue","Thought bends the narrator's sentence (FID)"],
+  [2,"2 · quoted monologue","Direct interior speech, explicitly framed"],
+  [3,"3 · autonomous monologue","Unframed interior voice, no narratorial frame"],
+];
+const CONF = [[1,"1","low"],[2,"2","medium"],[3,"3","high"]];
+const TYPE_LABEL = Object.fromEntries(TYPES.map(t=>[t[0],t[1]]));
+const BANNERS = {
+  contested: "Ordered by how much the machine readers disagree, most contested first. "+
+             "Passage order is itself a clue here, so these judgements are recorded with the "+
+             "order they were made in and can be analysed apart from the reading-order pass.",
+  shuffled:  "Randomised from your name, so that fatigue and drift do not fall on the same "+
+             "passages for every annotator."
+};
+const KEY = "mediation-coding/" + BUILD.set_sha.slice(0,12);
+
+const $ = id => document.getElementById(id);
+const CORE_N = PASSAGES.filter(p=>p.block==="core").length;
+let label="", order=[], cur=0, resp={}, mode="narrative",
+    shown=Date.now(), saveTimer=null, revealOn=true, exportedAt=null, lastChange=null;
+
+/* ---- persistence: this browser only, with an explicit file export ---------
+   localStorage is a convenience so a session survives a reload. The file is
+   the record: it is what goes into the repo and what the analysis reads. The
+   status line stays amber whenever there are changes not yet exported. */
+let storageOK=true;
+function probeStorage(){
+  try{
+    localStorage.setItem(KEY+"/probe","1");
+    localStorage.removeItem(KEY+"/probe");
+    storageOK=true;
+  }catch(e){ storageOK=false; }
+  $("nostore").hidden = storageOK;
+  return storageOK;
+}
+function store(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify({label,mode,resp,exportedAt,lastChange}));
+    if(!storageOK){ storageOK=true; $("nostore").hidden=true; }
+    return true;
+  }catch(e){
+    storageOK=false; $("nostore").hidden=false;
+    return false;
+  }
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function payload(){
+  const coded=Object.values(resp).filter(r=>r.is_soc===false||typeof r.mediation_level==="number").length;
+  return {
+    label, schema:"mediation-coding/1",
+    built:BUILD, exported:new Date().toISOString(),
+    mode_last_used:mode, n_coded:coded, n_total:PASSAGES.length,
+    responses:resp
+  };
+}
+function download(){
+  const blob=new Blob([JSON.stringify(payload(),null,1)],{type:"application/json"});
+  const a=document.createElement("a");
+  const safe=(label||"annotator").replace(/[^A-Za-z0-9_-]+/g,"_").toLowerCase();
+  a.href=URL.createObjectURL(blob);
+  a.download=`annotations_${safe}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  exportedAt=new Date().toISOString(); store(); flag();
+}
+function flag(){
+  const dirty = lastChange && (!exportedAt || lastChange > exportedAt);
+  $("status").className = "status" + (dirty ? " dirty" : "");
+  $("status").textContent = dirty ? "not yet exported"
+    : (exportedAt ? "exported " + exportedAt.slice(0,16).replace("T"," ") : "ready");
+}
+
+function seeded(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+function hash(str){ let h=2166136261>>>0; for(const c of str){ h^=c.charCodeAt(0); h=Math.imul(h,16777619)>>>0; } return h; }
+
+function contentionOf(code){
+  const m=MACHINE[code];
+  return m && typeof m.contention==="number" ? m.contention : 0;
+}
+function buildOrder(m){
+  const codes = PASSAGES.map(p=>p.code);
+  if(m==="narrative") return codes;
+  if(m==="contested")
+    return [...codes].sort((a,b)=>contentionOf(b)-contentionOf(a));
+  const rnd=seeded(hash(label||"anon")), out=[];
+  for(const b of ["core","cline"]){
+    const g=PASSAGES.filter(p=>p.block===b).map(p=>p.code);
+    for(let i=g.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [g[i],g[j]]=[g[j],g[i]]; }
+    out.push(...g);
+  }
+  return out;
+}
+
+const byCode = c => PASSAGES.find(p=>p.code===c);
+const rec = () => { const c=order[cur]; return resp[c] || (resp[c]={}); };
+const complete = r => r && (r.is_soc===false || (typeof r.mediation_level==="number" && r.soc_type && r.confidence));
+const coded = r => r && (r.is_soc===false || typeof r.mediation_level==="number");
+
+function opt(host,val,label_,hint,onpick){
+  const b=document.createElement("button");
+  b.className="opt"+(host.id==="level"?" lv":""); b.type="button"; b._val=val;
+  b.innerHTML=`<b>${label_}</b>`+(hint?`<small>${hint}</small>`:"");
+  b.onclick=onpick; host.appendChild(b);
+}
+function press(host,field){
+  const r=resp[order[cur]]||{};
+  for(const b of host.children) b.setAttribute("aria-pressed", String(b._val===r[field]));
+}
+
+function build(){
+  const soc=$("soc"); soc.textContent="";
+  for(const [val,lab] of [[true,"Yes"],[false,"No — no consciousness rendered"]])
+    opt(soc,val,lab,"",()=>{ const r=rec(); r.is_soc=(r.is_soc===val)?undefined:val;
+      if(r.is_soc===false){ r.mediation_level=undefined; r.soc_type=undefined; } touch(); paint(); });
+
+  const lv=$("level"); lv.textContent="";
+  for(const [val,lab,hint] of LEVELS)
+    opt(lv,val,lab,hint,()=>{ const r=rec(); r.mediation_level=(r.mediation_level===val)?undefined:val;
+      if(r.mediation_level!==undefined) r.is_soc=true; touch(); paint(); });
+
+  const tp=$("type"); tp.textContent="";
+  for(const [val,lab,hint] of TYPES)
+    opt(tp,val,lab,hint,()=>{ const r=rec(); r.soc_type=(r.soc_type===val)?undefined:val;
+      if(r.soc_type) r.is_soc=true; touch(); paint(); });
+
+  const cf=$("conf"); cf.textContent="";
+  for(const [val,lab,hint] of CONF)
+    opt(cf,val,lab,hint,()=>{ const r=rec(); r.confidence=(r.confidence===val)?undefined:val; touch(); paint(); });
+
+  $("note").oninput=()=>{ rec().note=$("note").value; touch(); };
+  $("prev").onclick=()=>move(-1);
+  $("next").onclick=()=>move(1);
+  $("skip").onclick=()=>{ rec().revisit=true; touch(); move(1); };
+  $("reveal").onchange=()=>{ revealOn=$("reveal").checked; paintMachine(); };
+  for(const b of $("modes").children) b.onclick=()=>setMode(b.dataset.mode);
+  $("export").onclick=download;
+  $("import").onclick=()=>$("file").click();
+  $("wipe").onclick=()=>{
+    if(lastChange && (!exportedAt || lastChange>exportedAt)){
+      $("status").className="status dirty";
+      $("status").textContent="export first — click Clear again to confirm";
+      $("wipe").onclick=doWipe; return;
+    }
+    doWipe();
+  };
+  drawBar();
+}
+function doWipe(){ try{ localStorage.removeItem(KEY); }catch(e){} location.reload(); }
+
+function drawBar(){
+  const bar=$("bar"); bar.textContent="";
+  order.forEach((c,i)=>{
+    if(mode==="narrative" && i===CORE_N){ const s=document.createElement("i"); s.className="sep"; bar.appendChild(s); }
+    const el=document.createElement("i"); el._i=i; bar.appendChild(el);
+  });
+}
+function setMode(m){
+  if(m===mode) return;
+  const here=order[cur];
+  mode=m; order=buildOrder(m);
+  cur=Math.max(0, order.indexOf(here));
+  for(const b of $("modes").children) b.setAttribute("aria-pressed", String(b.dataset.mode===m));
+  $("banner").hidden = !BANNERS[m];
+  $("banner").textContent = BANNERS[m] || "";
+  drawBar(); paint(); store();
+}
+
+function bars(dist, modal){
+  if(!dist) return `<div class="mdist"><span style="flex:1"><u>no soc</u></span></div>`;
+  return `<div class="mdist">`+dist.map((p,i)=>
+    `<span class="${i===modal?"on":""}" style="height:${Math.max(6,Math.round(p*100))}%"><u>${i}</u></span>`
+  ).join("")+`</div>`;
+}
+function paintMachine(){
+  const host=$("machine"), code=order[cur], m=MACHINE[code], r=resp[code]||{};
+  if(!m || !m.n_scoring_readers){ host.hidden=true; return; }
+  host.hidden=false;
+  if(!revealOn || !coded(r)){
+    host.innerHTML=`<h3>Machine readings</h3><p class="locked">${
+      revealOn ? "Shown once you have recorded a level for this passage."
+               : "Hidden — switch “Show machine readings” back on to see them."}</p>`;
+    return;
+  }
+  const rows=Object.entries(m.readers).sort((a,b)=>(a[1].failed_gate?1:0)-(b[1].failed_gate?1:0));
+  let html=`<h3>Machine readings</h3><p class="sub">Each reader collapsed over its own runs. `+
+           `Bars are the share of runs at levels 0–3; the filled bar is that reader's mode.</p>`;
+  for(const [rd,d] of rows){
+    html+=`<div class="mrow${d.failed_gate?" failed":""}">`+
+      `<div class="mname">${rd}<u>${d.failed_gate ? d.failed_gate : "k = "+d.k}</u></div>`+
+      bars(d.dist,d.modal)+
+      `<div class="mtype">${d.modal_type?(TYPE_LABEL[d.modal_type]||d.modal_type):"—"}`+
+      (d.soc_share<1?` · renders consciousness in ${Math.round(d.soc_share*100)}% of runs`:``)+`</div></div>`;
+  }
+  if(m.jev_mediation_probs)
+    html+=`<div class="mrow"><div class="mname">jev<u>stated probability</u></div>`+
+      bars(m.jev_mediation_probs, m.jev_mediation_probs.indexOf(Math.max(...m.jev_mediation_probs)))+
+      `<div class="mtype">Jev reports a distribution rather than resampling</div></div>`;
+  const yours = typeof r.mediation_level==="number" ? r.mediation_level : null;
+  const good = Object.values(m.readers).filter(d=>!d.failed_gate);
+  const agree = yours===null ? null : good.filter(d=>d.modal===yours).length;
+  html+=`<div class="mfoot"><span>contention <b>${m.contention.toFixed(3)}</b></span>`+
+        `<span>widest gap between readers <b>${m.spread}</b> level${m.spread===1?"":"s"}</span>`+
+        (agree===null?"":`<span>agreeing with you <b>${agree} of ${good.length}</b></span>`)+
+        `</div>`;
+  host.innerHTML=html;
+}
+
+function paint(){
+  const code=order[cur], p=byCode(code), r=resp[code]||{};
+  $("code").textContent=code;
+  $("block").textContent=p.block==="core"?"section A · Time Passes":"section B · cline sample";
+  $("words").textContent=p.n_words+" words";
+  $("passage").textContent=p.text;
+  press($("soc"),"is_soc"); press($("level"),"mediation_level");
+  press($("type"),"soc_type"); press($("conf"),"confidence");
+  const off = r.is_soc===false;
+  for(const q of ["q-level","q-type"]) $(q).style.opacity = off ? ".4" : "1";
+  $("note").value = r.note || "";
+  $("prev").disabled = cur===0;
+  $("next").textContent = cur===order.length-1 ? "Finish" : "Next →";
+  const done=order.filter(c=>complete(resp[c])).length;
+  $("counts").innerHTML=`<b>${done}</b> of ${order.length} coded &nbsp;·&nbsp; passage ${cur+1}`;
+  for(const el of $("bar").children){
+    if(el._i===undefined) continue;
+    el.className = el._i===cur ? "here" : (complete(resp[order[el._i]]) ? "done" : "");
+  }
+  paintMachine(); flag();
+  shown=Date.now();
+}
+
+function touch(){
+  const r=rec();
+  r.ts=new Date().toISOString();
+  r.order_mode=mode;
+  if(coded(r) && r.saw_machine===undefined) r.saw_machine=false;
+  lastChange=r.ts;
+  clearTimeout(saveTimer); saveTimer=setTimeout(()=>{ store(); flag(); },400);
+}
+function move(d){
+  const r=resp[order[cur]];
+  if(r){
+    r.ms=(r.ms||0)+Math.round((Date.now()-shown)/1000);
+    if(revealOn && coded(r)) r.saw_machine=true;
+  }
+  const n=cur+d;
+  if(n<0) return;
+  if(n>=order.length){ store(); finish(); return; }
+  cur=n; paint(); store();
+}
+function finish(){
+  const done=order.filter(c=>complete(resp[c])).length;
+  $("main").innerHTML=`<div class="gate"><h2>${done} of ${order.length} coded</h2>
+    <p>${done===order.length
+      ? "That is the whole set. Export it now — the file is the record, not this browser."
+      : "Reopen this page to finish the rest; it returns you to the first passage you have not coded. Export now so nothing rests on this browser alone."}</p>
+    <p><button class="nav go" id="x2">Export annotations</button>
+       <button class="nav" id="b2">Back to the passages</button></p></div>`;
+  $("x2").onclick=download; $("b2").onclick=()=>location.reload();
+}
+
+document.addEventListener("keydown", e=>{
+  if($("main").hidden || e.target.tagName==="TEXTAREA"||e.target.tagName==="INPUT"||e.metaKey||e.ctrlKey||e.altKey) return;
+  const k=e.key.toLowerCase();
+  if(k.length===1&&"0123".includes(k)){ const r=rec(); r.mediation_level=+k; r.is_soc=true; touch(); paint(); e.preventDefault(); }
+  else if(k==="y"){ const r=rec(); r.is_soc=true; touch(); paint(); }
+  else if(k==="n"){ const r=rec(); r.is_soc=false; r.mediation_level=undefined; r.soc_type=undefined; touch(); paint(); }
+  else if(k==="arrowright"||k==="enter"){ move(1); e.preventDefault(); }
+  else if(k==="arrowleft"){ move(-1); e.preventDefault(); }
+});
+window.addEventListener("beforeunload", e=>{
+  if(lastChange && (!exportedAt || lastChange>exportedAt)){ e.preventDefault(); e.returnValue=""; }
+});
+
+$("file").onchange = ev => {
+  const f=ev.target.files && ev.target.files[0];
+  if(!f) return;
+  const fr=new FileReader();
+  fr.onload=()=>{
+    try{
+      const d=JSON.parse(fr.result);
+      if(!d || typeof d.responses!=="object") throw new Error("not an annotations file");
+      if(d.built && d.built.set_sha && d.built.set_sha!==BUILD.set_sha
+         && !confirm("That file was made against a different passage set ("+
+                     d.built.set_sha.slice(0,8)+" vs "+BUILD.set_sha.slice(0,8)+
+                     "). Load it anyway?")) return;
+      label=d.label||label; resp=d.responses; mode=d.mode_last_used||"narrative";
+      exportedAt=d.exported||null; lastChange=null;
+      store(); start();
+    }catch(err){ alert("Could not read that file: "+err.message); }
+  };
+  fr.readAsText(f);
+  ev.target.value="";
+};
+
+function start(){
+  $("start").hidden=true; $("head").hidden=false; $("main").hidden=false;
+  $("who").textContent=label;
+  order=buildOrder(mode);
+  for(const b of $("modes").children) b.setAttribute("aria-pressed", String(b.dataset.mode===mode));
+  $("banner").hidden=!BANNERS[mode]; $("banner").textContent=BANNERS[mode]||"";
+  const firstOpen = order.findIndex(c=>!complete(resp[c]));
+  cur = firstOpen === -1 ? 0 : firstOpen;
+  build(); paint();
+  $("stamp").textContent=`passage set ${BUILD.set_sha.slice(0,12)} · machine readings `+
+                         `${BUILD.machine_sha.slice(0,12)} · built ${BUILD.built_at.slice(0,10)}`;
+}
+
+(function(){
+  $("stamp0").textContent=`passage set ${BUILD.set_sha.slice(0,12)} · built ${BUILD.built_at.slice(0,10)}`;
+  probeStorage();
+  const prior=load();
+  if(prior && prior.label){
+    label=prior.label; resp=prior.resp||{}; mode=prior.mode||"narrative";
+    exportedAt=prior.exportedAt||null; lastChange=prior.lastChange||null;
+    start(); return;
+  }
+  $("begin").onclick=()=>{
+    const v=$("label").value.trim();
+    if(!v){ $("label").focus(); return; }
+    label=v; store(); start();
+  };
+  $("label").addEventListener("keydown", e=>{ if(e.key==="Enter") $("begin").click(); });
+  $("restore").onclick=()=>$("file").click();
+})();
+</script>
+</body>
+</html>

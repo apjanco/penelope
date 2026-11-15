@@ -36,13 +36,28 @@ models:
   # technique_v_genre/endpoints/<served_name>.txt and update here each time
   # the server job is resubmitted (job restarts land on a different node).
   - label: qwen3-reasoning
-    base_url: http://della-l07g3:8000/v1   # job 11942782 (gpu-test, expires ~59min) — smoke test only
+    base_url: http://localhost:8000/v1   # job 12590291 (local vLLM, see technique_v_genre/serve_score_model.slurm)
     model_name: qwen3-reasoning
     api_key: not-needed
 
   - label: qwen3.6-local
-    base_url: http://della-l07g3:8000/v1   # job 12122936, fills content-filtered qwen3-max gaps (see technique_v_genre/fill_qwen_gaps.slurm)
+    base_url: http://localhost:8000/v1
     model_name: qwen3.6-local
+    api_key: not-needed
+
+  - label: mistral
+    base_url: http://localhost:8000/v1   # job 12590292 (local vLLM, see technique_v_genre/serve_score_model.slurm)
+    model_name: mistral
+    api_key: not-needed
+
+  - label: llama
+    base_url: http://localhost:8000/v1   # job 14787262 (local vLLM, see technique_v_genre/serve_score_model.slurm)
+    model_name: llama
+    api_key: not-needed
+
+  - label: gemma
+    base_url: http://localhost:8000/v1
+    model_name: gemma
     api_key: not-needed
 
   # Example: local model via Ollama / vLLM
